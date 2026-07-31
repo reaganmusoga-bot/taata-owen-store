@@ -799,6 +799,8 @@
             color: white;
             padding: 12px;
             text-align: left;
+            position: sticky;
+            top: 0;
         }
         .admin-content td {
             padding: 12px;
@@ -834,17 +836,17 @@
             border: 1px solid #ccc;
             font-weight: 600;
             font-size: 0.7rem;
+            cursor: pointer;
         }
-        .admin-content .product-mgmt table td {
-            vertical-align: middle;
-        }
-        .admin-content .product-mgmt .btn-sm {
+        .admin-content .btn-sm {
             padding: 4px 12px;
             border: none;
             border-radius: 20px;
             cursor: pointer;
             font-weight: 600;
             font-size: 0.7rem;
+            margin: 2px 0;
+            display: inline-block;
         }
         .btn-edit {
             background: var(--blue);
@@ -864,6 +866,20 @@
             cursor: pointer;
             margin-bottom: 15px;
         }
+        .btn-whatsapp {
+            background: #25D366;
+            color: white;
+        }
+        .btn-whatsapp:hover {
+            opacity: 0.8;
+        }
+        .btn-deliver {
+            background: #17a2b8;
+            color: white;
+        }
+        .btn-deliver:hover {
+            opacity: 0.8;
+        }
         .admin-content .out-of-stock-badge {
             color: var(--red);
             font-weight: bold;
@@ -871,15 +887,6 @@
         .admin-content .in-stock-badge {
             color: #28a745;
             font-weight: bold;
-        }
-        .toggle-stock-btn {
-            background: #6c757d;
-            color: white;
-            border: none;
-            padding: 4px 12px;
-            border-radius: 20px;
-            cursor: pointer;
-            font-size: 0.7rem;
         }
         .admin-content .product-form {
             background: var(--light-gray);
@@ -907,8 +914,23 @@
             font-weight: bold;
             cursor: pointer;
         }
-
-        /* Admin Login Modal Override */
+        .clear-btn {
+            background: var(--red);
+            color: white;
+            border: none;
+            padding: 8px 20px;
+            border-radius: 30px;
+            cursor: pointer;
+            font-weight: bold;
+            margin-bottom: 15px;
+        }
+        .clear-btn:hover {
+            opacity: 0.8;
+        }
+        .admin-order-table-wrapper {
+            max-height: 500px;
+            overflow-y: auto;
+        }
         .admin-login-modal .auth-modal {
             max-width: 380px;
             border-top-color: var(--gold);
@@ -1035,13 +1057,14 @@
                     </div>
                     <div style="background: #e6f0ff; padding:20px; border-radius:12px; border-left:5px solid var(--red);">
                         <p><strong><i class="fas fa-info-circle"></i> Welcome Admin!</strong></p>
-                        <p style="color:#555; font-size:0.9rem;">Manage all orders, products, and inventory from this dashboard. Changes sync instantly to the customer store.</p>
+                        <p style="color:#555; font-size:0.9rem;">Manage orders, products, and notify clients instantly via WhatsApp.</p>
                     </div>
                 </div>
 
                 <div id="adminOrders" style="display:none;">
                     <h2 style="color:var(--blue); margin-bottom:20px;">📋 Order Management</h2>
-                    <div id="adminOrderList"><p>Loading orders...</p></div>
+                    <button class="clear-btn" onclick="clearDeliveredOrders()"><i class="fas fa-trash-alt"></i> Clear Delivered Orders</button>
+                    <div class="admin-order-table-wrapper" id="adminOrderList"><p>Loading orders...</p></div>
                 </div>
 
                 <div id="adminProducts" style="display:none;">
@@ -1090,7 +1113,6 @@
         // ============================================================
         //  GLOBAL DATA & STATE
         // ============================================================
-        // Default Products (will be overridden by localStorage if exists)
         const defaultSupermarketItems = [
             { id: 1, name: "Matooke (Bunch)", category: "Fresh Produce", price: 15000, icon: "fa-solid fa-leaf",
                 inStock: true },
@@ -1165,7 +1187,6 @@
                 description: "Mixed greens with tomatoes", prepTime: "5 min", badge: null, inStock: true },
         ];
 
-        // Load products from localStorage or set defaults
         let supermarketItems = JSON.parse(localStorage.getItem('taata_supermarket_items'));
         let restaurantItems = JSON.parse(localStorage.getItem('taata_restaurant_items'));
 
@@ -1182,7 +1203,7 @@
             type: 'restaurant' }))];
 
         // ============================================================
-        //  CUSTOMER APP LOGIC (Auth, Cart, UI)
+        //  CUSTOMER APP LOGIC
         // ============================================================
         let currentUser = null;
         let isLoginMode = true;
@@ -1211,7 +1232,6 @@
             }
         }
 
-        // Auth
         function toggleAuthModal() {
             document.getElementById('authModal').classList.toggle('active');
             document.getElementById('authMessage').textContent = '';
@@ -1274,7 +1294,6 @@
             }
         });
 
-        // Wallet & Points
         function getWalletBalance() { return loadUserData().wallet; }
 
         function getPointsBalance() { return loadUserData().points; }
@@ -1392,7 +1411,6 @@
             });
         }
 
-        // Cart
         function addToCart(id) {
             const product = allProducts.find(p => p.id === id);
             if (!product || !product.inStock) return;
@@ -1473,7 +1491,7 @@
                         <p>Delivery: ${freeDelivery ? '🎉 FREE' : `UGX ${shipping.toLocaleString()}`}</p>
                         <hr>
                         <p style="color:var(--red); font-size:1.6rem;">Total: UGX ${finalTotal.toLocaleString()}</p>
-                        ${currentUser ? `<p style="font-size:0.8rem;">⭐ Earn ${pointsEarned} points</p>` : '<p style="color:red; font-size:0.8rem;">⚠️ Login to earn points</p>'}
+                        ${currentUser ? `<p style="font-size:0.8rem;">⭐ You'll earn ${pointsEarned} points</p>` : '<p style="color:red; font-size:0.8rem;">⚠️ Login to earn points</p>'}
                     </div>
                 `;
         }
@@ -1505,6 +1523,7 @@
                 walletPay = 0;
             let finalTotal = subtotal + (subtotal >= 200000 ? 0 : shipping);
 
+            let pointsEarned = 0;
             if (currentUser) {
                 let points = getPointsBalance();
                 if (document.getElementById('usePoints')?.checked) {
@@ -1518,9 +1537,9 @@
                 if (finalTotal < 0) finalTotal = 0;
                 if (walletPay > 0) setWalletBalance(wallet - walletPay);
                 if (discount > 0) setPointsBalance(points - discount);
-                const newPoints = Math.floor(finalTotal / 1000);
-                if (newPoints > 0) setPointsBalance(getPointsBalance() + newPoints);
-                var pointsMsg = `⭐ Points Earned: ${newPoints}`;
+                pointsEarned = Math.floor(finalTotal / 1000);
+                if (pointsEarned > 0) setPointsBalance(getPointsBalance() + pointsEarned);
+                var pointsMsg = `⭐ Points Earned: ${pointsEarned}`;
             } else {
                 var pointsMsg = '⚠️ Create an account to earn points!';
             }
@@ -1533,7 +1552,7 @@
                 cash: 'Cash on Delivery' } [payment] || payment;
             const orderTypeLabel = orderType === 'delivery' ? '🚚 Delivery' : '🏪 Pickup';
 
-            // Save Order
+            // Save Order (with points earned)
             const orders = JSON.parse(localStorage.getItem('taata_orders')) || [];
             orders.push({
                 timestamp: new Date().toLocaleString(),
@@ -1544,7 +1563,8 @@
                 payment: paymentMethod,
                 items: orderSummary,
                 total: finalTotal,
-                status: 'Pending' // default status
+                pointsEarned: pointsEarned,
+                status: 'Pending'
             });
             localStorage.setItem('taata_orders', JSON.stringify(orders));
 
@@ -1577,7 +1597,6 @@
             document.getElementById('custAddress').value = '';
         }
 
-        // Restaurant Status
         function updateRestaurantStatus() {
             const now = new Date();
             const hours = now.getHours();
@@ -1604,7 +1623,6 @@
 
         function loginAdmin() {
             const password = document.getElementById('adminPasswordInput').value;
-            // Default password: admin123 (you can change this)
             if (password === 'admin123') {
                 document.getElementById('adminLoginModal').classList.remove('active');
                 document.getElementById('customerApp').style.display = 'none';
@@ -1626,7 +1644,6 @@
 
         function showAdminSection(section) {
             document.querySelectorAll('.admin-sidebar button').forEach(b => b.classList.remove('active'));
-            // Toggle active class based on section
             const btns = document.querySelectorAll('.admin-sidebar button');
             if (section === 'dashboard') btns[0].classList.add('active');
             else if (section === 'orders') btns[1].classList.add('active');
@@ -1653,6 +1670,56 @@
             document.getElementById('statTotalProducts').textContent = supermarketItems.length + restaurantItems.length;
         }
 
+        // ============================================================
+        //  NEW: NOTIFY CLIENT VIA WHATSAPP
+        // ============================================================
+        function sendWhatsApp(phone, customer, orderIndex, total) {
+            // Format phone number (remove spaces, remove leading 0, add 256)
+            let rawPhone = phone.replace(/\s/g, '');
+            if (rawPhone.startsWith('0')) rawPhone = '256' + rawPhone.substring(1);
+            if (!rawPhone.startsWith('256')) rawPhone = '256' + rawPhone;
+
+            const msg = `Hello ${customer}, your order #${orderIndex + 1} (UGX ${total.toLocaleString()}) is ready for pickup/delivery at Taata Owen Supermarket! 🛍️ Thank you for choosing us. - Taata Owen Team`;
+            const url = `https://wa.me/${rawPhone}?text=${encodeURIComponent(msg)}`;
+            window.open(url, '_blank');
+        }
+
+        // ============================================================
+        //  NEW: MARK SINGLE ORDER AS DELIVERED (Quick Action)
+        // ============================================================
+        function markOrderDelivered(index) {
+            const orders = JSON.parse(localStorage.getItem('taata_orders')) || [];
+            if (orders[index]) {
+                orders[index].status = 'Delivered';
+                localStorage.setItem('taata_orders', JSON.stringify(orders));
+                renderAdminOrders();
+                renderAdminDashboard();
+                alert('✅ Order marked as Delivered!');
+            }
+        }
+
+        // ============================================================
+        //  NEW: CLEAR ALL DELIVERED ORDERS
+        // ============================================================
+        function clearDeliveredOrders() {
+            let orders = JSON.parse(localStorage.getItem('taata_orders')) || [];
+            const deliveredCount = orders.filter(o => o.status === 'Delivered').length;
+            if (deliveredCount === 0) {
+                alert('No delivered orders to clear.');
+                return;
+            }
+            if (confirm(`Delete ${deliveredCount} completed orders? This cannot be undone.`)) {
+                orders = orders.filter(o => o.status !== 'Delivered');
+                localStorage.setItem('taata_orders', JSON.stringify(orders));
+                renderAdminOrders();
+                renderAdminDashboard();
+                alert('✅ Delivered orders cleared!');
+            }
+        }
+
+        // ============================================================
+        //  RENDER ADMIN ORDERS (UPDATED)
+        // ============================================================
         function renderAdminOrders() {
             const container = document.getElementById('adminOrderList');
             const orders = JSON.parse(localStorage.getItem('taata_orders')) || [];
@@ -1661,10 +1728,12 @@
                 return;
             }
             let html = `<table>
-                        <thead><tr><th>#</th><th>Time</th><th>Customer</th><th>Phone</th><th>Type</th><th>Items</th><th>Total</th><th>Status</th></tr></thead><tbody>`;
+                        <thead><tr><th>#</th><th>Time</th><th>Customer</th><th>Phone</th><th>Type</th><th>Items</th><th>Total</th><th>Points</th><th>Status</th><th>Actions</th></tr></thead><tbody>`;
             orders.slice().reverse().forEach((order, index) => {
+                const reversedIndex = orders.length - 1 - index;
                 const statusOptions = ['Pending', 'Preparing', 'Out for Delivery', 'Delivered'];
-                let statusSelect = `<select class="status-select" onchange="updateOrderStatus(${orders.length - 1 - index}, this.value)" style="background:${getStatusColor(order.status)}">`;
+                let statusSelect =
+                    `<select class="status-select" onchange="updateOrderStatus(${reversedIndex}, this.value)" style="background:${getStatusColor(order.status)}">`;
                 statusOptions.forEach(s => {
                     statusSelect +=
                         `<option value="${s}" ${s === order.status ? 'selected' : ''}>${s}</option>`;
@@ -1672,14 +1741,19 @@
                 statusSelect += `</select>`;
 
                 html += `<tr>
-                            <td>${orders.length - index}</td>
+                            <td>${reversedIndex + 1}</td>
                             <td>${order.timestamp}</td>
                             <td><strong>${order.customer}</strong></td>
                             <td>${order.phone}</td>
                             <td>${order.orderType}</td>
                             <td style="max-width:150px; word-break:break-word;">${order.items}</td>
                             <td><strong>UGX ${order.total.toLocaleString()}</strong></td>
+                            <td>${order.pointsEarned || 0}</td>
                             <td>${statusSelect}</td>
+                            <td>
+                                <button class="btn-sm btn-whatsapp" onclick="sendWhatsApp('${order.phone}', '${order.customer}', ${reversedIndex}, '${order.total}')" title="Notify via WhatsApp"><i class="fab fa-whatsapp"></i> Notify</button>
+                                ${order.status !== 'Delivered' ? `<button class="btn-sm btn-deliver" onclick="markOrderDelivered(${reversedIndex})" title="Mark as Delivered"><i class="fas fa-check-circle"></i> Deliver</button>` : ''}
+                            </td>
                         </tr>`;
             });
             html += `</tbody></table>`;
@@ -1702,6 +1776,9 @@
             }
         }
 
+        // ============================================================
+        //  RENDER ADMIN PRODUCTS (Unchanged but included)
+        // ============================================================
         function renderAdminProducts() {
             const container = document.getElementById('adminProductList');
             const allItems = [...supermarketItems, ...restaurantItems];
@@ -1734,7 +1811,6 @@
                 item.inStock = !item.inStock;
                 if (type === 'supermarket') localStorage.setItem('taata_supermarket_items', JSON.stringify(items));
                 else localStorage.setItem('taata_restaurant_items', JSON.stringify(items));
-                // Refresh UI
                 renderAdminProducts();
                 refreshCustomerUI();
             }
@@ -1828,10 +1904,8 @@
         }
 
         function refreshCustomerUI() {
-            // Reload products from localStorage
             supermarketItems = JSON.parse(localStorage.getItem('taata_supermarket_items'));
             restaurantItems = JSON.parse(localStorage.getItem('taata_restaurant_items'));
-            // Re-render customer grids
             renderCategoryPills('supermarketCategoryPills', supermarketItems, supermarketFilter, 'supermarketGrid',
                 'supermarket');
             renderGrid('supermarketGrid', supermarketItems, supermarketFilter);
@@ -1851,7 +1925,6 @@
             }
         });
 
-        // Check if admin is already logged in (session)
         if (sessionStorage.getItem('taata_admin_logged_in') === 'true') {
             document.getElementById('customerApp').style.display = 'none';
             document.getElementById('adminApp').style.display = 'block';
