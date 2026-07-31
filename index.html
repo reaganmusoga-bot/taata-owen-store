@@ -24,7 +24,6 @@
             --shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
         }
 
-        /* ---------- NAVBAR ---------- */
         .navbar {
             background-color: var(--red);
             color: white;
@@ -81,7 +80,6 @@
         .navbar .account-btn:hover {
             background: white;
             color: var(--red);
-            border-color: white;
         }
         .navbar .wallet-display {
             background: rgba(255, 255, 255, 0.15);
@@ -119,7 +117,6 @@
             border: 2px solid white;
         }
 
-        /* ---------- HERO (with Background Image) ---------- */
         .hero {
             background: linear-gradient(rgba(0, 20, 50, 0.75), rgba(0, 0, 0, 0.85)),
                 url('https://i.ibb.co/KjkypGTv/supermarket-aisle-view-stockcake.jpg');
@@ -160,7 +157,6 @@
         .hero h1 {
             font-size: 4rem;
             font-weight: 900;
-            letter-spacing: -1px;
             text-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
             line-height: 1.1;
         }
@@ -175,7 +171,6 @@
             font-size: 1.8rem;
             font-weight: 300;
             margin-top: 15px;
-            text-shadow: 0 2px 10px rgba(0, 0, 0, 0.6);
         }
         .hero .tagline i {
             color: var(--red);
@@ -184,7 +179,6 @@
             font-size: 1.2rem;
             margin-top: 15px;
             opacity: 0.9;
-            font-weight: 300;
         }
         .hero .cta-btn {
             display: inline-block;
@@ -213,10 +207,8 @@
             border-radius: 50px;
             display: inline-block;
             border: 1px solid rgba(255, 255, 255, 0.25);
-            font-size: 1rem;
         }
 
-        /* ---------- SECTIONS ---------- */
         .section-container {
             max-width: 1300px;
             margin: 0 auto;
@@ -235,7 +227,6 @@
             padding-bottom: 10px;
         }
 
-        /* ---------- CATEGORY PILLS ---------- */
         .category-heading {
             font-size: 1.2rem;
             font-weight: 700;
@@ -266,7 +257,6 @@
             cursor: pointer;
             transition: all 0.2s ease;
             border: 2px solid #e0e0e0;
-            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.04);
             display: flex;
             align-items: center;
             gap: 8px;
@@ -274,7 +264,6 @@
         .category-pill:hover {
             border-color: var(--blue);
             transform: translateY(-2px);
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
         }
         .category-pill.active {
             background: var(--red);
@@ -286,15 +275,12 @@
         }
         .category-pill i {
             color: var(--blue);
-            font-size: 1rem;
         }
         .category-pill .count {
             opacity: 0.6;
             font-weight: 400;
-            margin-left: 4px;
         }
 
-        /* ---------- RESTAURANT SPECIAL BANNER ---------- */
         .restaurant-info-bar {
             background: linear-gradient(135deg, #1a0f0a, #3d1f12);
             color: white;
@@ -306,22 +292,15 @@
             align-items: center;
             margin: 15px 0 25px 0;
             border-left: 8px solid var(--gold);
-            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
         }
-        .restaurant-info-bar .hours {
-            display: flex;
-            align-items: center;
-            gap: 15px;
-            flex-wrap: wrap;
-        }
-        .restaurant-info-bar .hours .status-open {
+        .restaurant-info-bar .status-open {
             background: #28a745;
             padding: 4px 16px;
             border-radius: 30px;
             font-weight: bold;
             font-size: 0.9rem;
         }
-        .restaurant-info-bar .hours .status-closed {
+        .restaurant-info-bar .status-closed {
             background: #dc3545;
             padding: 4px 16px;
             border-radius: 30px;
@@ -336,11 +315,7 @@
             font-weight: 800;
             font-size: 0.9rem;
         }
-        .restaurant-info-bar .chef-pick i {
-            margin-right: 6px;
-        }
 
-        /* ---------- PRODUCT GRID ---------- */
         .product-grid {
             display: grid;
             grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
@@ -356,13 +331,10 @@
             transition: all 0.2s;
             border-bottom: 5px solid var(--red);
             position: relative;
-            overflow: hidden;
         }
         .product-card:hover {
             transform: scale(1.03);
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.12);
         }
-        /* Badges for Restaurant */
         .product-card .badge {
             position: absolute;
             top: 12px;
@@ -372,7 +344,6 @@
             padding: 4px 12px;
             border-radius: 30px;
             text-transform: uppercase;
-            letter-spacing: 0.5px;
         }
         .badge-special {
             background: var(--gold);
@@ -404,7 +375,6 @@
             font-size: 0.75rem;
             color: #777;
             margin: 5px 0 8px;
-            min-height: 30px;
             font-style: italic;
         }
         .product-card .price {
@@ -421,15 +391,6 @@
             color: #888;
             margin-bottom: 10px;
         }
-        .product-card .category-tag {
-            background: var(--light-gray);
-            padding: 3px 12px;
-            border-radius: 20px;
-            font-size: 0.65rem;
-            color: #555;
-            display: inline-block;
-            margin-bottom: 8px;
-        }
         .product-card button {
             background: var(--blue);
             color: white;
@@ -445,7 +406,6 @@
             background: var(--red);
         }
 
-        /* ---------- CART & CHECKOUT ---------- */
         .cart-overlay {
             display: none;
             position: fixed;
@@ -484,25 +444,12 @@
             background: none;
             border: none;
         }
-        .cart-sidebar h2 {
-            color: var(--blue);
-            border-bottom: 3px solid var(--red);
-            padding-bottom: 10px;
-            margin-bottom: 15px;
-        }
         .cart-item {
             display: flex;
             justify-content: space-between;
             align-items: center;
             padding: 10px 0;
             border-bottom: 1px solid #eee;
-        }
-        .cart-item .item-name {
-            font-weight: 600;
-        }
-        .cart-item .item-price {
-            color: var(--red);
-            font-weight: bold;
         }
         .qty-controls button {
             background: var(--light-gray);
@@ -624,7 +571,6 @@
             background: var(--blue);
         }
 
-        /* ---------- ACCOUNT MODAL ---------- */
         .auth-overlay {
             display: none;
             position: fixed;
@@ -660,11 +606,6 @@
             background: none;
             border: none;
         }
-        .auth-modal h2 {
-            color: var(--blue);
-            margin-bottom: 20px;
-            text-align: center;
-        }
         .auth-modal input {
             width: 100%;
             padding: 14px;
@@ -696,6 +637,61 @@
             font-weight: 600;
         }
 
+        /* Admin Modal */
+        .admin-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.7);
+            z-index: 600;
+            justify-content: center;
+            align-items: center;
+        }
+        .admin-modal.active {
+            display: flex;
+        }
+        .admin-modal-content {
+            background: white;
+            padding: 30px;
+            border-radius: 20px;
+            max-width: 800px;
+            width: 95%;
+            max-height: 80vh;
+            overflow-y: auto;
+            border-top: 8px solid var(--gold);
+        }
+        .admin-modal-content .close-admin {
+            float: right;
+            font-size: 28px;
+            cursor: pointer;
+            color: #999;
+            background: none;
+            border: none;
+        }
+        .admin-modal-content table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.8rem;
+        }
+        .admin-modal-content th {
+            background: var(--blue);
+            color: white;
+            padding: 10px;
+            text-align: left;
+            position: sticky;
+            top: 0;
+        }
+        .admin-modal-content td {
+            padding: 8px 10px;
+            border-bottom: 1px solid #eee;
+        }
+        .admin-modal-content .order-item-row {
+            background: #f8f9fa;
+        }
+
         .footer {
             background: var(--blue);
             color: white;
@@ -713,41 +709,41 @@
             font-weight: bold;
             margin-top: 10px;
         }
+        .footer .admin-btn {
+            background: var(--red);
+            color: white;
+            border: none;
+            padding: 10px 25px;
+            border-radius: 40px;
+            font-weight: bold;
+            cursor: pointer;
+            margin-top: 15px;
+            font-size: 1rem;
+        }
+        .footer .admin-btn:hover {
+            background: #ff3333;
+        }
+
         @media (max-width: 600px) {
             .hero h1 {
                 font-size: 2.2rem;
             }
-            .hero .tagline {
-                font-size: 1.2rem;
-            }
-            .navbar .logo {
-                font-size: 16px;
-            }
-            .navbar .logo img {
-                height: 35px;
-            }
             .product-grid {
                 grid-template-columns: repeat(2, 1fr);
-                gap: 15px;
             }
             .cart-sidebar {
                 width: 100%;
                 right: -100%;
             }
-            .auth-modal {
-                padding: 25px;
-            }
-            .restaurant-info-bar {
-                flex-direction: column;
-                gap: 10px;
-                text-align: center;
+            .admin-modal-content {
+                padding: 15px;
             }
         }
     </style>
 </head>
 <body>
 
-    <!-- ===== NAVBAR ===== -->
+    <!-- NAVBAR -->
     <nav class="navbar">
         <div class="logo">
             <img src="https://i.ibb.co/TqgqYj50/TAATA-OWEN.png" alt="Taata Owen Logo">
@@ -767,7 +763,7 @@
         </div>
     </nav>
 
-    <!-- ===== HERO ===== -->
+    <!-- HERO -->
     <section class="hero">
         <div class="hero-content">
             <div class="flag-stripes">
@@ -791,7 +787,7 @@
         </div>
     </section>
 
-    <!-- ===== SUPERMARKET ===== -->
+    <!-- SUPERMARKET -->
     <div class="section-container" id="supermarketSection">
         <div class="section-header">
             <h2 class="section-title"><i class="fas fa-store"></i> Supermarket</h2>
@@ -803,28 +799,20 @@
         <div class="product-grid" id="supermarketGrid"></div>
     </div>
 
-    <!-- ===== RESTAURANT (UPGRADED & BALANCED) ===== -->
+    <!-- RESTAURANT -->
     <div class="section-container" style="background: #fcf6f0; border-radius: 30px; margin: 0 20px 30px; padding: 20px 20px 30px; border: 1px solid #f0e0d0;">
         <div class="section-header">
             <h2 class="section-title" style="color: #5d2e1b;"><i class="fas fa-utensils" style="color: var(--gold);"></i> Restaurant Menu</h2>
         </div>
-
-        <!-- Professional Restaurant Info Bar -->
         <div class="restaurant-info-bar">
-            <div class="hours">
-                <i class="fas fa-clock" style="font-size: 1.5rem; color: var(--gold);"></i>
-                <span id="restaurantStatus" class="status-open">Loading...</span>
-                <span style="font-weight: 300;">|</span>
-                <span><i class="fas fa-calendar-alt"></i> Mon - Sun: 7:00 AM - 10:00 PM</span>
-            </div>
-            <div class="chef-pick">
-                <i class="fas fa-star"></i> Chef's Specials Available
-            </div>
             <div>
-                <i class="fas fa-motorcycle"></i> Delivery / <i class="fas fa-store-alt"></i> Pickup
+                <i class="fas fa-clock" style="color: var(--gold);"></i>
+                <span id="restaurantStatus" class="status-open">Loading...</span>
+                <span style="margin-left:10px;">Mon - Sun: 7:00 AM - 10:00 PM</span>
             </div>
+            <div class="chef-pick"><i class="fas fa-star"></i> Chef's Specials</div>
+            <div><i class="fas fa-motorcycle"></i> Delivery / <i class="fas fa-store-alt"></i> Pickup</div>
         </div>
-
         <div class="category-heading">
             <i class="fas fa-tags"></i> Browse Categories
         </div>
@@ -832,33 +820,32 @@
         <div class="product-grid" id="restaurantGrid"></div>
     </div>
 
-    <!-- ===== FOOTER ===== -->
+    <!-- FOOTER -->
     <footer class="footer">
         <p style="font-size:1.5rem; font-weight:900;">Taata Owen Supermarket</p>
         <p><i class="fas fa-map-marker-alt"></i> Jinja Central, Uganda</p>
         <p><i class="fas fa-phone"></i> +256 703 796 153</p>
         <a href="#" class="whatsapp"><i class="fab fa-whatsapp"></i> Chat on WhatsApp</a>
+        <br><br>
+        <!-- ADMIN ORDER BUTTON -->
+        <button class="admin-btn" onclick="toggleAdminModal()"><i class="fas fa-clipboard-list"></i> 📋 View Orders (Admin)</button>
         <p style="margin-top:20px; font-size:0.8rem; opacity:0.6;">© 2026 • Serving Jinja with pride 🇺🇬</p>
     </footer>
 
-    <!-- ===== CART SIDEBAR ===== -->
+    <!-- CART SIDEBAR -->
     <div class="cart-overlay" id="cartOverlay" onclick="toggleCart()"></div>
     <div class="cart-sidebar" id="cartSidebar">
         <button class="close-cart" onclick="toggleCart()">&times;</button>
         <h2><i class="fas fa-shopping-cart"></i> Your Cart</h2>
         <div id="cartItems"></div>
         <div id="cartSummary"></div>
-
         <div class="checkout-form">
             <h4 style="color:var(--blue);">Complete Order</h4>
-
-            <!-- Order Type: Delivery vs Pickup (Marketable!) -->
             <label>Order Type</label>
             <div class="order-type-toggle">
                 <label><input type="radio" name="orderType" value="delivery" checked onchange="toggleAddressField()"> <i class="fas fa-truck"></i> Delivery</label>
                 <label><input type="radio" name="orderType" value="pickup" onchange="toggleAddressField()"> <i class="fas fa-store-alt"></i> Pickup</label>
             </div>
-
             <label>Full Name</label>
             <input type="text" id="custName" placeholder="e.g. John Muwonge">
             <label>Phone Number</label>
@@ -870,7 +857,6 @@
                 <option value="jinja">Jinja City (UGX 5,000)</option>
                 <option value="other">Other Ugandan City (UGX 20,000)</option>
             </select>
-
             <label style="margin-top:15px;">Payment Method</label>
             <div class="payment-options">
                 <div><input type="radio" name="payment" id="payMomo" value="momo" checked> <label for="payMomo"><i class="fas fa-mobile-alt"></i> MTN MoMo</label></div>
@@ -878,7 +864,6 @@
                 <div><input type="radio" name="payment" id="payCard" value="card"> <label for="payCard"><i class="fas fa-credit-card"></i> Card</label></div>
                 <div><input type="radio" name="payment" id="payCash" value="cash"> <label for="payCash"><i class="fas fa-money-bill-wave"></i> Cash on Delivery</label></div>
             </div>
-
             <div class="wallet-section">
                 <p><strong><i class="fas fa-wallet"></i> Your Wallet</strong></p>
                 <p>Balance: UGX <span id="walletBalanceCheckout">0</span></p>
@@ -888,7 +873,6 @@
                     <label for="useWallet" style="display:inline; font-weight:normal;"> Pay with Wallet Balance</label>
                 </div>
             </div>
-
             <div class="points-section">
                 <p><strong><i class="fas fa-star"></i> Loyalty Points</strong></p>
                 <p>You have <span id="pointsBalanceDisplay">0</span> points</p>
@@ -897,7 +881,6 @@
                     <label for="usePoints" style="display:inline; font-weight:normal;"> Redeem 1000 points = UGX 1,000 discount</label>
                 </div>
             </div>
-
             <button class="checkout-btn" onclick="placeOrder()">
                 <i class="fas fa-check-circle"></i> Place Order (Simulated)
             </button>
@@ -905,14 +888,14 @@
         </div>
     </div>
 
-    <!-- ===== AUTH MODAL ===== -->
+    <!-- AUTH MODAL -->
     <div class="auth-overlay" id="authModal">
         <div class="auth-modal">
             <button class="close-auth" onclick="toggleAuthModal()">&times;</button>
             <h2 id="authTitle">Welcome Back</h2>
             <div id="authForm">
-                <input type="text" id="authUsername" placeholder="Username (e.g. reagan)" autocomplete="username">
-                <input type="password" id="authPassword" placeholder="Password" autocomplete="current-password">
+                <input type="text" id="authUsername" placeholder="Username (e.g. reagan)">
+                <input type="password" id="authPassword" placeholder="Password">
                 <button class="auth-btn" id="authActionBtn" onclick="handleAuth()">Login</button>
             </div>
             <div class="toggle-auth" id="authToggleLink" onclick="toggleAuthMode()">
@@ -922,9 +905,22 @@
         </div>
     </div>
 
+    <!-- ADMIN ORDER MODAL -->
+    <div class="admin-modal" id="adminModal">
+        <div class="admin-modal-content">
+            <button class="close-admin" onclick="toggleAdminModal()">&times;</button>
+            <h2 style="color:var(--blue);"><i class="fas fa-clipboard-list"></i> Customer Orders</h2>
+            <p style="color:#888; margin-bottom:15px;">Orders are stored in your browser. Refresh to see new ones.</p>
+            <div id="adminOrderList">
+                <p>Loading orders...</p>
+            </div>
+            <button onclick="clearAllOrders()" style="margin-top:15px; background:var(--red); color:white; border:none; padding:8px 20px; border-radius:30px; cursor:pointer;">Clear All Orders</button>
+        </div>
+    </div>
+
     <script>
         // ============================================================
-        //  DATA (BALANCED RESTAURANT MENU)
+        //  DATA
         // ============================================================
         const supermarketItems = [
             { id: 1, name: "Matooke (Bunch)", category: "Fresh Produce", price: 15000, icon: "fa-solid fa-leaf" },
@@ -949,55 +945,50 @@
             { id: 20, name: "Shampoo (500ml)", category: "Personal Care", price: 12000, icon: "fa-solid fa-spray-can" },
         ];
 
-        // ** BALANCED RESTAURANT ITEMS **
         const restaurantItems = [
-            // Fast Food (4 items)
             { id: 101, name: "Rolex (Chapati + Eggs)", category: "Fast Food", price: 7000, icon: "fa-solid fa-egg",
-                description: "Classic Ugandan street roll with eggs & veggies", prepTime: "10 min", badge: "popular" },
+                description: "Classic Ugandan street roll", prepTime: "10 min", badge: "popular" },
             { id: 102, name: "Chapati (2 pcs)", category: "Fast Food", price: 3000, icon: "fa-solid fa-bread-slice",
-                description: "Soft, flaky Ugandan flatbread", prepTime: "5 min", badge: null },
+                description: "Soft, flaky flatbread", prepTime: "5 min", badge: null },
             { id: 103, name: "Samosa (2 pcs)", category: "Fast Food", price: 4000, icon: "fa-solid fa-cube",
-                description: "Crispy pastry filled with spiced meat or vegetables", prepTime: "8 min", badge: null },
+                description: "Spiced meat or veg pastry", prepTime: "8 min", badge: null },
             { id: 104, name: "Chips (Large)", category: "Fast Food", price: 5000, icon: "fa-solid fa-fries",
-                description: "Golden crispy fries, served with ketchup", prepTime: "8 min", badge: null },
-
-            // Main Course (4 items)
+                description: "Golden crispy fries", prepTime: "8 min", badge: null },
             { id: 105, name: "Chicken Stew + Rice", category: "Main Course", price: 18000, icon: "fa-solid fa-drumstick-bite",
-                description: "Tender chicken stew served with hot rice", prepTime: "20 min", badge: "special" },
+                description: "Tender chicken stew with rice", prepTime: "20 min", badge: "special" },
             { id: 106, name: "Beans + Matooke", category: "Main Course", price: 12000, icon: "fa-solid fa-utensils",
-                description: "Rich bean stew paired with steamed matooke", prepTime: "15 min", badge: null },
+                description: "Rich bean stew with matooke", prepTime: "15 min", badge: null },
             { id: 107, name: "Grilled Fish + Chips", category: "Main Course", price: 22000, icon: "fa-solid fa-fish",
-                description: "Fresh Nile perch grilled to perfection with chips", prepTime: "25 min", badge: "special" },
+                description: "Fresh Nile perch with chips", prepTime: "25 min", badge: "special" },
             { id: 108, name: "Beef Stew + Rice", category: "Main Course", price: 20000, icon: "fa-solid fa-cow",
-                description: "Tender beef stew in rich gravy with rice", prepTime: "20 min", badge: null },
-
-            // Beverages (4 items)
+                description: "Tender beef in rich gravy", prepTime: "20 min", badge: null },
             { id: 109, name: "Fresh Juice (Passion)", category: "Beverages", price: 5000, icon: "fa-solid fa-wine-bottle",
-                description: "Freshly squeezed passion fruit juice", prepTime: "5 min", badge: null },
+                description: "Freshly squeezed", prepTime: "5 min", badge: null },
             { id: 110, name: "Soda (Can)", category: "Beverages", price: 3000, icon: "fa-solid fa-wine-bottle",
-                description: "Chilled soft drink (Coke, Fanta, or Sprite)", prepTime: "2 min", badge: null },
+                description: "Chilled soft drink", prepTime: "2 min", badge: null },
             { id: 111, name: "Bottled Water", category: "Beverages", price: 2000, icon: "fa-solid fa-wine-bottle",
-                description: "Pure mineral water (500ml)", prepTime: "1 min", badge: null },
+                description: "Pure mineral water", prepTime: "1 min", badge: null },
             { id: 112, name: "Milkshake", category: "Beverages", price: 8000, icon: "fa-solid fa-wine-bottle",
-                description: "Creamy vanilla or strawberry milkshake", prepTime: "5 min", badge: "popular" },
-
-            // Sides & Extras (3 items)
+                description: "Creamy vanilla/strawberry", prepTime: "5 min", badge: "popular" },
             { id: 113, name: "Extra Chapati", category: "Sides", price: 2000, icon: "fa-solid fa-bread-slice",
                 description: "One extra fluffy chapati", prepTime: "3 min", badge: null },
             { id: 114, name: "Extra Rice", category: "Sides", price: 3000, icon: "fa-solid fa-seedling",
-                description: "Extra serving of steamed rice", prepTime: "5 min", badge: null },
+                description: "Extra steamed rice", prepTime: "5 min", badge: null },
             { id: 115, name: "Fresh Salad", category: "Sides", price: 4000, icon: "fa-solid fa-leaf",
-                description: "Mixed greens with tomatoes and onions", prepTime: "5 min", badge: null },
+                description: "Mixed greens with tomatoes", prepTime: "5 min", badge: null },
         ];
 
         const allProducts = [...supermarketItems.map(p => ({ ...p, type: 'supermarket' })), ...restaurantItems.map(p => ({ ...p,
             type: 'restaurant' }))];
 
         // ============================================================
-        //  AUTHENTICATION SYSTEM
+        //  AUTH & STATE
         // ============================================================
         let currentUser = null;
         let isLoginMode = true;
+        let cart = [];
+        let supermarketFilter = 'All';
+        let restaurantFilter = 'All';
 
         function getStorageKey() {
             return currentUser ? `taata_${currentUser}` : null;
@@ -1020,43 +1011,37 @@
             }
         }
 
+        // ============================================================
+        //  AUTH FUNCTIONS
+        // ============================================================
         function toggleAuthModal() {
             document.getElementById('authModal').classList.toggle('active');
             document.getElementById('authMessage').textContent = '';
-            document.getElementById('authUsername').value = '';
-            document.getElementById('authPassword').value = '';
         }
 
         function toggleAuthMode() {
             isLoginMode = !isLoginMode;
             const title = document.getElementById('authTitle');
             const btn = document.getElementById('authActionBtn');
-            const toggleLink = document.getElementById('authToggleLink');
+            const link = document.getElementById('authToggleLink');
             if (isLoginMode) {
                 title.textContent = 'Welcome Back';
                 btn.textContent = 'Login';
-                toggleLink.innerHTML = `Don't have an account? <strong>Sign Up</strong>`;
+                link.innerHTML = `Don't have an account? <strong>Sign Up</strong>`;
             } else {
                 title.textContent = 'Create Account';
                 btn.textContent = 'Sign Up';
-                toggleLink.innerHTML = `Already have an account? <strong>Login</strong>`;
+                link.innerHTML = `Already have an account? <strong>Login</strong>`;
             }
-            document.getElementById('authMessage').textContent = '';
         }
 
         function handleAuth() {
             const username = document.getElementById('authUsername').value.trim();
             const password = document.getElementById('authPassword').value.trim();
             const msg = document.getElementById('authMessage');
-
-            if (!username || !password) {
-                msg.textContent = '⚠️ Please fill in all fields.';
-                msg.style.color = 'red';
-                return;
-            }
-
+            if (!username || !password) { msg.textContent = '⚠️ Fill in all fields.';
+                msg.style.color = 'red'; return; }
             let users = JSON.parse(localStorage.getItem('taata_users')) || {};
-
             if (isLoginMode) {
                 if (users[username] && users[username].password === password) {
                     currentUser = username;
@@ -1065,41 +1050,29 @@
                     updateCartUI();
                     msg.textContent = '';
                 } else {
-                    msg.textContent = '❌ Invalid username or password.';
+                    msg.textContent = '❌ Invalid username/password.';
                     msg.style.color = 'red';
                 }
             } else {
-                if (users[username]) {
-                    msg.textContent = '❌ Username already exists.';
-                    msg.style.color = 'red';
-                    return;
-                }
+                if (users[username]) { msg.textContent = '❌ Username exists.';
+                    msg.style.color = 'red'; return; }
                 users[username] = { password: password };
                 localStorage.setItem('taata_users', JSON.stringify(users));
                 currentUser = username;
                 document.getElementById('accountNameDisplay').textContent = username;
                 toggleAuthModal();
                 updateCartUI();
-                msg.textContent = '';
-            }
-        }
-
-        function logoutUser() {
-            if (currentUser) {
-                const data = loadUserData();
-                saveUserData(data.wallet, data.points);
-                currentUser = null;
-                document.getElementById('accountNameDisplay').textContent = 'Login';
-                updateCartUI();
-                alert('✅ Logged out successfully.');
             }
         }
 
         document.getElementById('accountNameDisplay').addEventListener('dblclick', function() {
-            if (currentUser) {
-                if (confirm(`Logout ${currentUser}?`)) {
-                    logoutUser();
-                }
+            if (currentUser && confirm(`Logout ${currentUser}?`)) {
+                const d = loadUserData();
+                saveUserData(d.wallet, d.points);
+                currentUser = null;
+                document.getElementById('accountNameDisplay').textContent = 'Login';
+                updateCartUI();
+                alert('✅ Logged out.');
             }
         });
 
@@ -1110,41 +1083,32 @@
 
         function getPointsBalance() { return loadUserData().points; }
 
-        function setWalletBalance(val) { const d = loadUserData();
-            saveUserData(val, d.points); }
+        function setWalletBalance(v) { const d = loadUserData();
+            saveUserData(v, d.points); }
 
-        function setPointsBalance(val) { const d = loadUserData();
-            saveUserData(d.wallet, val); }
+        function setPointsBalance(v) { const d = loadUserData();
+            saveUserData(d.wallet, v); }
 
         function depositMoney() {
-            if (!currentUser) { alert('⚠️ Please Login or Sign Up first.'); return; }
+            if (!currentUser) { alert('⚠️ Please Login first.'); return; }
             const amount = prompt("Enter amount to deposit (UGX):", "10000");
-            if (amount && !isNaN(amount) && parseInt(amount) > 0) {
-                let balance = getWalletBalance();
-                balance += parseInt(amount);
-                setWalletBalance(balance);
+            if (amount && parseInt(amount) > 0) {
+                let bal = getWalletBalance();
+                bal += parseInt(amount);
+                setWalletBalance(bal);
                 updateCartUI();
-                alert(`✅ UGX ${parseInt(amount).toLocaleString()} added to wallet!`);
-            } else {
-                alert("Please enter a valid amount.");
+                alert(`✅ UGX ${parseInt(amount).toLocaleString()} added!`);
             }
         }
 
         function showWalletInfo() {
-            if (!currentUser) {
-                alert('⚠️ Please Login to view your wallet and points.');
-                return;
-            }
-            alert(`💰 Wallet Balance: UGX ${getWalletBalance().toLocaleString()}\n⭐ Points: ${getPointsBalance()}\n\nEarn 1 point per UGX 1,000 spent.`);
+            if (!currentUser) { alert('⚠️ Login to view wallet.'); return; }
+            alert(`💰 Wallet: UGX ${getWalletBalance().toLocaleString()}\n⭐ Points: ${getPointsBalance()}`);
         }
 
         // ============================================================
-        //  CART & UI LOGIC
+        //  UI RENDERING
         // ============================================================
-        let cart = [];
-        let supermarketFilter = 'All';
-        let restaurantFilter = 'All';
-
         function getCategories(items) {
             const cats = items.map(item => item.category);
             return ['All', ...new Set(cats)];
@@ -1208,24 +1172,14 @@
             filtered.forEach(item => {
                 const card = document.createElement('div');
                 card.className = 'product-card';
-
                 let badgeHtml = '';
-                if (item.badge === 'special') {
-                    badgeHtml = `<span class="badge badge-special"><i class="fas fa-crown"></i> Chef's Special</span>`;
-                } else if (item.badge === 'popular') {
-                    badgeHtml = `<span class="badge badge-popular"><i class="fas fa-fire"></i> Popular</span>`;
-                }
-
-                let metaHtml = '';
-                if (item.prepTime) {
-                    metaHtml = `<div class="meta-info"><i class="fas fa-clock"></i> ${item.prepTime}</div>`;
-                }
-
-                let descHtml = '';
-                if (item.description) {
-                    descHtml = `<div class="description">${item.description}</div>`;
-                }
-
+                if (item.badge === 'special') badgeHtml =
+                    `<span class="badge badge-special"><i class="fas fa-crown"></i> Chef's Special</span>`;
+                else if (item.badge === 'popular') badgeHtml =
+                    `<span class="badge badge-popular"><i class="fas fa-fire"></i> Popular</span>`;
+                let metaHtml = item.prepTime ? `<div class="meta-info"><i class="fas fa-clock"></i> ${item.prepTime}</div>` :
+                    '';
+                let descHtml = item.description ? `<div class="description">${item.description}</div>` : '';
                 card.innerHTML = `
                         ${badgeHtml}
                         <div class="icon"><i class="${item.icon}"></i></div>
@@ -1240,6 +1194,9 @@
             });
         }
 
+        // ============================================================
+        //  CART LOGIC
+        // ============================================================
         function addToCart(id) {
             const product = allProducts.find(p => p.id === id);
             if (!product) return;
@@ -1261,36 +1218,32 @@
 
         function toggleAddressField() {
             const isPickup = document.querySelector('input[name="orderType"]:checked')?.value === 'pickup';
-            const addressInput = document.getElementById('custAddress');
-            const addressLabel = document.getElementById('addressLabel');
+            const addrInput = document.getElementById('custAddress');
+            const addrLabel = document.getElementById('addressLabel');
             if (isPickup) {
-                addressInput.placeholder = 'Pickup location (e.g., Taata Owen Jinja Central)';
-                addressLabel.textContent = 'Pickup Location';
-                addressInput.required = false;
+                addrInput.placeholder = 'Taata Owen Jinja Central (or specific pickup point)';
+                addrLabel.textContent = 'Pickup Location';
             } else {
-                addressInput.placeholder = 'Street, building, landmark';
-                addressLabel.textContent = 'Delivery Address';
-                addressInput.required = true;
+                addrInput.placeholder = 'Street, building, landmark';
+                addrLabel.textContent = 'Delivery Address';
             }
         }
 
         function updateCartUI() {
             const count = cart.reduce((sum, c) => sum + c.qty, 0);
             document.getElementById('cartCount').textContent = count;
-
-            const wallet = getWalletBalance();
-            const points = getPointsBalance();
+            const wallet = getWalletBalance(),
+                points = getPointsBalance();
             document.getElementById('walletBalanceDisplay').textContent = wallet.toLocaleString();
             document.getElementById('walletBalanceCheckout').textContent = wallet.toLocaleString();
             document.getElementById('pointsBalanceDisplay').textContent = points;
 
             const container = document.getElementById('cartItems');
             if (cart.length === 0) {
-                container.innerHTML = '<p style="color:#888; margin-top:30px;">Cart is empty.</p>';
+                container.innerHTML = '<p style="color:#888;">Cart is empty.</p>';
                 document.getElementById('cartSummary').innerHTML = '';
                 return;
             }
-
             let html = '',
                 subtotal = 0;
             cart.forEach(item => {
@@ -1303,32 +1256,28 @@
             const location = document.getElementById('custLocation')?.value || 'jinja';
             const shipping = location === 'jinja' ? 5000 : 20000;
             const freeDelivery = subtotal >= 200000;
-
-            let discount = 0;
+            let discount = 0,
+                walletPay = 0;
             if (document.getElementById('usePoints')?.checked && currentUser) {
-                const maxPointsToUse = Math.min(points, Math.floor(subtotal / 1000) * 1000);
-                discount = maxPointsToUse;
+                const max = Math.min(points, Math.floor(subtotal / 1000) * 1000);
+                discount = max;
             }
-
-            let walletPay = 0;
             if (document.getElementById('useWallet')?.checked && currentUser) {
                 walletPay = Math.min(wallet, subtotal - discount);
             }
-
             let finalTotal = subtotal - discount - walletPay + (freeDelivery ? 0 : shipping);
             if (finalTotal < 0) finalTotal = 0;
-
             let pointsEarned = Math.floor(finalTotal / 1000);
 
             document.getElementById('cartSummary').innerHTML = `
                     <div class="cart-total">
                         <p>Subtotal: UGX ${subtotal.toLocaleString()}</p>
-                        ${discount > 0 ? `<p style="color:green;">Points Discount: - UGX ${discount.toLocaleString()}</p>` : ''}
-                        ${walletPay > 0 ? `<p style="color:blue;">Wallet Paid: - UGX ${walletPay.toLocaleString()}</p>` : ''}
+                        ${discount > 0 ? `<p style="color:green;">Discount: - UGX ${discount.toLocaleString()}</p>` : ''}
+                        ${walletPay > 0 ? `<p style="color:blue;">Wallet: - UGX ${walletPay.toLocaleString()}</p>` : ''}
                         <p>Delivery: ${freeDelivery ? '🎉 FREE' : `UGX ${shipping.toLocaleString()}`}</p>
                         <hr>
-                        <p style="color:var(--red); font-size:1.6rem;">Total Due: UGX ${finalTotal.toLocaleString()}</p>
-                        ${currentUser ? `<p style="font-size:0.8rem; color:#888;">You will earn ${pointsEarned} points on this order.</p>` : '<p style="font-size:0.8rem; color:red;">⚠️ Login to earn points & use wallet!</p>'}
+                        <p style="color:var(--red); font-size:1.6rem;">Total: UGX ${finalTotal.toLocaleString()}</p>
+                        ${currentUser ? `<p style="font-size:0.8rem;">⭐ Earn ${pointsEarned} points</p>` : '<p style="color:red; font-size:0.8rem;">⚠️ Login to earn points</p>'}
                     </div>
                 `;
         }
@@ -1342,7 +1291,51 @@
         }
 
         // ============================================================
-        //  PLACE ORDER
+        //  ADMIN PANEL (View Orders)
+        // ============================================================
+        function toggleAdminModal() {
+            const modal = document.getElementById('adminModal');
+            modal.classList.toggle('active');
+            if (modal.classList.contains('active')) {
+                loadOrdersIntoAdmin();
+            }
+        }
+
+        function loadOrdersIntoAdmin() {
+            const container = document.getElementById('adminOrderList');
+            const orders = JSON.parse(localStorage.getItem('taata_orders')) || [];
+            if (orders.length === 0) {
+                container.innerHTML = '<p style="text-align:center; padding:20px; color:#888;">📭 No orders placed yet.</p>';
+                return;
+            }
+            let html = `<table>
+                        <thead><tr><th>#</th><th>Time</th><th>Customer</th><th>Phone</th><th>Type</th><th>Items</th><th>Total</th></tr></thead><tbody>`;
+            // Show latest first
+            orders.slice().reverse().forEach((order, index) => {
+                html += `<tr>
+                            <td>${index + 1}</td>
+                            <td>${order.timestamp}</td>
+                            <td><strong>${order.customer}</strong></td>
+                            <td>${order.phone}</td>
+                            <td>${order.orderType}</td>
+                            <td style="max-width:200px; word-break:break-word;">${order.items}</td>
+                            <td><strong>UGX ${order.total.toLocaleString()}</strong></td>
+                        </tr>`;
+            });
+            html += `</tbody></table>`;
+            container.innerHTML = html;
+        }
+
+        function clearAllOrders() {
+            if (confirm('Delete all orders permanently?')) {
+                localStorage.removeItem('taata_orders');
+                loadOrdersIntoAdmin();
+                alert('All orders cleared.');
+            }
+        }
+
+        // ============================================================
+        //  PLACE ORDER (UPDATED: Fast Delivery & Admin Save)
         // ============================================================
         function placeOrder() {
             const orderType = document.querySelector('input[name="orderType"]:checked')?.value || 'delivery';
@@ -1358,8 +1351,8 @@
 
             let subtotal = cart.reduce((sum, c) => sum + (c.price * c.qty), 0);
             const shipping = location === 'jinja' ? 5000 : 20000;
-            let discount = 0;
-            let walletPay = 0;
+            let discount = 0,
+                walletPay = 0;
             let finalTotal = subtotal + (subtotal >= 200000 ? 0 : shipping);
 
             if (currentUser) {
@@ -1373,22 +1366,39 @@
                 }
                 finalTotal = subtotal - discount - walletPay + (subtotal >= 200000 ? 0 : shipping);
                 if (finalTotal < 0) finalTotal = 0;
-
-                if (walletPay > 0) { setWalletBalance(wallet - walletPay); }
-                if (discount > 0) { setPointsBalance(points - discount); }
-
+                if (walletPay > 0) setWalletBalance(wallet - walletPay);
+                if (discount > 0) setPointsBalance(points - discount);
                 const newPoints = Math.floor(finalTotal / 1000);
-                if (newPoints > 0) { setPointsBalance(getPointsBalance() + newPoints); }
-                var pointsMsg = `\n⭐ Points Earned: ${newPoints}`;
+                if (newPoints > 0) setPointsBalance(getPointsBalance() + newPoints);
+                var pointsMsg = `⭐ Points Earned: ${newPoints}`;
             } else {
-                var pointsMsg = '\n⚠️ Create an account to earn points!';
+                var pointsMsg = '⚠️ Create an account to earn points!';
             }
+
+            // --- DETERMINE DELIVERY TIME (15-30 mins for Restaurant, 1-2 hrs for Supermarket) ---
+            const hasRestaurantItems = cart.some(item => item.type === 'restaurant');
+            const estimatedTime = hasRestaurantItems ? '15-30 minutes' : '1-2 hours';
 
             const orderSummary = cart.map(c => `${c.name} x${c.qty}`).join(', ');
             const paymentMethod = { momo: 'MTN Mobile Money', airtel: 'Airtel Money', card: 'Credit/Debit Card',
                 cash: 'Cash on Delivery' } [payment] || payment;
             const orderTypeLabel = orderType === 'delivery' ? '🚚 Delivery' : '🏪 Pickup';
 
+            // --- SAVE ORDER TO ADMIN PANEL (LocalStorage) ---
+            const orders = JSON.parse(localStorage.getItem('taata_orders')) || [];
+            orders.push({
+                timestamp: new Date().toLocaleString(),
+                customer: name,
+                phone: phone,
+                address: address,
+                orderType: orderTypeLabel,
+                payment: paymentMethod,
+                items: orderSummary,
+                total: finalTotal
+            });
+            localStorage.setItem('taata_orders', JSON.stringify(orders));
+
+            // Show Confirmation Popup
             alert(`
         ✅ ORDER PLACED SUCCESSFULLY!
 
@@ -1401,15 +1411,16 @@
         🛒 Items: ${orderSummary}
         💰 Total Paid: UGX ${finalTotal.toLocaleString()}
         ${pointsMsg}
-        💵 Wallet Balance Left: UGX ${getWalletBalance().toLocaleString()}
+        💵 Wallet Balance: UGX ${getWalletBalance().toLocaleString()}
 
-        📌 Next Steps:
-        1. We will call you on ${phone} to confirm.
-        2. ${orderType === 'delivery' ? 'Your order will be delivered within 1-2 days.' : 'Your order will be ready for pickup at Taata Owen Supermarket (Jinja Central).'}
-
-        Thank you for shopping at Taata Owen! 🛍️🇺🇬
+        📌 NEXT STEPS (REAL):
+        1️⃣ We will call you on ${phone} within 5 minutes to confirm.
+        2️⃣ ${orderType === 'delivery' ? `Your order will arrive within ${estimatedTime}! 🏍️` : `Your order will be ready for pickup within ${estimatedTime} at Taata Owen Supermarket.`}
+        
+        Thank you for choosing Taata Owen! 🇺🇬
         `);
 
+            // Reset cart
             cart = [];
             updateCartUI();
             toggleCart();
@@ -1419,12 +1430,11 @@
         }
 
         // ============================================================
-        //  RESTAURANT OPEN/CLOSE STATUS
+        //  RESTAURANT STATUS
         // ============================================================
         function updateRestaurantStatus() {
             const now = new Date();
             const hours = now.getHours();
-            // Open from 7 AM (7) to 10 PM (22)
             const isOpen = hours >= 7 && hours < 22;
             const statusEl = document.getElementById('restaurantStatus');
             if (isOpen) {
@@ -1437,7 +1447,7 @@
         }
 
         // ============================================================
-        //  INIT & EVENTS
+        //  INIT
         // ============================================================
         document.addEventListener('change', function(e) {
             if (e.target.id === 'custLocation' || e.target.id === 'useWallet' || e.target.id === 'usePoints' || e.target
@@ -1453,9 +1463,11 @@
         renderGrid('restaurantGrid', restaurantItems, 'All');
         updateCartUI();
         updateRestaurantStatus();
-        setInterval(updateRestaurantStatus, 60000); // Update every minute
+        setInterval(updateRestaurantStatus, 60000);
+        toggleAddressField(); // Set initial address field state
 
         console.log('🔥 Taata Owen Supermarket & Restaurant is LIVE!');
+        console.log('📋 To view orders, scroll down and click "View Orders (Admin)" button.');
     </script>
 </body>
 </html>
