@@ -1318,6 +1318,9 @@
     <!-- Back to Top Button -->
     <button id="backToTop" onclick="scrollToTop()"><i class="fas fa-arrow-up"></i></button>
 
+    <!-- ========================================================== -->
+    <!-- =============== JAVASCRIPT - ALL LOGIC ================= -->
+    <!-- ========================================================== -->
     <script>
         // ============================================================
         //  GLOBAL DATA & STATE
@@ -1823,13 +1826,12 @@
         }
 
         // ============================================================
-        //  ✅ CHECKOUT - PLACE ORDER (FIXED & FORCED)
+        //  ✅ CHECKOUT - PLACE ORDER (FIXED)
         // ============================================================
         function placeOrder() {
             try {
                 console.log("🚀 Place Order triggered!");
 
-                // 1. Get all form values safely
                 const orderType = document.querySelector('input[name="orderType"]:checked')?.value || 'delivery';
                 const name = document.getElementById('custName')?.value?.trim() || '';
                 const phone = document.getElementById('custPhone')?.value?.trim() || '';
@@ -1838,7 +1840,6 @@
                 const paymentEl = document.querySelector('input[name="payment"]:checked');
                 const payment = paymentEl ? paymentEl.value : 'momo';
 
-                // 2. Validate
                 if (cart.length === 0) {
                     alert('❌ Your cart is empty! Add some items first.');
                     return;
@@ -1861,7 +1862,6 @@
 
                 console.log("✅ Validation passed");
 
-                // 3. Calculate totals
                 let subtotal = cart.reduce((sum, c) => sum + (c.price * c.qty), 0);
                 const shipping = location === 'jinja' ? 5000 : 20000;
                 const freeDelivery = subtotal >= 200000;
@@ -1897,7 +1897,6 @@
                     var pointsMsg = '⚠️ Create an account to earn points!';
                 }
 
-                // 4. Build order summary
                 const hasRestaurantItems = cart.some(item => item.type === 'restaurant');
                 const estimatedTime = hasRestaurantItems ? '15-30 minutes' : '1-2 hours';
                 const orderSummary = cart.map(c => `${c.name} x${c.qty}`).join(', ');
@@ -1909,7 +1908,6 @@
                 } [payment] || payment;
                 const orderTypeLabel = orderType === 'delivery' ? '🚚 Delivery' : '🏪 Pickup';
 
-                // 5. Save order to localStorage
                 const orders = JSON.parse(localStorage.getItem('taata_orders')) || [];
                 orders.push({
                     timestamp: new Date().toLocaleString(),
@@ -1927,7 +1925,6 @@
 
                 console.log("✅ Order saved:", orders);
 
-                // 6. Show success message
                 alert(`
         ✅ ORDER PLACED SUCCESSFULLY!
 
@@ -1949,7 +1946,6 @@
         Thank you for choosing Taata Owen! 🇺🇬
         `);
 
-                // 7. Reset cart and form
                 cart = [];
                 updateCartUI();
                 toggleCart();
@@ -1999,7 +1995,7 @@
         }
 
         // ============================================================
-        //  ADMIN APP LOGIC (unchanged)
+        //  ADMIN APP LOGIC
         // ============================================================
         function showAdminLogin() {
             document.getElementById('adminLoginModal').classList.add('active');
@@ -2322,7 +2318,7 @@
         console.log('🔥 Taata Owen Supermarket & Restaurant is LIVE!');
         console.log('🔐 Admin Login: Click "Admin Login" at the bottom. Password: admin123');
         console.log('🛒 Cart & Checkout are FULLY ACTIVE.');
-        console.log('📋 If checkout fails, please check the console for errors.');
+        console.log('📋 If checkout fails, check the console for errors.');
 
         // Force the placeOrder function to be globally accessible
         window.placeOrder = placeOrder;
