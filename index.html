@@ -1558,10 +1558,6 @@
             }
         }
 
-        function showWalletInfo() {
-            toggleAccountModal();
-        }
-
         // ============================================================
         //  SEARCH FUNCTION
         // ============================================================
@@ -1684,29 +1680,157 @@
             });
         }
 
+        // ============================================================
+        //  🛒 CART LOGIC (REWRITTEN & BULLETPROOF)
+        // ============================================================
         function addToCart(id) {
-            const product = allProducts.find(p => p.id === id);
-            if (!product || !product.inStock) return;
-            const existing = cart.find(c => c.id === id && c.type === product.type);
-            if (existing) existing.qty += 1;
-            else cart.push({ ...product, qty: 1 });
-            updateCartUI();
-            alert(`✅ Added: ${product.name}`);
+            try {
+                const product = allProducts.find(p => p.id === id);
+                if (!product) { alert('Product not found!'); return; }
+                if (!product.inStock) { alert('Sorry, this item is out of stock.'); return; }
+
+                const existing = cart.find(c => c.id === id && c.type === product.type);
+                if (existing) {
+                    existing.qty += 1;
+                } else {
+                    cart.push({ ...product, qty: 1 });
+                }
+                updateCartUI();
+                alert(`✅ Added: ${product.name}`);
+            } catch (e) {
+                console.error("Add to cart error:", e);
+                alert("Error adding item.");
+            }
         }
 
         function removeFromCart(id, type) {
-            const index = cart.findIndex(c => c.id === id && c.type === type);
-            if (index !== -1) {
-                if (cart[index].qty > 1) cart[index].qty -= 1;
-                else cart.splice(index, 1);
+            try {
+                const index = cart.findIndex(c => c.id === id && c.type === type);
+                if (index === -1) return;
+                if (cart[index].qty > 1) {
+                    cart[index].qty -= 1;
+                } else {
+                    cart.splice(index, 1);
+                }
+                updateCartUI();
+            } catch (e) {
+                console.error("Remove from cart error:", e);
             }
-            updateCartUI();
+        }
+
+        function updateCartUI() {
+            try {
+                // Update badge count
+                const totalItems = cart.reduce((sum, c) => sum + c.qty, 0);
+                document.getElementById('cartCount').textContent = totalItems;
+
+                // Update wallet display
+                if (currentUser) {
+                    const data = loadUserData();
+                    document.getElementById('walletBalanceDisplay').textContent = data.wallet.toLocaleString();
+                    if (document.getElementById('accountModal').classList.contains('active')) {
+                        updateAccountModal();
+                    }
+                }
+
+                const container = document.getElementById('cartItems');
+                const summaryContainer = document.getElementById('cartSummary');
+
+                if (!container) {
+                    console.warn("Cart items container not found");
+                    return;
+                }
+
+                if (cart.length === 0) {
+                    container.innerHTML = '<p style="color:#888; text-align:center; margin-top:20px;">🛒 Your cart is empty.</p>';
+                    if (summaryContainer) summaryContainer.innerHTML = '';
+                    return;
+                }
+
+                // Build cart items HTML
+                let html = '';
+                let subtotal = 0;
+                cart.forEach(item => {
+                    const total = item.price * item.qty;
+                    subtotal += total;
+                    html += `
+                        <div class="cart-item">
+                            <div>
+                                <div class="item-name">${item.name}</div>
+                                <small>${item.type === 'supermarket' ? '🏪 Supermarket' : '🍽️ Restaurant'}</small>
+                            </div>
+                            <div>
+                                <span class="item-price">UGX ${total.toLocaleString()}</span>
+                                <div class="qty-controls">
+                                    <button onclick="removeFromCart(${item.id}, '${item.type}')">-</button>
+                                    <span>${item.qty}</span>
+                                    <button onclick="addToCart(${item.id})">+</button>
+                                </div>
+                            </div>
+                        </div>
+                    `;
+                });
+                container.innerHTML = html;
+
+                // Calculate totals & shipping
+                const location = document.getElementById('custLocation')?.value || 'jinja';
+                const shipping = location === 'jinja' ? 5000 : 20000;
+                const freeDelivery = subtotal >= 200000;
+
+                let discount = 0;
+                let walletPay = 0;
+                let points = getPointsBalance();
+                let wallet = getWalletBalance();
+
+                const usePointsCheck = document.getElementById('usePoints');
+                const useWalletCheck = document.getElementById('useWallet');
+
+                if (usePointsCheck && usePointsCheck.checked && currentUser) {
+                    discount = Math.min(points, Math.floor(subtotal / 1000) * 1000);
+                }
+                if (useWalletCheck && useWalletCheck.checked && currentUser) {
+                    walletPay = Math.min(wallet, subtotal - discount);
+                }
+
+                let finalTotal = subtotal - discount - walletPay + (freeDelivery ? 0 : shipping);
+                if (finalTotal < 0) finalTotal = 0;
+                let pointsEarned = Math.floor(finalTotal / 1000);
+
+                // Build summary HTML
+                let summaryHtml = `
+                    <div class="cart-total">
+                        <p>Subtotal: UGX ${subtotal.toLocaleString()}</p>
+                        ${discount > 0 ? `<p style="color:green;">Discount: - UGX ${discount.toLocaleString()}</p>` : ''}
+                        ${walletPay > 0 ? `<p style="color:blue;">Wallet Paid: - UGX ${walletPay.toLocaleString()}</p>` : ''}
+                        <p>Delivery: ${freeDelivery ? '🎉 FREE' : `UGX ${shipping.toLocaleString()}`}</p>
+                        <hr>
+                        <p style="color:var(--red); font-size:1.6rem;">Total: UGX ${finalTotal.toLocaleString()}</p>
+                        ${currentUser ? `<p style="font-size:0.8rem; color:#888;">⭐ You'll earn ${pointsEarned} points</p>` : '<p style="color:red; font-size:0.8rem;">⚠️ Login to earn points</p>'}
+                    </div>
+                `;
+                if (summaryContainer) summaryContainer.innerHTML = summaryHtml;
+
+            } catch (e) {
+                console.error("Update cart UI error:", e);
+            }
+        }
+
+        function toggleCart() {
+            const sidebar = document.getElementById('cartSidebar');
+            const overlay = document.getElementById('cartOverlay');
+            if (!sidebar || !overlay) return;
+            sidebar.classList.toggle('open');
+            overlay.classList.toggle('active');
+            if (sidebar.classList.contains('open')) {
+                updateCartUI();
+            }
         }
 
         function toggleAddressField() {
             const isPickup = document.querySelector('input[name="orderType"]:checked')?.value === 'pickup';
             const addrInput = document.getElementById('custAddress');
             const addrLabel = document.getElementById('addressLabel');
+            if (!addrInput || !addrLabel) return;
             if (isPickup) {
                 addrInput.placeholder = 'Taata Owen Jinja Central (or specific pickup point)';
                 addrLabel.textContent = 'Pickup Location';
@@ -1716,80 +1840,14 @@
             }
         }
 
-        function updateCartUI() {
-            const count = cart.reduce((sum, c) => sum + c.qty, 0);
-            document.getElementById('cartCount').textContent = count;
-
-            if (currentUser) {
-                const data = loadUserData();
-                document.getElementById('walletBalanceDisplay').textContent = data.wallet.toLocaleString();
-                if (document.getElementById('accountModal').classList.contains('active')) {
-                    updateAccountModal();
-                }
-            }
-
-            const container = document.getElementById('cartItems');
-            if (cart.length === 0) {
-                container.innerHTML = '<p style="color:#888;">Cart is empty.</p>';
-                document.getElementById('cartSummary').innerHTML = '';
-                return;
-            }
-            let html = '',
-                subtotal = 0;
-            cart.forEach(item => {
-                const total = item.price * item.qty;
-                subtotal += total;
-                html += `<div class="cart-item"><div><div class="item-name">${item.name}</div><small>${item.type === 'supermarket' ? '🏪' : '🍽️'}</small></div><div><span class="item-price">UGX ${total.toLocaleString()}</span><div class="qty-controls"><button onclick="removeFromCart(${item.id}, '${item.type}')">-</button><span>${item.qty}</span><button onclick="addToCart(${item.id})">+</button></div></div></div>`;
-            });
-            container.innerHTML = html;
-
-            const location = document.getElementById('custLocation')?.value || 'jinja';
-            const shipping = location === 'jinja' ? 5000 : 20000;
-            const freeDelivery = subtotal >= 200000;
-            let discount = 0,
-                walletPay = 0;
-            const points = getPointsBalance();
-            const wallet = getWalletBalance();
-            if (document.getElementById('usePoints')?.checked && currentUser) {
-                const max = Math.min(points, Math.floor(subtotal / 1000) * 1000);
-                discount = max;
-            }
-            if (document.getElementById('useWallet')?.checked && currentUser) {
-                walletPay = Math.min(wallet, subtotal - discount);
-            }
-            let finalTotal = subtotal - discount - walletPay + (freeDelivery ? 0 : shipping);
-            if (finalTotal < 0) finalTotal = 0;
-            let pointsEarned = Math.floor(finalTotal / 1000);
-
-            document.getElementById('cartSummary').innerHTML = `
-                    <div class="cart-total">
-                        <p>Subtotal: UGX ${subtotal.toLocaleString()}</p>
-                        ${discount > 0 ? `<p style="color:green;">Discount: - UGX ${discount.toLocaleString()}</p>` : ''}
-                        ${walletPay > 0 ? `<p style="color:blue;">Wallet: - UGX ${walletPay.toLocaleString()}</p>` : ''}
-                        <p>Delivery: ${freeDelivery ? '🎉 FREE' : `UGX ${shipping.toLocaleString()}`}</p>
-                        <hr>
-                        <p style="color:var(--red); font-size:1.6rem;">Total: UGX ${finalTotal.toLocaleString()}</p>
-                        ${currentUser ? `<p style="font-size:0.8rem;">⭐ You'll earn ${pointsEarned} points</p>` : '<p style="color:red; font-size:0.8rem;">⚠️ Login to earn points</p>'}
-                    </div>
-                `;
-        }
-
-        function toggleCart() {
-            const sidebar = document.getElementById('cartSidebar');
-            const overlay = document.getElementById('cartOverlay');
-            sidebar.classList.toggle('open');
-            overlay.classList.toggle('active');
-            if (sidebar.classList.contains('open')) updateCartUI();
-        }
-
         // ============================================================
-        //  PLACE ORDER (FIXED)
+        //  ✅ CHECKOUT & PLACE ORDER (FIXED)
         // ============================================================
         function placeOrder() {
             try {
-                console.log("🛒 Place Order called.");
+                console.log("🚀 Place Order triggered");
 
-                // Get form values safely
+                // 1. Get all form values safely
                 const orderType = document.querySelector('input[name="orderType"]:checked')?.value || 'delivery';
                 const name = document.getElementById('custName')?.value?.trim() || '';
                 const phone = document.getElementById('custPhone')?.value?.trim() || '';
@@ -1798,13 +1856,30 @@
                 const paymentEl = document.querySelector('input[name="payment"]:checked');
                 const payment = paymentEl ? paymentEl.value : 'momo';
 
-                if (cart.length === 0) { alert('❌ Your cart is empty!'); return; }
-                if (!name) { alert('⚠️ Enter your full name.'); document.getElementById('custName').focus(); return; }
-                if (!phone) { alert('⚠️ Enter your phone number.'); document.getElementById('custPhone').focus(); return; }
-                if (orderType === 'delivery' && !address) { alert('⚠️ Enter delivery address.');
-                    document.getElementById('custAddress').focus(); return; }
+                // 2. Validate
+                if (cart.length === 0) {
+                    alert('❌ Your cart is empty! Add some items first.');
+                    return;
+                }
+                if (!name) {
+                    alert('⚠️ Please enter your full name.');
+                    document.getElementById('custName')?.focus();
+                    return;
+                }
+                if (!phone) {
+                    alert('⚠️ Please enter your phone number.');
+                    document.getElementById('custPhone')?.focus();
+                    return;
+                }
+                if (orderType === 'delivery' && !address) {
+                    alert('⚠️ Please enter a delivery address.');
+                    document.getElementById('custAddress')?.focus();
+                    return;
+                }
 
-                // Calculate totals
+                console.log("✅ Validation passed");
+
+                // 3. Calculate totals
                 let subtotal = cart.reduce((sum, c) => sum + (c.price * c.qty), 0);
                 const shipping = location === 'jinja' ? 5000 : 20000;
                 const freeDelivery = subtotal >= 200000;
@@ -1815,32 +1890,45 @@
 
                 if (currentUser) {
                     let points = getPointsBalance();
-                    if (document.getElementById('usePoints')?.checked) {
+                    const usePointsCheck = document.getElementById('usePoints');
+                    if (usePointsCheck && usePointsCheck.checked) {
                         discount = Math.min(points, Math.floor(subtotal / 1000) * 1000);
                     }
+
                     let wallet = getWalletBalance();
-                    if (document.getElementById('useWallet')?.checked) {
+                    const useWalletCheck = document.getElementById('useWallet');
+                    if (useWalletCheck && useWalletCheck.checked) {
                         walletPay = Math.min(wallet, subtotal - discount);
                     }
+
                     finalTotal = subtotal - discount - walletPay + (freeDelivery ? 0 : shipping);
                     if (finalTotal < 0) finalTotal = 0;
+
+                    // Deduct wallet & points
                     if (walletPay > 0) setWalletBalance(wallet - walletPay);
                     if (discount > 0) setPointsBalance(points - discount);
+
                     pointsEarned = Math.floor(finalTotal / 1000);
                     if (pointsEarned > 0) setPointsBalance(getPointsBalance() + pointsEarned);
+
                     var pointsMsg = `⭐ Points Earned: ${pointsEarned}`;
                 } else {
                     var pointsMsg = '⚠️ Create an account to earn points!';
                 }
 
+                // 4. Build order summary
                 const hasRestaurantItems = cart.some(item => item.type === 'restaurant');
                 const estimatedTime = hasRestaurantItems ? '15-30 minutes' : '1-2 hours';
                 const orderSummary = cart.map(c => `${c.name} x${c.qty}`).join(', ');
-                const paymentMethod = { momo: 'MTN Mobile Money', airtel: 'Airtel Money', card: 'Credit/Debit Card',
-                    cash: 'Cash on Delivery' } [payment] || payment;
+                const paymentMethod = {
+                    momo: 'MTN Mobile Money',
+                    airtel: 'Airtel Money',
+                    card: 'Credit/Debit Card',
+                    cash: 'Cash on Delivery'
+                } [payment] || payment;
                 const orderTypeLabel = orderType === 'delivery' ? '🚚 Delivery' : '🏪 Pickup';
 
-                // Save order
+                // 5. Save order to localStorage (Admin panel)
                 const orders = JSON.parse(localStorage.getItem('taata_orders')) || [];
                 orders.push({
                     timestamp: new Date().toLocaleString(),
@@ -1856,6 +1944,9 @@
                 });
                 localStorage.setItem('taata_orders', JSON.stringify(orders));
 
+                console.log("✅ Order saved:", orders);
+
+                // 6. Show success message
                 alert(`
         ✅ ORDER PLACED SUCCESSFULLY!
 
@@ -1877,6 +1968,7 @@
         Thank you for choosing Taata Owen! 🇺🇬
         `);
 
+                // 7. Reset cart and form
                 cart = [];
                 updateCartUI();
                 toggleCart();
@@ -1884,18 +1976,21 @@
                 document.getElementById('custPhone').value = '';
                 document.getElementById('custAddress').value = '';
 
-                console.log("✅ Order placed successfully.");
             } catch (error) {
-                console.error("❌ placeOrder error:", error);
-                alert("⚠️ Something went wrong. Check console (F12) for details.");
+                console.error("❌ Place order error:", error);
+                alert("⚠️ Something went wrong while placing your order. Please check the console (F12) for details.");
             }
         }
 
+        // ============================================================
+        //  RESTAURANT STATUS
+        // ============================================================
         function updateRestaurantStatus() {
             const now = new Date();
             const hours = now.getHours();
             const isOpen = hours >= 7 && hours < 22;
             const statusEl = document.getElementById('restaurantStatus');
+            if (!statusEl) return;
             if (isOpen) {
                 statusEl.className = 'status-open';
                 statusEl.textContent = '🔴 Open Now';
@@ -1910,6 +2005,7 @@
         // ============================================================
         window.onscroll = function() {
             const btn = document.getElementById('backToTop');
+            if (!btn) return;
             if (document.body.scrollTop > 300 || document.documentElement.scrollTop > 300) {
                 btn.style.display = 'block';
             } else {
@@ -2220,6 +2316,7 @@
             }
         });
 
+        // Admin session check
         if (sessionStorage.getItem('taata_admin_logged_in') === 'true') {
             document.getElementById('customerApp').style.display = 'none';
             document.getElementById('adminApp').style.display = 'block';
@@ -2231,6 +2328,7 @@
             document.getElementById('adminApp').style.display = 'none';
         }
 
+        // Render initial UI
         renderCategoryPills('supermarketCategoryPills', supermarketItems, 'All', 'supermarketGrid', 'supermarket');
         renderGrid('supermarketGrid', supermarketItems, 'All');
         renderCategoryPills('restaurantCategoryPills', restaurantItems, 'All', 'restaurantGrid', 'restaurant');
@@ -2242,8 +2340,7 @@
 
         console.log('🔥 Taata Owen Supermarket & Restaurant is LIVE!');
         console.log('🔐 Admin Login: Click "Admin Login" at the bottom. Password: admin123');
-        console.log('🔎 Use the search bar to find products instantly.');
-        console.log('👤 Click your username to view Wallet & Points.');
+        console.log('🛒 Cart & Checkout are FULLY ACTIVE.');
     </script>
 </body>
 </html>
