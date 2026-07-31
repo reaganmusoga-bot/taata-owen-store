@@ -47,6 +47,13 @@
             align-items: center;
             gap: 10px;
         }
+        .navbar .logo img {
+            height: 40px;
+            width: auto;
+            border-radius: 8px;
+            background: white;
+            padding: 4px;
+        }
         .navbar .logo span {
             background: white;
             color: var(--red);
@@ -112,23 +119,60 @@
         .hero .flag-stripes .stripe-blue { background: var(--blue); }
 
         /* ---------- SECTION TITLES ---------- */
-        .section-title {
-            text-align: center;
-            padding: 30px 0 10px;
-            font-size: 2rem;
-            color: var(--blue);
-            border-bottom: 4px solid var(--red);
-            display: inline-block;
-            margin: 20px auto 0;
-            width: auto;
-        }
         .section-container {
             max-width: 1200px;
             margin: 0 auto;
             padding: 10px 20px 40px;
         }
         .section-header {
-            text-align: center;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin: 20px 0 10px;
+        }
+        .section-title {
+            font-size: 2rem;
+            color: var(--blue);
+            border-bottom: 4px solid var(--red);
+            padding-bottom: 10px;
+            display: inline-block;
+        }
+
+        /* ---------- CATEGORY FILTERS (Sidebar style) ---------- */
+        .filter-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            justify-content: center;
+            margin: 15px 0 10px;
+            padding: 10px;
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+            border-left: 4px solid var(--red);
+        }
+        .filter-btn {
+            background: var(--light-gray);
+            border: none;
+            padding: 8px 18px;
+            border-radius: 30px;
+            font-weight: 600;
+            color: #333;
+            cursor: pointer;
+            transition: 0.2s;
+            font-size: 0.85rem;
+            border: 2px solid transparent;
+        }
+        .filter-btn:hover {
+            background: #ddd;
+        }
+        .filter-btn.active {
+            background: var(--blue);
+            color: white;
+            border-color: var(--red);
+        }
+        .filter-btn i {
+            margin-right: 6px;
         }
 
         /* ---------- PRODUCT GRID ---------- */
@@ -136,7 +180,7 @@
             display: grid;
             grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
             gap: 20px;
-            margin-top: 25px;
+            margin-top: 15px;
         }
         .product-card {
             background: white;
@@ -289,7 +333,7 @@
             background: var(--blue);
         }
 
-        /* ---------- CHECKOUT FORM (inside cart) ---------- */
+        /* ---------- CHECKOUT FORM ---------- */
         .checkout-form {
             margin-top: 20px;
             border-top: 2px solid #ddd;
@@ -337,9 +381,11 @@
         /* ---------- RESPONSIVE ---------- */
         @media (max-width: 600px) {
             .navbar .logo { font-size: 18px; }
+            .navbar .logo img { height: 30px; }
             .hero h1 { font-size: 1.6rem; }
             .product-grid { grid-template-columns: repeat(2, 1fr); }
             .cart-sidebar { width: 100%; right: -100%; }
+            .filter-btn { padding: 6px 12px; font-size: 0.75rem; }
         }
     </style>
 </head>
@@ -348,7 +394,9 @@
 <!-- ===== NAVBAR ===== -->
 <nav class="navbar">
     <div class="logo">
-        <i class="fas fa-store"></i> Taata Owen
+        <!-- REPLACE THE src URL BELOW WITH YOUR ONLINE LOGO LINK -->
+        <img src="https://your-online-logo-url.com/logo.png" alt="Taata Owen Logo">
+        Taata Owen
         <span>Jinja</span>
     </div>
     <div class="cart-icon" onclick="toggleCart()">
@@ -370,18 +418,22 @@
 </section>
 
 <!-- ===== SUPERMARKET SECTION ===== -->
-<div class="section-container">
+<div class="section-container" id="supermarketSection">
     <div class="section-header">
         <h2 class="section-title"><i class="fas fa-shopping-basket"></i> Supermarket</h2>
     </div>
+    <!-- Category Filters will be injected here by JS -->
+    <div id="supermarketFilters" class="filter-container"></div>
     <div class="product-grid" id="supermarketGrid"></div>
 </div>
 
 <!-- ===== RESTAURANT SECTION ===== -->
-<div class="section-container" style="background: var(--light-gray); border-radius: 20px; margin: 0 20px 20px;">
+<div class="section-container" style="background: var(--light-gray); border-radius: 20px; margin: 0 20px 20px;" id="restaurantSection">
     <div class="section-header">
         <h2 class="section-title"><i class="fas fa-utensils"></i> Restaurant Menu</h2>
     </div>
+    <!-- Category Filters will be injected here by JS -->
+    <div id="restaurantFilters" class="filter-container"></div>
     <div class="product-grid" id="restaurantGrid"></div>
 </div>
 
@@ -433,7 +485,7 @@
 
 <script>
     // ============================================================
-    //  DATA (Dummy Products - Replace with real products later)
+    //  DATA (Dummy Products)
     // ============================================================
     const supermarketItems = [
         { id: 1, name: "Matooke (Bunch)", category: "Fresh Produce", price: 15000, icon: "fa-solid fa-leaf" },
@@ -457,24 +509,57 @@
         { id: 106, name: "Grilled Fish + Chips", category: "Main Course", price: 22000, icon: "fa-solid fa-fish" },
     ];
 
-    // Combine for cart purposes (add type flag)
     const allProducts = [...supermarketItems.map(p => ({ ...p, type: 'supermarket' })), ...restaurantItems.map(p => ({ ...p, type: 'restaurant' }))];
 
     // ============================================================
     //  CART LOGIC
     // ============================================================
     let cart = [];
-    let shippingCost = 5000; // default Jinja
+    let shippingCost = 5000;
 
-    function renderProducts() {
-        renderGrid('supermarketGrid', supermarketItems);
-        renderGrid('restaurantGrid', restaurantItems);
+    // Category Filter State
+    let activeSupermarketFilter = 'All';
+    let activeRestaurantFilter = 'All';
+
+    function getCategories(items) {
+        const cats = items.map(item => item.category);
+        return ['All', ...new Set(cats)];
     }
 
-    function renderGrid(gridId, items) {
+    function renderFilters(gridId, filterContainerId, items, activeFilter) {
+        const container = document.getElementById(filterContainerId);
+        const categories = getCategories(items);
+        container.innerHTML = '';
+        categories.forEach(cat => {
+            const btn = document.createElement('button');
+            btn.className = `filter-btn ${cat === activeFilter ? 'active' : ''}`;
+            btn.innerHTML = `<i class="fas fa-tag"></i> ${cat}`;
+            btn.onclick = () => {
+                if (gridId === 'supermarketGrid') {
+                    activeSupermarketFilter = cat;
+                    renderGrid('supermarketGrid', supermarketItems, activeSupermarketFilter);
+                    renderFilters('supermarketGrid', 'supermarketFilters', supermarketItems, activeSupermarketFilter);
+                } else {
+                    activeRestaurantFilter = cat;
+                    renderGrid('restaurantGrid', restaurantItems, activeRestaurantFilter);
+                    renderFilters('restaurantGrid', 'restaurantFilters', restaurantItems, activeRestaurantFilter);
+                }
+            };
+            container.appendChild(btn);
+        });
+    }
+
+    function renderGrid(gridId, items, filterCategory = 'All') {
         const grid = document.getElementById(gridId);
         grid.innerHTML = '';
-        items.forEach(item => {
+        const filtered = filterCategory === 'All' ? items : items.filter(item => item.category === filterCategory);
+        
+        if (filtered.length === 0) {
+            grid.innerHTML = `<p style="grid-column:1/-1; text-align:center; padding:40px; color:#888;">No items in this category.</p>`;
+            return;
+        }
+
+        filtered.forEach(item => {
             const card = document.createElement('div');
             card.className = 'product-card';
             card.innerHTML = `
@@ -499,7 +584,6 @@
             cart.push({ ...product, qty: 1 });
         }
         updateCartUI();
-        // Flash feedback
         alert(`Added: ${product.name}`);
     }
 
@@ -551,7 +635,6 @@
 
         container.innerHTML = html;
 
-        // Calculate shipping based on selection
         const locationSelect = document.getElementById('custLocation');
         if (locationSelect) {
             shippingCost = locationSelect.value === 'jinja' ? 5000 : 20000;
@@ -614,7 +697,6 @@
 
         const orderSummary = cart.map(c => `${c.name} x${c.qty}`).join(', ');
 
-        // Show a detailed confirmation
         alert(`
 ✅ ORDER PLACED SUCCESSFULLY (SIMULATION)
 
@@ -634,11 +716,9 @@
 Thank you for shopping at Taata Owen! 🛍️
         `);
 
-        // Reset cart
         cart = [];
         updateCartUI();
         toggleCart();
-        // Reset form fields
         document.getElementById('custName').value = '';
         document.getElementById('custPhone').value = '';
         document.getElementById('custAddress').value = '';
@@ -647,15 +727,16 @@ Thank you for shopping at Taata Owen! 🛍️
     // ============================================================
     //  INIT
     // ============================================================
-    renderProducts();
+    // Set initial filters
+    activeSupermarketFilter = 'All';
+    activeRestaurantFilter = 'All';
+    
+    renderFilters('supermarketGrid', 'supermarketFilters', supermarketItems, activeSupermarketFilter);
+    renderFilters('restaurantGrid', 'restaurantFilters', restaurantItems, activeRestaurantFilter);
+    
+    renderGrid('supermarketGrid', supermarketItems, activeSupermarketFilter);
+    renderGrid('restaurantGrid', restaurantItems, activeRestaurantFilter);
     updateCartUI();
-
-    // Add event listener for location dropdown to update shipping
-    document.addEventListener('change', function(e) {
-        if (e.target.id === 'custLocation') {
-            updateCartUI();
-        }
-    });
 </script>
 </body>
 </html>
