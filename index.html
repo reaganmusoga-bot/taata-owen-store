@@ -23,7 +23,7 @@
             --shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
         }
 
-        /* NAVBAR */
+        /* ---------- NAVBAR ---------- */
         .navbar {
             background-color: var(--red);
             color: white;
@@ -33,7 +33,7 @@
             align-items: center;
             position: sticky;
             top: 0;
-            z-index: 100;
+            z-index: 1000;
             box-shadow: 0 4px 15px rgba(204, 0, 0, 0.4);
             flex-wrap: wrap;
             gap: 10px;
@@ -63,15 +63,32 @@
         .navbar .right-icons {
             display: flex;
             align-items: center;
-            gap: 15px;
+            gap: 12px;
+            flex-wrap: wrap;
+        }
+        .navbar .account-btn {
+            background: rgba(255, 255, 255, 0.15);
+            border: 2px solid rgba(255, 255, 255, 0.5);
+            color: white;
+            padding: 8px 18px;
+            border-radius: 30px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: 0.3s;
+            font-size: 0.9rem;
+        }
+        .navbar .account-btn:hover {
+            background: white;
+            color: var(--red);
+            border-color: white;
         }
         .navbar .wallet-display {
-            background: rgba(255,255,255,0.15);
+            background: rgba(255, 255, 255, 0.15);
             padding: 6px 15px;
             border-radius: 30px;
             font-weight: bold;
             font-size: 14px;
-            border: 1px solid rgba(255,255,255,0.3);
+            border: 1px solid rgba(255, 255, 255, 0.3);
             cursor: pointer;
         }
         .navbar .cart-icon {
@@ -101,58 +118,81 @@
             border: 2px solid white;
         }
 
-        /* HERO */
+        /* ---------- HERO (with Background Image) ---------- */
         .hero {
-            background: linear-gradient(135deg, var(--blue), #001a4d);
+            background: linear-gradient(rgba(0, 20, 50, 0.75), rgba(0, 0, 0, 0.85)), 
+                        url('https://i.ibb.co/KjkypGTv/supermarket-aisle-view-stockcake.jpg');
+            background-size: cover;
+            background-position: center;
             color: white;
-            padding: 60px 20px;
+            padding: 80px 20px;
             text-align: center;
             position: relative;
-            overflow: hidden;
-        }
-        .hero::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: repeating-linear-gradient(90deg, var(--red) 0px, var(--red) 33%, white 33%, white 66%, var(--blue) 66%, var(--blue) 100%);
-            opacity: 0.08;
-            z-index: 1;
+            border-bottom: 8px solid var(--red);
         }
         .hero-content {
             position: relative;
             z-index: 2;
+            max-width: 900px;
+            margin: 0 auto;
         }
+        .hero-content .flag-stripes {
+            display: flex;
+            justify-content: center;
+            gap: 5px;
+            margin-bottom: 20px;
+        }
+        .hero-content .flag-stripes div {
+            width: 60px;
+            height: 6px;
+            border-radius: 4px;
+        }
+        .hero-content .flag-stripes .stripe-red { background: var(--red); }
+        .hero-content .flag-stripes .stripe-white { background: white; }
+        .hero-content .flag-stripes .stripe-blue { background: var(--blue); }
+
         .hero h1 {
-            font-size: 3rem;
+            font-size: 4rem;
             font-weight: 900;
-            text-shadow: 0 4px 15px rgba(0,0,0,0.3);
+            letter-spacing: -1px;
+            text-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
+            line-height: 1.1;
         }
-        .hero h1 .highlight {
-            background: var(--red);
+        .hero h1 .highlight-red {
+            color: var(--red);
+            background: white;
             padding: 0 15px;
-            border-radius: 8px;
+            border-radius: 12px;
             display: inline-block;
         }
-        .hero p {
-            font-size: 1.3rem;
+        .hero .tagline {
+            font-size: 1.8rem;
+            font-weight: 300;
             margin-top: 15px;
-            opacity: 0.95;
+            text-shadow: 0 2px 10px rgba(0, 0, 0, 0.6);
+        }
+        .hero .tagline i {
+            color: var(--red);
+        }
+        .hero .sub-text {
+            font-size: 1.2rem;
+            margin-top: 15px;
+            opacity: 0.9;
+            font-weight: 300;
         }
         .hero .cta-btn {
             display: inline-block;
             background: var(--red);
             color: white;
-            padding: 14px 40px;
+            padding: 16px 50px;
             border-radius: 50px;
             text-decoration: none;
-            font-weight: bold;
-            font-size: 1.2rem;
-            margin-top: 25px;
+            font-weight: 700;
+            font-size: 1.3rem;
+            margin-top: 30px;
             border: 2px solid white;
             transition: 0.3s;
+            box-shadow: 0 4px 20px rgba(204, 0, 0, 0.5);
         }
         .hero .cta-btn:hover {
             background: white;
@@ -160,16 +200,17 @@
             transform: scale(1.05);
         }
         .hero .delivery-tag {
-            margin-top: 20px;
-            background: rgba(255,255,255,0.1);
-            backdrop-filter: blur(5px);
-            padding: 10px 25px;
+            margin-top: 25px;
+            background: rgba(255, 255, 255, 0.12);
+            backdrop-filter: blur(8px);
+            padding: 12px 30px;
             border-radius: 50px;
             display: inline-block;
-            border: 1px solid rgba(255,255,255,0.2);
+            border: 1px solid rgba(255, 255, 255, 0.25);
+            font-size: 1rem;
         }
 
-        /* SECTIONS */
+        /* ---------- SECTIONS ---------- */
         .section-container {
             max-width: 1300px;
             margin: 0 auto;
@@ -188,57 +229,71 @@
             padding-bottom: 10px;
         }
 
-        /* CATEGORY TILES */
-        .category-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
-            gap: 15px;
-            margin: 15px 0 25px;
-        }
-        .category-tile {
-            background: white;
-            border-radius: 16px;
-            padding: 18px 10px;
-            text-align: center;
-            box-shadow: var(--shadow);
-            cursor: pointer;
-            border: 3px solid transparent;
-            transition: all 0.2s ease;
-            border-top: 5px solid #ddd;
-        }
-        .category-tile:hover {
-            transform: translateY(-6px);
-            box-shadow: 0 10px 30px rgba(0,0,0,0.12);
-        }
-        .category-tile.active {
-            border-color: var(--red);
-            background: #fff5f5;
-            border-top-color: var(--red);
-        }
-        .category-tile i {
-            font-size: 36px;
-            color: var(--blue);
-            display: block;
-            margin-bottom: 8px;
-        }
-        .category-tile span {
-            font-size: 0.85rem;
+        /* ---------- CATEGORY HEADINGS & PILLS (Redesigned) ---------- */
+        .category-heading {
+            font-size: 1.2rem;
             font-weight: 700;
-            color: #333;
-            display: block;
+            color: var(--blue);
+            margin: 20px 0 12px 0;
+            display: flex;
+            align-items: center;
+            gap: 10px;
         }
-        .category-tile .count {
-            font-size: 0.7rem;
-            color: #888;
-            font-weight: normal;
+        .category-heading i {
+            color: var(--red);
+            font-size: 1.4rem;
+        }
+        .category-pills {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+            margin-bottom: 25px;
+            padding: 10px 0;
+        }
+        .category-pill {
+            background: white;
+            padding: 10px 24px;
+            border-radius: 50px;
+            font-weight: 600;
+            font-size: 0.9rem;
+            color: #333;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            border: 2px solid #e0e0e0;
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.04);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .category-pill:hover {
+            border-color: var(--blue);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+        }
+        .category-pill.active {
+            background: var(--red);
+            border-color: var(--red);
+            color: white;
+        }
+        .category-pill.active i {
+            color: white;
+        }
+        .category-pill i {
+            color: var(--blue);
+            font-size: 1rem;
+        }
+        .category-pill .count {
+            opacity: 0.6;
+            font-weight: 400;
+            margin-left: 4px;
         }
 
-        /* PRODUCT GRID */
+        /* ---------- PRODUCT GRID ---------- */
         .product-grid {
             display: grid;
             grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
             gap: 25px;
-            margin-top: 10px;
+            margin-top: 5px;
         }
         .product-card {
             background: white;
@@ -251,7 +306,7 @@
         }
         .product-card:hover {
             transform: scale(1.03);
-            box-shadow: 0 10px 30px rgba(0,0,0,0.12);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.12);
         }
         .product-card .icon {
             font-size: 48px;
@@ -301,7 +356,7 @@
             background: var(--red);
         }
 
-        /* CART & CHECKOUT */
+        /* ---------- CART & CHECKOUT ---------- */
         .cart-overlay {
             display: none;
             position: fixed;
@@ -309,7 +364,7 @@
             left: 0;
             width: 100%;
             height: 100%;
-            background: rgba(0,0,0,0.6);
+            background: rgba(0, 0, 0, 0.6);
             z-index: 200;
         }
         .cart-overlay.active { display: block; }
@@ -321,7 +376,7 @@
             max-width: 95%;
             height: 100%;
             background: white;
-            box-shadow: -4px 0 30px rgba(0,0,0,0.2);
+            box-shadow: -4px 0 30px rgba(0, 0, 0, 0.2);
             z-index: 300;
             padding: 25px;
             overflow-y: auto;
@@ -389,7 +444,7 @@
         }
         .payment-options label:hover { border-color: var(--blue); }
         .payment-options input[type="radio"] { display: none; }
-        .payment-options input[type="radio"]:checked + label {
+        .payment-options input[type="radio"]:checked+label {
             border-color: var(--red);
             background: #fff0f0;
         }
@@ -430,6 +485,75 @@
             cursor: pointer;
         }
         .checkout-btn:hover { background: var(--blue); }
+
+        /* ---------- ACCOUNT MODAL ---------- */
+        .auth-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.7);
+            z-index: 500;
+            justify-content: center;
+            align-items: center;
+        }
+        .auth-overlay.active { display: flex; }
+        .auth-modal {
+            background: white;
+            padding: 40px;
+            border-radius: 20px;
+            max-width: 420px;
+            width: 90%;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            position: relative;
+            border-top: 8px solid var(--red);
+        }
+        .auth-modal .close-auth {
+            position: absolute;
+            top: 15px;
+            right: 20px;
+            font-size: 28px;
+            cursor: pointer;
+            color: #999;
+            background: none;
+            border: none;
+        }
+        .auth-modal h2 {
+            color: var(--blue);
+            margin-bottom: 20px;
+            text-align: center;
+        }
+        .auth-modal input {
+            width: 100%;
+            padding: 14px;
+            margin: 8px 0;
+            border: 1px solid #ddd;
+            border-radius: 10px;
+            font-size: 1rem;
+        }
+        .auth-modal .auth-btn {
+            width: 100%;
+            padding: 14px;
+            background: var(--red);
+            color: white;
+            border: none;
+            border-radius: 30px;
+            font-weight: bold;
+            font-size: 1.1rem;
+            cursor: pointer;
+            margin-top: 10px;
+        }
+        .auth-modal .auth-btn:hover { background: var(--blue); }
+        .auth-modal .toggle-auth {
+            text-align: center;
+            margin-top: 15px;
+            color: var(--blue);
+            cursor: pointer;
+            font-weight: 600;
+        }
+
         .footer {
             background: var(--blue);
             color: white;
@@ -448,439 +572,638 @@
             margin-top: 10px;
         }
         @media (max-width: 600px) {
-            .hero h1 { font-size: 1.8rem; }
+            .hero h1 { font-size: 2.2rem; }
+            .hero .tagline { font-size: 1.2rem; }
             .navbar .logo { font-size: 16px; }
             .navbar .logo img { height: 35px; }
             .product-grid { grid-template-columns: repeat(2, 1fr); gap: 15px; }
             .cart-sidebar { width: 100%; right: -100%; }
-            .category-grid { grid-template-columns: repeat(3, 1fr); }
-            .payment-options { grid-template-columns: 1fr 1fr; }
+            .auth-modal { padding: 25px; }
         }
     </style>
 </head>
 <body>
 
-<!-- NAVBAR -->
-<nav class="navbar">
-    <div class="logo">
-        <img src="https://i.ibb.co/TqgqYj50/TAATA-OWEN.png" alt="Taata Owen Logo">
-        <span>Jinja</span>
-    </div>
-    <div class="right-icons">
-        <div class="wallet-display" onclick="showWalletInfo()">
-            <i class="fas fa-wallet"></i> UGX <span id="walletBalanceDisplay">0</span>
+    <!-- ===== NAVBAR ===== -->
+    <nav class="navbar">
+        <div class="logo">
+            <img src="https://i.ibb.co/TqgqYj50/TAATA-OWEN.png" alt="Taata Owen Logo">
+            <span>Jinja</span>
         </div>
-        <div class="cart-icon" onclick="toggleCart()">
-            <i class="fas fa-shopping-cart"></i>
-            <span class="badge" id="cartCount">0</span>
-        </div>
-    </div>
-</nav>
-
-<!-- HERO -->
-<section class="hero">
-    <div class="hero-content">
-        <div style="display: flex; justify-content: center; gap: 3px; margin-bottom: 15px;">
-            <span style="background:var(--red); width:40px; height:5px; border-radius:5px;"></span>
-            <span style="background:white; width:40px; height:5px; border-radius:5px;"></span>
-            <span style="background:var(--blue); width:40px; height:5px; border-radius:5px;"></span>
-        </div>
-        <h1>
-            Get out of the <span class="highlight">line</span>,<br>
-            get <span class="highlight">online</span>!
-        </h1>
-        <p>Jinja's freshest groceries, tasty restaurant meals, delivered straight to your door.</p>
-        <a href="#supermarketSection" class="cta-btn"><i class="fas fa-shopping-basket"></i> Start Shopping</a>
-        <div class="delivery-tag">
-            <i class="fas fa-truck"></i> Free delivery > UGX 200k | <i class="fas fa-star"></i> Earn Points on every order!
-        </div>
-    </div>
-</section>
-
-<!-- SUPERMARKET -->
-<div class="section-container" id="supermarketSection">
-    <div class="section-header"><h2 class="section-title"><i class="fas fa-store"></i> Supermarket</h2></div>
-    <div id="supermarketCategoryTiles" class="category-grid"></div>
-    <div class="product-grid" id="supermarketGrid"></div>
-</div>
-
-<!-- RESTAURANT -->
-<div class="section-container" style="background: var(--light-gray); border-radius: 30px; margin: 0 20px 30px; padding: 20px 20px 30px;">
-    <div class="section-header"><h2 class="section-title"><i class="fas fa-utensils"></i> Restaurant Menu</h2></div>
-    <div id="restaurantCategoryTiles" class="category-grid"></div>
-    <div class="product-grid" id="restaurantGrid"></div>
-</div>
-
-<!-- FOOTER -->
-<footer class="footer">
-    <p style="font-size:1.2rem; font-weight:bold;">Taata Owen Supermarket</p>
-    <p><i class="fas fa-map-marker-alt"></i> Jinja Central, Uganda</p>
-    <p><i class="fas fa-phone"></i> +256 703 796 153</p>
-    <a href="#" class="whatsapp"><i class="fab fa-whatsapp"></i> Chat on WhatsApp</a>
-    <p style="margin-top:20px; font-size:0.8rem; opacity:0.6;">© 2026 • Serving Jinja with pride 🇺🇬</p>
-</footer>
-
-<!-- CART SIDEBAR -->
-<div class="cart-overlay" id="cartOverlay" onclick="toggleCart()"></div>
-<div class="cart-sidebar" id="cartSidebar">
-    <button class="close-cart" onclick="toggleCart()">&times;</button>
-    <h2><i class="fas fa-shopping-cart"></i> Your Cart</h2>
-    <div id="cartItems"></div>
-    <div id="cartSummary"></div>
-
-    <div class="checkout-form">
-        <h4 style="color:var(--blue);">Complete Order</h4>
-        <label>Full Name</label>
-        <input type="text" id="custName" placeholder="e.g. John Muwonge">
-        <label>Phone Number</label>
-        <input type="tel" id="custPhone" placeholder="e.g. 0777123456">
-        <label>Delivery Address</label>
-        <input type="text" id="custAddress" placeholder="Street, building, landmark">
-        <label>Location</label>
-        <select id="custLocation">
-            <option value="jinja">Jinja City (UGX 5,000)</option>
-            <option value="other">Other Ugandan City (UGX 20,000)</option>
-        </select>
-
-        <!-- PAYMENT METHODS (ACTIVE) -->
-        <label style="margin-top:15px;">Payment Method</label>
-        <div class="payment-options">
-            <div><input type="radio" name="payment" id="payMomo" value="momo" checked> <label for="payMomo"><i class="fas fa-mobile-alt"></i> MTN MoMo</label></div>
-            <div><input type="radio" name="payment" id="payAirtel" value="airtel"> <label for="payAirtel"><i class="fas fa-mobile-alt"></i> Airtel Money</label></div>
-            <div><input type="radio" name="payment" id="payCard" value="card"> <label for="payCard"><i class="fas fa-credit-card"></i> Credit/Debit</label></div>
-            <div><input type="radio" name="payment" id="payCash" value="cash"> <label for="payCash"><i class="fas fa-money-bill-wave"></i> Cash on Delivery</label></div>
-        </div>
-
-        <!-- WALLET SECTION -->
-        <div class="wallet-section">
-            <p><strong><i class="fas fa-wallet"></i> Your Wallet</strong></p>
-            <p>Balance: UGX <span id="walletBalanceCheckout">0</span></p>
-            <button class="btn-deposit" onclick="depositMoney()"><i class="fas fa-plus-circle"></i> Add Money</button>
-            <div style="margin-top:10px;">
-                <input type="checkbox" id="useWallet" onchange="updateCartUI()"> 
-                <label for="useWallet" style="display:inline; font-weight:normal;"> Pay with Wallet Balance</label>
+        <div class="right-icons">
+            <button class="account-btn" onclick="toggleAuthModal()">
+                <i class="fas fa-user"></i> <span id="accountNameDisplay">Login</span>
+            </button>
+            <div class="wallet-display" onclick="showWalletInfo()">
+                <i class="fas fa-wallet"></i> UGX <span id="walletBalanceDisplay">0</span>
+            </div>
+            <div class="cart-icon" onclick="toggleCart()">
+                <i class="fas fa-shopping-cart"></i>
+                <span class="badge" id="cartCount">0</span>
             </div>
         </div>
+    </nav>
 
-        <!-- POINTS SECTION -->
-        <div class="points-section">
-            <p><strong><i class="fas fa-star"></i> Loyalty Points</strong></p>
-            <p>You have <span id="pointsBalanceDisplay">0</span> points</p>
-            <div style="margin-top:8px;">
-                <input type="checkbox" id="usePoints" onchange="updateCartUI()"> 
-                <label for="usePoints" style="display:inline; font-weight:normal;"> Redeem 1000 points = UGX 1,000 discount</label>
+    <!-- ===== HERO (with new design & background) ===== -->
+    <section class="hero">
+        <div class="hero-content">
+            <div class="flag-stripes">
+                <div class="stripe-red"></div>
+                <div class="stripe-white"></div>
+                <div class="stripe-blue"></div>
+            </div>
+            <h1>
+                Taata Owen <span class="highlight-red">Supermarket</span>
+            </h1>
+            <div class="tagline">
+                <i class="fas fa-shopping-basket"></i> Get out of the <strong>line</strong>, get <strong>online</strong>!
+            </div>
+            <p class="sub-text">
+                Jinja's freshest groceries & tasty restaurant meals, delivered to your door.
+            </p>
+            <a href="#supermarketSection" class="cta-btn"><i class="fas fa-store"></i> Shop Now</a>
+            <div class="delivery-tag">
+                <i class="fas fa-truck"></i> Free delivery over UGX 200k &nbsp;|&nbsp; <i class="fas fa-star"></i> Earn points on every order
             </div>
         </div>
+    </section>
 
-        <button class="checkout-btn" onclick="placeOrder()">
-            <i class="fas fa-check-circle"></i> Place Order (Simulated)
-        </button>
-        <p style="font-size:0.7rem; margin-top:8px; color:#888;">* Real payment & SMS alerts will be connected later.</p>
+    <!-- ===== SUPERMARKET ===== -->
+    <div class="section-container" id="supermarketSection">
+        <div class="section-header">
+            <h2 class="section-title"><i class="fas fa-store"></i> Supermarket</h2>
+        </div>
+
+        <!-- Category Heading & Pills -->
+        <div class="category-heading">
+            <i class="fas fa-tags"></i> Browse Categories
+        </div>
+        <div id="supermarketCategoryPills" class="category-pills"></div>
+
+        <div class="product-grid" id="supermarketGrid"></div>
     </div>
-</div>
 
-<script>
-    // ============================================================
-    //  DATA (Expanded with real categories)
-    // ============================================================
-    const supermarketItems = [
-        // Fresh Produce
-        { id: 1, name: "Matooke (Bunch)", category: "Fresh Produce", price: 15000, icon: "fa-solid fa-leaf" },
-        { id: 2, name: "Tomatoes (1kg)", category: "Fresh Produce", price: 5000, icon: "fa-solid fa-apple-whole" },
-        { id: 3, name: "Onions (1kg)", category: "Fresh Produce", price: 4000, icon: "fa-solid fa-circle" },
-        // Meat & Poultry
-        { id: 4, name: "Chicken (Whole)", category: "Meat & Poultry", price: 35000, icon: "fa-solid fa-drumstick-bite" },
-        { id: 5, name: "Beef (1kg)", category: "Meat & Poultry", price: 18000, icon: "fa-solid fa-cow" },
-        // Dairy & Eggs
-        { id: 6, name: "Fresh Milk (1L)", category: "Dairy & Eggs", price: 4500, icon: "fa-solid fa-glass-whiskey" },
-        { id: 7, name: "Eggs (Tray)", category: "Dairy & Eggs", price: 12000, icon: "fa-solid fa-egg" },
-        // Bakery
-        { id: 8, name: "Bread (Loaf)", category: "Bakery", price: 5000, icon: "fa-solid fa-bread-slice" },
-        // Pantry Staples
-        { id: 9, name: "Cooking Oil (5L)", category: "Pantry Staples", price: 25000, icon: "fa-solid fa-oil-can" },
-        { id: 10, name: "Sugar (2kg)", category: "Pantry Staples", price: 8000, icon: "fa-solid fa-cube" },
-        { id: 11, name: "Rice (5kg)", category: "Pantry Staples", price: 18000, icon: "fa-solid fa-seedling" },
-        { id: 12, name: "Beans (2kg)", category: "Pantry Staples", price: 12000, icon: "fa-solid fa-seedling" },
-        // Beverages
-        { id: 13, name: "Soda (2L)", category: "Beverages", price: 6000, icon: "fa-solid fa-wine-bottle" },
-        { id: 14, name: "Fresh Juice (1L)", category: "Beverages", price: 8000, icon: "fa-solid fa-blender-phone" },
-        // Snacks
-        { id: 15, name: "Biscuits (Pack)", category: "Snacks & Sweets", price: 3000, icon: "fa-solid fa-cookie" },
-        // Frozen
-        { id: 16, name: "Frozen Chicken (1kg)", category: "Frozen Foods", price: 28000, icon: "fa-solid fa-snowflake" },
-        // Household
-        { id: 17, name: "Soap (Bar)", category: "Household Supplies", price: 3000, icon: "fa-solid fa-soap" },
-        { id: 18, name: "Detergent (1kg)", category: "Household Supplies", price: 8000, icon: "fa-solid fa-bucket" },
-        // Personal Care
-        { id: 19, name: "Toothpaste", category: "Personal Care", price: 5000, icon: "fa-solid fa-tooth" },
-        { id: 20, name: "Shampoo (500ml)", category: "Personal Care", price: 12000, icon: "fa-solid fa-spray-can" },
-    ];
+    <!-- ===== RESTAURANT ===== -->
+    <div class="section-container" style="background: var(--light-gray); border-radius: 30px; margin: 0 20px 30px; padding: 20px 20px 30px;">
+        <div class="section-header">
+            <h2 class="section-title"><i class="fas fa-utensils"></i> Restaurant Menu</h2>
+        </div>
 
-    const restaurantItems = [
-        { id: 101, name: "Rolex (Chapati + Eggs)", category: "Fast Food", price: 7000, icon: "fa-solid fa-egg" },
-        { id: 102, name: "Chapati (2 pcs)", category: "Fast Food", price: 3000, icon: "fa-solid fa-bread-slice" },
-        { id: 103, name: "Chicken Stew + Rice", category: "Main Course", price: 18000, icon: "fa-solid fa-drumstick-bite" },
-        { id: 104, name: "Beans + Matooke", category: "Main Course", price: 12000, icon: "fa-solid fa-utensils" },
-        { id: 105, name: "Fresh Juice (Passion)", category: "Beverages", price: 5000, icon: "fa-solid fa-wine-bottle" },
-        { id: 106, name: "Grilled Fish + Chips", category: "Main Course", price: 22000, icon: "fa-solid fa-fish" },
-    ];
+        <!-- Category Heading & Pills -->
+        <div class="category-heading">
+            <i class="fas fa-tags"></i> Browse Categories
+        </div>
+        <div id="restaurantCategoryPills" class="category-pills"></div>
 
-    const allProducts = [...supermarketItems.map(p => ({ ...p, type: 'supermarket' })), ...restaurantItems.map(p => ({ ...p, type: 'restaurant' }))];
+        <div class="product-grid" id="restaurantGrid"></div>
+    </div>
 
-    // ============================================================
-    //  STATE (Wallet & Points saved in localStorage)
-    // ============================================================
-    let walletBalance = parseInt(localStorage.getItem('taataWallet')) || 0;
-    let pointsBalance = parseInt(localStorage.getItem('taataPoints')) || 0;
-    let cart = [];
-    let supermarketFilter = 'All';
-    let restaurantFilter = 'All';
+    <!-- ===== FOOTER ===== -->
+    <footer class="footer">
+        <p style="font-size:1.5rem; font-weight:900;">Taata Owen Supermarket</p>
+        <p><i class="fas fa-map-marker-alt"></i> Jinja Central, Uganda</p>
+        <p><i class="fas fa-phone"></i> +256 703 796 153</p>
+        <a href="#" class="whatsapp"><i class="fab fa-whatsapp"></i> Chat on WhatsApp</a>
+        <p style="margin-top:20px; font-size:0.8rem; opacity:0.6;">© 2026 • Serving Jinja with pride 🇺🇬</p>
+    </footer>
 
-    // ============================================================
-    //  RENDER FUNCTIONS
-    // ============================================================
-    function getCategories(items) {
-        const cats = items.map(item => item.category);
-        return ['All', ...new Set(cats)];
-    }
+    <!-- ===== CART SIDEBAR ===== -->
+    <div class="cart-overlay" id="cartOverlay" onclick="toggleCart()"></div>
+    <div class="cart-sidebar" id="cartSidebar">
+        <button class="close-cart" onclick="toggleCart()">&times;</button>
+        <h2><i class="fas fa-shopping-cart"></i> Your Cart</h2>
+        <div id="cartItems"></div>
+        <div id="cartSummary"></div>
 
-    function getCategoryIcon(cat) {
-        const map = {
-            'All': 'fa-solid fa-grid-2',
-            'Fresh Produce': 'fa-solid fa-leaf',
-            'Meat & Poultry': 'fa-solid fa-drumstick-bite',
-            'Dairy & Eggs': 'fa-solid fa-egg',
-            'Bakery': 'fa-solid fa-bread-slice',
-            'Pantry Staples': 'fa-solid fa-boxes-stacked',
-            'Beverages': 'fa-solid fa-wine-bottle',
-            'Snacks & Sweets': 'fa-solid fa-cookie',
-            'Frozen Foods': 'fa-solid fa-snowflake',
-            'Household Supplies': 'fa-solid fa-soap',
-            'Personal Care': 'fa-solid fa-tooth',
-            'Fast Food': 'fa-solid fa-burger',
-            'Main Course': 'fa-solid fa-utensils'
-        };
-        return map[cat] || 'fa-solid fa-tag';
-    }
+        <div class="checkout-form">
+            <h4 style="color:var(--blue);">Complete Order</h4>
+            <label>Full Name</label>
+            <input type="text" id="custName" placeholder="e.g. John Muwonge">
+            <label>Phone Number</label>
+            <input type="tel" id="custPhone" placeholder="e.g. 0777123456">
+            <label>Delivery Address</label>
+            <input type="text" id="custAddress" placeholder="Street, building, landmark">
+            <label>Location</label>
+            <select id="custLocation">
+                <option value="jinja">Jinja City (UGX 5,000)</option>
+                <option value="other">Other Ugandan City (UGX 20,000)</option>
+            </select>
 
-    function renderCategoryTiles(containerId, items, activeFilter, gridId, type) {
-        const container = document.getElementById(containerId);
-        const categories = getCategories(items);
-        container.innerHTML = '';
-        categories.forEach(cat => {
-            const count = cat === 'All' ? items.length : items.filter(i => i.category === cat).length;
-            const tile = document.createElement('div');
-            tile.className = `category-tile ${cat === activeFilter ? 'active' : ''}`;
-            tile.innerHTML = `<i class="${getCategoryIcon(cat)}"></i><span>${cat} <span class="count">(${count})</span></span>`;
-            tile.onclick = () => {
-                if (type === 'supermarket') { supermarketFilter = cat; renderCategoryTiles('supermarketCategoryTiles', supermarketItems, supermarketFilter, 'supermarketGrid', 'supermarket'); renderGrid('supermarketGrid', supermarketItems, supermarketFilter); }
-                else { restaurantFilter = cat; renderCategoryTiles('restaurantCategoryTiles', restaurantItems, restaurantFilter, 'restaurantGrid', 'restaurant'); renderGrid('restaurantGrid', restaurantItems, restaurantFilter); }
+            <label style="margin-top:15px;">Payment Method</label>
+            <div class="payment-options">
+                <div><input type="radio" name="payment" id="payMomo" value="momo" checked> <label for="payMomo"><i class="fas fa-mobile-alt"></i> MTN MoMo</label></div>
+                <div><input type="radio" name="payment" id="payAirtel" value="airtel"> <label for="payAirtel"><i class="fas fa-mobile-alt"></i> Airtel</label></div>
+                <div><input type="radio" name="payment" id="payCard" value="card"> <label for="payCard"><i class="fas fa-credit-card"></i> Card</label></div>
+                <div><input type="radio" name="payment" id="payCash" value="cash"> <label for="payCash"><i class="fas fa-money-bill-wave"></i> Cash on Delivery</label></div>
+            </div>
+
+            <div class="wallet-section">
+                <p><strong><i class="fas fa-wallet"></i> Your Wallet</strong></p>
+                <p>Balance: UGX <span id="walletBalanceCheckout">0</span></p>
+                <button class="btn-deposit" onclick="depositMoney()"><i class="fas fa-plus-circle"></i> Add Money</button>
+                <div style="margin-top:10px;">
+                    <input type="checkbox" id="useWallet" onchange="updateCartUI()">
+                    <label for="useWallet" style="display:inline; font-weight:normal;"> Pay with Wallet Balance</label>
+                </div>
+            </div>
+
+            <div class="points-section">
+                <p><strong><i class="fas fa-star"></i> Loyalty Points</strong></p>
+                <p>You have <span id="pointsBalanceDisplay">0</span> points</p>
+                <div style="margin-top:8px;">
+                    <input type="checkbox" id="usePoints" onchange="updateCartUI()">
+                    <label for="usePoints" style="display:inline; font-weight:normal;"> Redeem 1000 points = UGX 1,000 discount</label>
+                </div>
+            </div>
+
+            <button class="checkout-btn" onclick="placeOrder()">
+                <i class="fas fa-check-circle"></i> Place Order (Simulated)
+            </button>
+            <p style="font-size:0.7rem; margin-top:8px; color:#888;">* Real payment & SMS alerts will be connected later.</p>
+        </div>
+    </div>
+
+    <!-- ===== AUTHENTICATION MODAL (Login/Signup) ===== -->
+    <div class="auth-overlay" id="authModal">
+        <div class="auth-modal">
+            <button class="close-auth" onclick="toggleAuthModal()">&times;</button>
+            <h2 id="authTitle">Welcome Back</h2>
+            <div id="authForm">
+                <input type="text" id="authUsername" placeholder="Username (e.g. reagan)" autocomplete="username">
+                <input type="password" id="authPassword" placeholder="Password" autocomplete="current-password">
+                <button class="auth-btn" id="authActionBtn" onclick="handleAuth()">Login</button>
+            </div>
+            <div class="toggle-auth" id="authToggleLink" onclick="toggleAuthMode()">
+                Don't have an account? <strong>Sign Up</strong>
+            </div>
+            <div style="margin-top:10px; color:#888; font-size:0.8rem;" id="authMessage"></div>
+        </div>
+    </div>
+
+    <script>
+        // ============================================================
+        //  DATA (Expanded)
+        // ============================================================
+        const supermarketItems = [
+            { id: 1, name: "Matooke (Bunch)", category: "Fresh Produce", price: 15000, icon: "fa-solid fa-leaf" },
+            { id: 2, name: "Tomatoes (1kg)", category: "Fresh Produce", price: 5000, icon: "fa-solid fa-apple-whole" },
+            { id: 3, name: "Onions (1kg)", category: "Fresh Produce", price: 4000, icon: "fa-solid fa-circle" },
+            { id: 4, name: "Chicken (Whole)", category: "Meat & Poultry", price: 35000, icon: "fa-solid fa-drumstick-bite" },
+            { id: 5, name: "Beef (1kg)", category: "Meat & Poultry", price: 18000, icon: "fa-solid fa-cow" },
+            { id: 6, name: "Fresh Milk (1L)", category: "Dairy & Eggs", price: 4500, icon: "fa-solid fa-glass-whiskey" },
+            { id: 7, name: "Eggs (Tray)", category: "Dairy & Eggs", price: 12000, icon: "fa-solid fa-egg" },
+            { id: 8, name: "Bread (Loaf)", category: "Bakery", price: 5000, icon: "fa-solid fa-bread-slice" },
+            { id: 9, name: "Cooking Oil (5L)", category: "Pantry Staples", price: 25000, icon: "fa-solid fa-oil-can" },
+            { id: 10, name: "Sugar (2kg)", category: "Pantry Staples", price: 8000, icon: "fa-solid fa-cube" },
+            { id: 11, name: "Rice (5kg)", category: "Pantry Staples", price: 18000, icon: "fa-solid fa-seedling" },
+            { id: 12, name: "Beans (2kg)", category: "Pantry Staples", price: 12000, icon: "fa-solid fa-seedling" },
+            { id: 13, name: "Soda (2L)", category: "Beverages", price: 6000, icon: "fa-solid fa-wine-bottle" },
+            { id: 14, name: "Fresh Juice (1L)", category: "Beverages", price: 8000, icon: "fa-solid fa-blender-phone" },
+            { id: 15, name: "Biscuits (Pack)", category: "Snacks & Sweets", price: 3000, icon: "fa-solid fa-cookie" },
+            { id: 16, name: "Frozen Chicken (1kg)", category: "Frozen Foods", price: 28000, icon: "fa-solid fa-snowflake" },
+            { id: 17, name: "Soap (Bar)", category: "Household Supplies", price: 3000, icon: "fa-solid fa-soap" },
+            { id: 18, name: "Detergent (1kg)", category: "Household Supplies", price: 8000, icon: "fa-solid fa-bucket" },
+            { id: 19, name: "Toothpaste", category: "Personal Care", price: 5000, icon: "fa-solid fa-tooth" },
+            { id: 20, name: "Shampoo (500ml)", category: "Personal Care", price: 12000, icon: "fa-solid fa-spray-can" },
+        ];
+
+        const restaurantItems = [
+            { id: 101, name: "Rolex (Chapati + Eggs)", category: "Fast Food", price: 7000, icon: "fa-solid fa-egg" },
+            { id: 102, name: "Chapati (2 pcs)", category: "Fast Food", price: 3000, icon: "fa-solid fa-bread-slice" },
+            { id: 103, name: "Chicken Stew + Rice", category: "Main Course", price: 18000, icon: "fa-solid fa-drumstick-bite" },
+            { id: 104, name: "Beans + Matooke", category: "Main Course", price: 12000, icon: "fa-solid fa-utensils" },
+            { id: 105, name: "Fresh Juice (Passion)", category: "Beverages", price: 5000, icon: "fa-solid fa-wine-bottle" },
+            { id: 106, name: "Grilled Fish + Chips", category: "Main Course", price: 22000, icon: "fa-solid fa-fish" },
+        ];
+
+        const allProducts = [...supermarketItems.map(p => ({ ...p, type: 'supermarket' })), ...restaurantItems.map(p => ({ ...p,
+            type: 'restaurant' }))];
+
+        // ============================================================
+        //  AUTHENTICATION SYSTEM
+        // ============================================================
+        let currentUser = null;
+        let isLoginMode = true;
+
+        function getStorageKey() {
+            return currentUser ? `taata_${currentUser}` : null;
+        }
+
+        function loadUserData() {
+            const key = getStorageKey();
+            if (!key) return { wallet: 0, points: 0 };
+            return {
+                wallet: parseInt(localStorage.getItem(`${key}_wallet`)) || 0,
+                points: parseInt(localStorage.getItem(`${key}_points`)) || 0
             };
-            container.appendChild(tile);
-        });
-    }
-
-    function renderGrid(gridId, items, filterCategory = 'All') {
-        const grid = document.getElementById(gridId);
-        grid.innerHTML = '';
-        const filtered = filterCategory === 'All' ? items : items.filter(item => item.category === filterCategory);
-        if (filtered.length === 0) { grid.innerHTML = `<p style="grid-column:1/-1; text-align:center; padding:40px; color:#888;">No items in this category.</p>`; return; }
-        filtered.forEach(item => {
-            const card = document.createElement('div');
-            card.className = 'product-card';
-            card.innerHTML = `
-                <div class="icon"><i class="${item.icon}"></i></div>
-                <span class="category-tag">${item.category}</span>
-                <h3>${item.name}</h3>
-                <div class="price">UGX ${item.price.toLocaleString()}</div>
-                <button onclick="addToCart(${item.id})"><i class="fas fa-plus"></i> Add</button>
-            `;
-            grid.appendChild(card);
-        });
-    }
-
-    // ============================================================
-    //  CART LOGIC
-    // ============================================================
-    function addToCart(id) {
-        const product = allProducts.find(p => p.id === id);
-        if (!product) return;
-        const existing = cart.find(c => c.id === id && c.type === product.type);
-        if (existing) existing.qty += 1;
-        else cart.push({ ...product, qty: 1 });
-        updateCartUI();
-        alert(`✅ Added: ${product.name}`);
-    }
-
-    function removeFromCart(id, type) {
-        const index = cart.findIndex(c => c.id === id && c.type === type);
-        if (index !== -1) {
-            if (cart[index].qty > 1) cart[index].qty -= 1;
-            else cart.splice(index, 1);
-        }
-        updateCartUI();
-    }
-
-    function updateCartUI() {
-        const count = cart.reduce((sum, c) => sum + c.qty, 0);
-        document.getElementById('cartCount').textContent = count;
-        document.getElementById('walletBalanceDisplay').textContent = walletBalance.toLocaleString();
-        document.getElementById('walletBalanceCheckout').textContent = walletBalance.toLocaleString();
-        document.getElementById('pointsBalanceDisplay').textContent = pointsBalance;
-
-        const container = document.getElementById('cartItems');
-        if (cart.length === 0) { container.innerHTML = '<p style="color:#888; margin-top:30px;">Cart is empty.</p>'; document.getElementById('cartSummary').innerHTML = ''; return; }
-
-        let html = '', subtotal = 0;
-        cart.forEach(item => {
-            const total = item.price * item.qty;
-            subtotal += total;
-            html += `<div class="cart-item"><div><div class="item-name">${item.name}</div><small>${item.type === 'supermarket' ? '🏪' : '🍽️'}</small></div><div><span class="item-price">UGX ${total.toLocaleString()}</span><div class="qty-controls"><button onclick="removeFromCart(${item.id}, '${item.type}')">-</button><span>${item.qty}</span><button onclick="addToCart(${item.id})">+</button></div></div></div>`;
-        });
-        container.innerHTML = html;
-
-        const location = document.getElementById('custLocation')?.value || 'jinja';
-        const shipping = location === 'jinja' ? 5000 : 20000;
-        const freeDelivery = subtotal >= 200000;
-
-        let discount = 0;
-        // Apply Points discount
-        if (document.getElementById('usePoints')?.checked) {
-            const pointsToUse = Math.min(pointsBalance, Math.floor(subtotal / 1000) * 1000);
-            discount = pointsToUse; // 1 point = 1 UGX in this logic (1000 points = 1000 UGX)
         }
 
-        let walletPay = 0;
-        if (document.getElementById('useWallet')?.checked) {
-            walletPay = Math.min(walletBalance, subtotal - discount);
+        function saveUserData(wallet, points) {
+            const key = getStorageKey();
+            if (key) {
+                localStorage.setItem(`${key}_wallet`, wallet);
+                localStorage.setItem(`${key}_points`, points);
+            }
         }
 
-        let finalTotal = subtotal - discount - walletPay + (freeDelivery ? 0 : shipping);
-        if (finalTotal < 0) finalTotal = 0;
+        function toggleAuthModal() {
+            document.getElementById('authModal').classList.toggle('active');
+            document.getElementById('authMessage').textContent = '';
+            document.getElementById('authUsername').value = '';
+            document.getElementById('authPassword').value = '';
+        }
 
-        document.getElementById('cartSummary').innerHTML = `
-            <div class="cart-total">
-                <p>Subtotal: UGX ${subtotal.toLocaleString()}</p>
-                ${discount > 0 ? `<p style="color:green;">Points Discount: - UGX ${discount.toLocaleString()}</p>` : ''}
-                ${walletPay > 0 ? `<p style="color:blue;">Wallet Paid: - UGX ${walletPay.toLocaleString()}</p>` : ''}
-                <p>Delivery: ${freeDelivery ? '🎉 FREE' : `UGX ${shipping.toLocaleString()}`}</p>
-                <hr>
-                <p style="color:var(--red); font-size:1.6rem;">Total Due: UGX ${finalTotal.toLocaleString()}</p>
-                <p style="font-size:0.8rem; color:#888;">You will earn ${Math.floor(finalTotal / 1000)} points on this order.</p>
-            </div>
-        `;
-    }
+        function toggleAuthMode() {
+            isLoginMode = !isLoginMode;
+            const title = document.getElementById('authTitle');
+            const btn = document.getElementById('authActionBtn');
+            const toggleLink = document.getElementById('authToggleLink');
+            if (isLoginMode) {
+                title.textContent = 'Welcome Back';
+                btn.textContent = 'Login';
+                toggleLink.innerHTML = `Don't have an account? <strong>Sign Up</strong>`;
+            } else {
+                title.textContent = 'Create Account';
+                btn.textContent = 'Sign Up';
+                toggleLink.innerHTML = `Already have an account? <strong>Login</strong>`;
+            }
+            document.getElementById('authMessage').textContent = '';
+        }
 
-    // ============================================================
-    //  WALLET & POINTS LOGIC
-    // ============================================================
-    function depositMoney() {
-        const amount = prompt("Enter amount to deposit (UGX):", "10000");
-        if (amount && !isNaN(amount) && parseInt(amount) > 0) {
-            walletBalance += parseInt(amount);
-            localStorage.setItem('taataWallet', walletBalance);
+        function handleAuth() {
+            const username = document.getElementById('authUsername').value.trim();
+            const password = document.getElementById('authPassword').value.trim();
+            const msg = document.getElementById('authMessage');
+
+            if (!username || !password) {
+                msg.textContent = '⚠️ Please fill in all fields.';
+                msg.style.color = 'red';
+                return;
+            }
+
+            // Load users from localStorage
+            let users = JSON.parse(localStorage.getItem('taata_users')) || {};
+
+            if (isLoginMode) {
+                // LOGIN
+                if (users[username] && users[username].password === password) {
+                    currentUser = username;
+                    document.getElementById('accountNameDisplay').textContent = username;
+                    toggleAuthModal();
+                    updateCartUI();
+                    msg.textContent = '';
+                } else {
+                    msg.textContent = '❌ Invalid username or password.';
+                    msg.style.color = 'red';
+                }
+            } else {
+                // SIGNUP
+                if (users[username]) {
+                    msg.textContent = '❌ Username already exists.';
+                    msg.style.color = 'red';
+                    return;
+                }
+                users[username] = { password: password };
+                localStorage.setItem('taata_users', JSON.stringify(users));
+                currentUser = username;
+                document.getElementById('accountNameDisplay').textContent = username;
+                toggleAuthModal();
+                updateCartUI();
+                msg.textContent = '';
+            }
+        }
+
+        function logoutUser() {
+            if (currentUser) {
+                const data = loadUserData();
+                saveUserData(data.wallet, data.points);
+                currentUser = null;
+                document.getElementById('accountNameDisplay').textContent = 'Login';
+                updateCartUI();
+                alert('✅ Logged out successfully.');
+            }
+        }
+
+        // Add logout option by clicking the account name when logged in
+        document.getElementById('accountNameDisplay').addEventListener('dblclick', function() {
+            if (currentUser) {
+                if (confirm(`Logout ${currentUser}?`)) {
+                    logoutUser();
+                }
+            }
+        });
+
+        // ============================================================
+        //  WALLET & POINTS (User-specific)
+        // ============================================================
+        function getWalletBalance() {
+            return loadUserData().wallet;
+        }
+
+        function getPointsBalance() {
+            return loadUserData().points;
+        }
+
+        function setWalletBalance(val) {
+            const data = loadUserData();
+            saveUserData(val, data.points);
+        }
+
+        function setPointsBalance(val) {
+            const data = loadUserData();
+            saveUserData(data.wallet, val);
+        }
+
+        function depositMoney() {
+            if (!currentUser) {
+                alert('⚠️ Please Login or Sign Up first to use the wallet.');
+                return;
+            }
+            const amount = prompt("Enter amount to deposit (UGX):", "10000");
+            if (amount && !isNaN(amount) && parseInt(amount) > 0) {
+                let balance = getWalletBalance();
+                balance += parseInt(amount);
+                setWalletBalance(balance);
+                updateCartUI();
+                alert(`✅ UGX ${parseInt(amount).toLocaleString()} added to wallet!`);
+            } else {
+                alert("Please enter a valid amount.");
+            }
+        }
+
+        function showWalletInfo() {
+            if (!currentUser) {
+                alert('⚠️ Please Login to view your wallet and points.\n\n(Double-click "Login" to sign up)');
+                return;
+            }
+            alert(`💰 Wallet Balance: UGX ${getWalletBalance().toLocaleString()}\n⭐ Points: ${getPointsBalance()}\n\nEarn 1 point per UGX 1,000 spent.`);
+        }
+
+        // ============================================================
+        //  CART LOGIC
+        // ============================================================
+        let cart = [];
+        let supermarketFilter = 'All';
+        let restaurantFilter = 'All';
+
+        function getCategories(items) {
+            const cats = items.map(item => item.category);
+            return ['All', ...new Set(cats)];
+        }
+
+        function getCategoryIcon(cat) {
+            const map = {
+                'All': 'fa-solid fa-grid-2',
+                'Fresh Produce': 'fa-solid fa-leaf',
+                'Meat & Poultry': 'fa-solid fa-drumstick-bite',
+                'Dairy & Eggs': 'fa-solid fa-egg',
+                'Bakery': 'fa-solid fa-bread-slice',
+                'Pantry Staples': 'fa-solid fa-boxes-stacked',
+                'Beverages': 'fa-solid fa-wine-bottle',
+                'Snacks & Sweets': 'fa-solid fa-cookie',
+                'Frozen Foods': 'fa-solid fa-snowflake',
+                'Household Supplies': 'fa-solid fa-soap',
+                'Personal Care': 'fa-solid fa-tooth',
+                'Fast Food': 'fa-solid fa-burger',
+                'Main Course': 'fa-solid fa-utensils'
+            };
+            return map[cat] || 'fa-solid fa-tag';
+        }
+
+        function renderCategoryPills(containerId, items, activeFilter, gridId, type) {
+            const container = document.getElementById(containerId);
+            const categories = getCategories(items);
+            container.innerHTML = '';
+            categories.forEach(cat => {
+                const count = cat === 'All' ? items.length : items.filter(i => i.category === cat).length;
+                const pill = document.createElement('div');
+                pill.className = `category-pill ${cat === activeFilter ? 'active' : ''}`;
+                pill.innerHTML = `<i class="${getCategoryIcon(cat)}"></i> ${cat} <span class="count">(${count})</span>`;
+                pill.onclick = () => {
+                    if (type === 'supermarket') {
+                        supermarketFilter = cat;
+                        renderCategoryPills('supermarketCategoryPills', supermarketItems, supermarketFilter, 'supermarketGrid',
+                            'supermarket');
+                        renderGrid('supermarketGrid', supermarketItems, supermarketFilter);
+                    } else {
+                        restaurantFilter = cat;
+                        renderCategoryPills('restaurantCategoryPills', restaurantItems, restaurantFilter, 'restaurantGrid',
+                            'restaurant');
+                        renderGrid('restaurantGrid', restaurantItems, restaurantFilter);
+                    }
+                };
+                container.appendChild(pill);
+            });
+        }
+
+        function renderGrid(gridId, items, filterCategory = 'All') {
+            const grid = document.getElementById(gridId);
+            grid.innerHTML = '';
+            const filtered = filterCategory === 'All' ? items : items.filter(item => item.category === filterCategory);
+            if (filtered.length === 0) {
+                grid.innerHTML =
+                    `<p style="grid-column:1/-1; text-align:center; padding:40px; color:#888;">No items in this category.</p>`;
+                return;
+            }
+            filtered.forEach(item => {
+                const card = document.createElement('div');
+                card.className = 'product-card';
+                card.innerHTML = `
+                        <div class="icon"><i class="${item.icon}"></i></div>
+                        <span class="category-tag">${item.category}</span>
+                        <h3>${item.name}</h3>
+                        <div class="price">UGX ${item.price.toLocaleString()}</div>
+                        <button onclick="addToCart(${item.id})"><i class="fas fa-plus"></i> Add</button>
+                    `;
+                grid.appendChild(card);
+            });
+        }
+
+        function addToCart(id) {
+            const product = allProducts.find(p => p.id === id);
+            if (!product) return;
+            const existing = cart.find(c => c.id === id && c.type === product.type);
+            if (existing) existing.qty += 1;
+            else cart.push({ ...product, qty: 1 });
             updateCartUI();
-            alert(`✅ UGX ${parseInt(amount).toLocaleString()} added to wallet!`);
-        } else {
-            alert("Please enter a valid amount.");
+            alert(`✅ Added: ${product.name}`);
         }
-    }
 
-    function showWalletInfo() {
-        alert(`💰 Wallet Balance: UGX ${walletBalance.toLocaleString()}\n⭐ Points: ${pointsBalance}\n\nEarn 1 point per UGX 1,000 spent.`);
-    }
-
-    // ============================================================
-    //  PLACE ORDER
-    // ============================================================
-    function placeOrder() {
-        const name = document.getElementById('custName').value.trim();
-        const phone = document.getElementById('custPhone').value.trim();
-        const address = document.getElementById('custAddress').value.trim();
-        const location = document.getElementById('custLocation').value;
-        const payment = document.querySelector('input[name="payment"]:checked')?.value || 'momo';
-
-        if (cart.length === 0) { alert('❌ Cart is empty!'); return; }
-        if (!name || !phone || !address) { alert('⚠️ Please fill in Name, Phone, and Address.'); return; }
-
-        let subtotal = cart.reduce((sum, c) => sum + (c.price * c.qty), 0);
-        const shipping = location === 'jinja' ? 5000 : 20000;
-        let discount = 0;
-        if (document.getElementById('usePoints')?.checked) {
-            discount = Math.min(pointsBalance, Math.floor(subtotal / 1000) * 1000);
+        function removeFromCart(id, type) {
+            const index = cart.findIndex(c => c.id === id && c.type === type);
+            if (index !== -1) {
+                if (cart[index].qty > 1) cart[index].qty -= 1;
+                else cart.splice(index, 1);
+            }
+            updateCartUI();
         }
-        let walletPay = 0;
-        if (document.getElementById('useWallet')?.checked) {
-            walletPay = Math.min(walletBalance, subtotal - discount);
+
+        function updateCartUI() {
+            const count = cart.reduce((sum, c) => sum + c.qty, 0);
+            document.getElementById('cartCount').textContent = count;
+
+            const wallet = getWalletBalance();
+            const points = getPointsBalance();
+            document.getElementById('walletBalanceDisplay').textContent = wallet.toLocaleString();
+            document.getElementById('walletBalanceCheckout').textContent = wallet.toLocaleString();
+            document.getElementById('pointsBalanceDisplay').textContent = points;
+
+            const container = document.getElementById('cartItems');
+            if (cart.length === 0) {
+                container.innerHTML = '<p style="color:#888; margin-top:30px;">Cart is empty.</p>';
+                document.getElementById('cartSummary').innerHTML = '';
+                return;
+            }
+
+            let html = '',
+                subtotal = 0;
+            cart.forEach(item => {
+                const total = item.price * item.qty;
+                subtotal += total;
+                html += `<div class="cart-item"><div><div class="item-name">${item.name}</div><small>${item.type === 'supermarket' ? '🏪' : '🍽️'}</small></div><div><span class="item-price">UGX ${total.toLocaleString()}</span><div class="qty-controls"><button onclick="removeFromCart(${item.id}, '${item.type}')">-</button><span>${item.qty}</span><button onclick="addToCart(${item.id})">+</button></div></div></div>`;
+            });
+            container.innerHTML = html;
+
+            const location = document.getElementById('custLocation')?.value || 'jinja';
+            const shipping = location === 'jinja' ? 5000 : 20000;
+            const freeDelivery = subtotal >= 200000;
+
+            let discount = 0;
+            if (document.getElementById('usePoints')?.checked && currentUser) {
+                const maxPointsToUse = Math.min(points, Math.floor(subtotal / 1000) * 1000);
+                discount = maxPointsToUse;
+            }
+
+            let walletPay = 0;
+            if (document.getElementById('useWallet')?.checked && currentUser) {
+                walletPay = Math.min(wallet, subtotal - discount);
+            }
+
+            let finalTotal = subtotal - discount - walletPay + (freeDelivery ? 0 : shipping);
+            if (finalTotal < 0) finalTotal = 0;
+
+            let pointsEarned = Math.floor(finalTotal / 1000);
+
+            document.getElementById('cartSummary').innerHTML = `
+                    <div class="cart-total">
+                        <p>Subtotal: UGX ${subtotal.toLocaleString()}</p>
+                        ${discount > 0 ? `<p style="color:green;">Points Discount: - UGX ${discount.toLocaleString()}</p>` : ''}
+                        ${walletPay > 0 ? `<p style="color:blue;">Wallet Paid: - UGX ${walletPay.toLocaleString()}</p>` : ''}
+                        <p>Delivery: ${freeDelivery ? '🎉 FREE' : `UGX ${shipping.toLocaleString()}`}</p>
+                        <hr>
+                        <p style="color:var(--red); font-size:1.6rem;">Total Due: UGX ${finalTotal.toLocaleString()}</p>
+                        ${currentUser ? `<p style="font-size:0.8rem; color:#888;">You will earn ${pointsEarned} points on this order.</p>` : '<p style="font-size:0.8rem; color:red;">⚠️ Login to earn points & use wallet!</p>'}
+                    </div>
+                `;
         }
-        let finalTotal = subtotal - discount - walletPay + (subtotal >= 200000 ? 0 : shipping);
-        if (finalTotal < 0) finalTotal = 0;
 
-        // Deduct wallet & points
-        if (walletPay > 0) { walletBalance -= walletPay; localStorage.setItem('taataWallet', walletBalance); }
-        if (discount > 0) { pointsBalance -= discount; localStorage.setItem('taataPoints', pointsBalance); }
+        // ============================================================
+        //  PLACE ORDER
+        // ============================================================
+        function placeOrder() {
+            const name = document.getElementById('custName').value.trim();
+            const phone = document.getElementById('custPhone').value.trim();
+            const address = document.getElementById('custAddress').value.trim();
+            const location = document.getElementById('custLocation').value;
+            const payment = document.querySelector('input[name="payment"]:checked')?.value || 'momo';
 
-        // Add new points (1 per 1000 spent)
-        const newPoints = Math.floor(finalTotal / 1000);
-        if (newPoints > 0) { pointsBalance += newPoints; localStorage.setItem('taataPoints', pointsBalance); }
+            if (cart.length === 0) { alert('❌ Cart is empty!'); return; }
+            if (!name || !phone || !address) { alert('⚠️ Please fill in Name, Phone, and Address.'); return; }
 
-        const orderSummary = cart.map(c => `${c.name} x${c.qty}`).join(', ');
-        const paymentMethod = { momo: 'MTN Mobile Money', airtel: 'Airtel Money', card: 'Credit/Debit Card', cash: 'Cash on Delivery' }[payment] || payment;
+            let subtotal = cart.reduce((sum, c) => sum + (c.price * c.qty), 0);
+            const shipping = location === 'jinja' ? 5000 : 20000;
+            let discount = 0;
+            let walletPay = 0;
+            let finalTotal = subtotal + (subtotal >= 200000 ? 0 : shipping);
 
-        alert(`
-✅ ORDER PLACED SUCCESSFULLY!
+            if (currentUser) {
+                let points = getPointsBalance();
+                if (document.getElementById('usePoints')?.checked) {
+                    discount = Math.min(points, Math.floor(subtotal / 1000) * 1000);
+                }
+                let wallet = getWalletBalance();
+                if (document.getElementById('useWallet')?.checked) {
+                    walletPay = Math.min(wallet, subtotal - discount);
+                }
+                finalTotal = subtotal - discount - walletPay + (subtotal >= 200000 ? 0 : shipping);
+                if (finalTotal < 0) finalTotal = 0;
 
-👤 Customer: ${name}
-📞 Phone: ${phone}
-📍 Address: ${address}
-🚚 Location: ${location === 'jinja' ? 'Jinja City' : 'Other Uganda City'}
-💳 Payment: ${paymentMethod}
+                // Deduct
+                if (walletPay > 0) { setWalletBalance(wallet - walletPay); }
+                if (discount > 0) { setPointsBalance(points - discount); }
 
-🛒 Items: ${orderSummary}
-💰 Total Paid: UGX ${finalTotal.toLocaleString()}
-⭐ Points Earned: ${newPoints}
-💵 Wallet Balance Left: UGX ${walletBalance.toLocaleString()}
+                // Add new points
+                const newPoints = Math.floor(finalTotal / 1000);
+                if (newPoints > 0) { setPointsBalance(getPointsBalance() + newPoints); }
 
-📌 Next Steps:
-1. We will call you on ${phone} to confirm.
-2. Your order will be delivered within 1-2 days.
+                // Show points earned in alert
+                var pointsEarnedMsg = `\n⭐ Points Earned: ${newPoints}`;
+            } else {
+                var pointsEarnedMsg = '\n⚠️ Create an account to earn points on this order!';
+            }
 
-Thank you for shopping at Taata Owen! 🛍️🇺🇬
+            const orderSummary = cart.map(c => `${c.name} x${c.qty}`).join(', ');
+            const paymentMethod = { momo: 'MTN Mobile Money', airtel: 'Airtel Money', card: 'Credit/Debit Card',
+                cash: 'Cash on Delivery' } [payment] || payment;
+
+            alert(`
+        ✅ ORDER PLACED SUCCESSFULLY!
+
+        👤 Customer: ${name}
+        📞 Phone: ${phone}
+        📍 Address: ${address}
+        🚚 Location: ${location === 'jinja' ? 'Jinja City' : 'Other Uganda City'}
+        💳 Payment: ${paymentMethod}
+
+        🛒 Items: ${orderSummary}
+        💰 Total Paid: UGX ${finalTotal.toLocaleString()}
+        ${pointsEarnedMsg}
+        💵 Wallet Balance Left: UGX ${getWalletBalance().toLocaleString()}
+
+        📌 Next Steps:
+        1. We will call you on ${phone} to confirm.
+        2. Your order will be delivered within 1-2 days.
+
+        Thank you for shopping at Taata Owen! 🛍️🇺🇬
         `);
 
-        cart = [];
-        updateCartUI();
-        toggleCart();
-        document.getElementById('custName').value = '';
-        document.getElementById('custPhone').value = '';
-        document.getElementById('custAddress').value = '';
-    }
-
-    // ============================================================
-    //  TOGGLE CART & EVENTS
-    // ============================================================
-    function toggleCart() {
-        const sidebar = document.getElementById('cartSidebar');
-        const overlay = document.getElementById('cartOverlay');
-        sidebar.classList.toggle('open');
-        overlay.classList.toggle('active');
-        if (sidebar.classList.contains('open')) updateCartUI();
-    }
-
-    document.addEventListener('change', function(e) {
-        if (e.target.id === 'custLocation' || e.target.id === 'useWallet' || e.target.id === 'usePoints') {
+            cart = [];
             updateCartUI();
+            toggleCart();
+            document.getElementById('custName').value = '';
+            document.getElementById('custPhone').value = '';
+            document.getElementById('custAddress').value = '';
         }
-    });
 
-    // ============================================================
-    //  INIT
-    // ============================================================
-    renderCategoryTiles('supermarketCategoryTiles', supermarketItems, 'All', 'supermarketGrid', 'supermarket');
-    renderGrid('supermarketGrid', supermarketItems, 'All');
-    renderCategoryTiles('restaurantCategoryTiles', restaurantItems, 'All', 'restaurantGrid', 'restaurant');
-    renderGrid('restaurantGrid', restaurantItems, 'All');
-    updateCartUI();
-</script>
+        // ============================================================
+        //  TOGGLE CART & EVENTS
+        // ============================================================
+        function toggleCart() {
+            const sidebar = document.getElementById('cartSidebar');
+            const overlay = document.getElementById('cartOverlay');
+            sidebar.classList.toggle('open');
+            overlay.classList.toggle('active');
+            if (sidebar.classList.contains('open')) updateCartUI();
+        }
+
+        document.addEventListener('change', function(e) {
+            if (e.target.id === 'custLocation' || e.target.id === 'useWallet' || e.target.id === 'usePoints') {
+                updateCartUI();
+            }
+        });
+
+        // ============================================================
+        //  INIT
+        // ============================================================
+        renderCategoryPills('supermarketCategoryPills', supermarketItems, 'All', 'supermarketGrid', 'supermarket');
+        renderGrid('supermarketGrid', supermarketItems, 'All');
+        renderCategoryPills('restaurantCategoryPills', restaurantItems, 'All', 'restaurantGrid', 'restaurant');
+        renderGrid('restaurantGrid', restaurantItems, 'All');
+        updateCartUI();
+
+        // Check if user is logged in from previous session (optional: keep simple, just reset state)
+        // Logout double-click listener is set above.
+        console.log('🚀 Taata Owen Supermarket is ready!');
+    </script>
 </body>
 </html>
