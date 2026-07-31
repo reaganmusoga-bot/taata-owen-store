@@ -6,7 +6,7 @@
     <title>Taata Owen Supermarket & Restaurant - Jinja</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <style>
-        /* ===== ALL STYLES (same as before) ===== */
+        /* ===== ALL STYLES (compressed for brevity, but complete) ===== */
         * { margin:0; padding:0; box-sizing:border-box; font-family:'Segoe UI',Tahoma,Geneva,Verdana,sans-serif; }
         body { background:#f8f9fa; }
         :root { --red:#CC0000; --blue:#003399; --gold:#D4AF37; --light-gray:#f1f3f5; --shadow:0 4px 15px rgba(0,0,0,0.08); }
@@ -35,10 +35,11 @@
         .navbar .cart-icon:hover { background:var(--blue); color:#fff; }
         .navbar .cart-icon .badge { background:var(--blue); color:#fff; border-radius:50%; padding:2px 10px; font-size:14px; border:2px solid #fff; }
 
-        /* ===== HERO ===== */
+        /* ===== HERO (dynamic) ===== */
         .hero {
-            background:linear-gradient(rgba(0,20,50,0.75),rgba(0,0,0,0.85)), url('https://i.ibb.co/KjkypGTv/supermarket-aisle-view-stockcake.jpg');
+            background:linear-gradient(rgba(0,20,50,0.75),rgba(0,0,0,0.85)), var(--hero-bg, url('https://i.ibb.co/KjkypGTv/supermarket-aisle-view-stockcake.jpg'));
             background-size:cover; background-position:center; color:#fff; padding:80px 20px; text-align:center; border-bottom:8px solid var(--red);
+            transition:background 0.3s;
         }
         .hero-content { max-width:900px; margin:0 auto; }
         .hero-content .flag-stripes { display:flex; justify-content:center; gap:5px; margin-bottom:20px; }
@@ -90,6 +91,7 @@
         .product-card .badge { position:absolute; top:12px; right:12px; font-size:0.6rem; font-weight:800; padding:4px 12px; border-radius:30px; text-transform:uppercase; }
         .badge-special { background:var(--gold); color:#222; }
         .badge-popular { background:var(--red); color:#fff; }
+        .badge-featured { background:var(--blue); color:#fff; }
         .product-card .icon { font-size:48px; color:var(--blue); background:var(--light-gray); padding:12px; border-radius:50%; width:80px; height:80px; display:flex; align-items:center; justify-content:center; margin:0 auto 12px; }
         .product-card h3 { font-size:0.95rem; color:#222; min-height:40px; }
         .product-card .description { font-size:0.75rem; color:#777; margin:5px 0 8px; font-style:italic; }
@@ -97,6 +99,7 @@
         .product-card .meta-info { display:flex; justify-content:center; gap:12px; font-size:0.7rem; color:#888; margin-bottom:10px; }
         .product-card .stock-badge { font-size:0.65rem; padding:2px 10px; border-radius:20px; display:inline-block; margin-bottom:8px; }
         .in-stock { background:#d4edda; color:#155724; }
+        .low-stock { background:#fff3cd; color:#856404; }
         .out-of-stock { background:#f8d7da; color:#721c24; }
         .product-card button { background:var(--blue); color:#fff; border:none; padding:10px; border-radius:40px; font-weight:700; cursor:pointer; transition:0.3s; width:100%; }
         .product-card button:hover { background:var(--red); }
@@ -157,7 +160,7 @@
         .auth-modal .auth-btn:hover { background:var(--blue); }
         .auth-modal .toggle-auth { text-align:center; margin-top:15px; color:var(--blue); cursor:pointer; font-weight:600; }
 
-        .account-modal .auth-modal { max-width:450px; border-top-color:var(--gold); }
+        .account-modal .auth-modal { max-width:520px; border-top-color:var(--gold); }
         .account-modal .auth-modal .account-card { text-align:center; }
         .account-modal .auth-modal .account-card .avatar { font-size:4rem; color:var(--blue); background:var(--light-gray); width:80px; height:80px; border-radius:50%; display:flex; align-items:center; justify-content:center; margin:0 auto 15px; border:4px solid var(--red); }
         .account-modal .auth-modal .account-card h2 { color:var(--blue); margin-bottom:5px; }
@@ -174,6 +177,16 @@
         .account-modal .auth-modal .account-actions .btn-deposit-account:hover { background:#002266; }
         .account-modal .auth-modal .account-actions .btn-logout { background:var(--red); color:#fff; }
         .account-modal .auth-modal .account-actions .btn-logout:hover { background:#990000; }
+        .account-modal .auth-modal .account-actions .btn-orders { background:#17a2b8; color:#fff; }
+        .account-modal .auth-modal .account-actions .btn-orders:hover { background:#0f7a8b; }
+
+        /* Order History Modal */
+        .history-modal .auth-modal { max-width:700px; width:95%; }
+        .history-modal .auth-modal .history-table { max-height:400px; overflow-y:auto; }
+        .history-modal .auth-modal .history-table table { font-size:0.8rem; width:100%; border-collapse:collapse; }
+        .history-modal .auth-modal .history-table th { background:var(--red); color:#fff; padding:10px; position:sticky; top:0; }
+        .history-modal .auth-modal .history-table td { padding:10px; border-bottom:1px solid #eee; text-align:left; }
+        .history-modal .auth-modal .history-table .status-badge { padding:2px 10px; border-radius:20px; font-size:0.7rem; font-weight:600; }
 
         /* ===== FOOTER ===== */
         .footer { background:var(--blue); color:#fff; text-align:center; padding:25px; margin-top:30px; }
@@ -207,6 +220,7 @@
             .account-modal .auth-modal .account-stats { grid-template-columns:1fr; }
             .order-type-toggle label { padding:10px 16px; font-size:0.9rem; }
             .payment-options { grid-template-columns:1fr 1fr; }
+            .history-modal .auth-modal { padding:20px; }
         }
 
         /* ===== ADMIN STYLES ===== */
@@ -223,6 +237,8 @@
         .admin-content .stat-card { background:var(--light-gray); padding:20px; border-radius:12px; border-left:5px solid var(--red); }
         .admin-content .stat-card h3 { font-size:0.8rem; color:#888; text-transform:uppercase; }
         .admin-content .stat-card .number { font-size:2rem; font-weight:900; color:var(--blue); }
+        .admin-content .alert-card { background:#fff3cd; border-left:5px solid #ffc107; padding:15px; border-radius:8px; margin-bottom:15px; }
+        .admin-content .alert-card h4 { color:#856404; }
         .admin-content table { width:100%; border-collapse:collapse; font-size:0.85rem; }
         .admin-content th { background:var(--blue); color:#fff; padding:12px; text-align:left; position:sticky; top:0; }
         .admin-content td { padding:12px; border-bottom:1px solid #eee; vertical-align:middle; }
@@ -239,9 +255,17 @@
         .clear-btn:hover { opacity:0.8; }
         .admin-order-table-wrapper { max-height:500px; overflow-y:auto; }
         .admin-login-modal .auth-modal { max-width:380px; border-top-color:var(--gold); }
-        .admin-content .product-form { background:var(--light-gray); padding:20px; border-radius:12px; margin:15px 0; display:grid; grid-template-columns:repeat(auto-fit,minmax(150px,1fr)); gap:15px; align-items:end; }
+        .admin-content .product-form { background:var(--light-gray); padding:20px; border-radius:12px; margin:15px 0; display:grid; grid-template-columns:repeat(auto-fit,minmax(140px,1fr)); gap:12px; align-items:end; }
         .admin-content .product-form input, .admin-content .product-form select { padding:10px; border:1px solid #ccc; border-radius:8px; width:100%; }
+        .admin-content .product-form .featured-check { display:flex; align-items:center; gap:8px; }
+        .admin-content .product-form .featured-check input { width:auto; }
         .admin-content .product-form button { padding:10px 20px; background:var(--blue); color:#fff; border:none; border-radius:8px; font-weight:700; cursor:pointer; }
+
+        /* Promo form */
+        .promo-form { background:var(--light-gray); padding:20px; border-radius:12px; margin-bottom:20px; display:grid; grid-template-columns:1fr 1fr; gap:15px; align-items:end; }
+        .promo-form input, .promo-form textarea { padding:10px; border:1px solid #ccc; border-radius:8px; width:100%; }
+        .promo-form button { padding:10px 20px; background:var(--blue); color:#fff; border:none; border-radius:8px; font-weight:700; cursor:pointer; }
+        @media (max-width:600px) { .promo-form { grid-template-columns:1fr; } }
 
         /* Customer History Modal */
         .customer-history-modal .auth-modal { max-width:700px; width:95%; }
@@ -280,24 +304,24 @@
             </div>
         </nav>
 
-        <!-- HERO -->
-        <section class="hero">
+        <!-- HERO (dynamic) -->
+        <section class="hero" id="heroSection">
             <div class="hero-content">
                 <div class="flag-stripes">
                     <div class="stripe-red"></div>
                     <div class="stripe-white"></div>
                     <div class="stripe-blue"></div>
                 </div>
-                <h1>
+                <h1 id="heroTitle">
                     Taata Owen <span class="highlight-red">Supermarket</span>
                 </h1>
-                <div class="tagline">
+                <div class="tagline" id="heroTagline">
                     <i class="fas fa-shopping-basket"></i> Get out of the <strong>line</strong>, get <strong>online</strong>!
                 </div>
-                <p class="sub-text">
+                <p class="sub-text" id="heroSubtext">
                     Jinja's freshest groceries & tasty restaurant meals, delivered to your door.
                 </p>
-                <div style="display: flex; flex-wrap: wrap; gap: 15px; justify-content: center; margin-top: 20px;">
+                <div style="display:flex; flex-wrap:wrap; gap:15px; justify-content:center; margin-top:20px;">
                     <a href="#supermarketSection" class="cta-btn"><i class="fas fa-store"></i> Shop Now</a>
                     <a href="#restaurantSection" class="restaurant-jump"><i class="fas fa-utensils"></i> Restaurant Menu</a>
                 </div>
@@ -306,6 +330,14 @@
                 </div>
             </div>
         </section>
+
+        <!-- FEATURED PRODUCTS -->
+        <div class="section-container" id="featuredSection">
+            <div class="section-header">
+                <h2 class="section-title"><i class="fas fa-star" style="color:var(--gold);"></i> Featured Products</h2>
+            </div>
+            <div class="product-grid" id="featuredGrid"></div>
+        </div>
 
         <!-- SUPERMARKET -->
         <div class="section-container" id="supermarketSection">
@@ -320,13 +352,13 @@
         </div>
 
         <!-- RESTAURANT -->
-        <div class="section-container" style="background: #fcf6f0; border-radius: 30px; margin: 0 20px 30px; padding: 20px 20px 30px; border: 1px solid #f0e0d0;" id="restaurantSection">
+        <div class="section-container" style="background:#fcf6f0; border-radius:30px; margin:0 20px 30px; padding:20px 20px 30px; border:1px solid #f0e0d0;" id="restaurantSection">
             <div class="section-header">
-                <h2 class="section-title" style="color: #5d2e1b;"><i class="fas fa-utensils" style="color: var(--gold);"></i> Restaurant Menu</h2>
+                <h2 class="section-title" style="color:#5d2e1b;"><i class="fas fa-utensils" style="color:var(--gold);"></i> Restaurant Menu</h2>
             </div>
             <div class="restaurant-info-bar">
                 <div>
-                    <i class="fas fa-clock" style="color: var(--gold);"></i>
+                    <i class="fas fa-clock" style="color:var(--gold);"></i>
                     <span id="restaurantStatus" class="status-open">Loading...</span>
                     <span style="margin-left:10px;">Mon - Sun: 7:00 AM - 10:00 PM</span>
                 </div>
@@ -385,17 +417,18 @@
                 </div>
 
                 <button class="checkout-btn" onclick="placeOrder()"><i class="fas fa-check-circle"></i> Place Order</button>
+                <p style="font-size:0.7rem; color:#888; margin-top:8px; text-align:center;">* You must be logged in to complete checkout.</p>
             </div>
         </div>
 
         <!-- FOOTER -->
         <footer class="footer">
-            <p style="font-size: 1.5rem; font-weight: 900;">Taata Owen Supermarket</p>
+            <p style="font-size:1.5rem; font-weight:900;">Taata Owen Supermarket</p>
             <p><i class="fas fa-map-marker-alt"></i> Jinja Central, Uganda</p>
             <p><i class="fas fa-phone"></i> +256 786 605 822</p>
             <a href="https://wa.me/256786605822" class="whatsapp"><i class="fab fa-whatsapp"></i> Chat on WhatsApp</a>
             <button class="admin-login-link" onclick="showAdminLogin()"><i class="fas fa-lock"></i> Admin Login</button>
-            <p style="margin-top: 20px; font-size: 0.8rem; opacity: 0.6;">© 2026 • Serving Jinja with pride 🇺🇬</p>
+            <p style="margin-top:20px; font-size:0.8rem; opacity:0.6;">© 2026 • Serving Jinja with pride 🇺🇬</p>
         </footer>
     </div>
 
@@ -410,6 +443,7 @@
                 <button onclick="showAdminSection('orders')"><i class="fas fa-clipboard-list"></i> Orders</button>
                 <button onclick="showAdminSection('products')"><i class="fas fa-boxes"></i> Products</button>
                 <button onclick="showAdminSection('customers')"><i class="fas fa-users"></i> Customers</button>
+                <button onclick="showAdminSection('promotions')"><i class="fas fa-bullhorn"></i> Promotions</button>
                 <button class="logout-btn" onclick="logoutAdmin()"><i class="fas fa-sign-out-alt"></i> Logout</button>
             </div>
             <div class="admin-content">
@@ -421,9 +455,14 @@
                         <div class="stat-card"><h3>Pending Orders</h3><div class="number" id="statPendingOrders">0</div></div>
                         <div class="stat-card"><h3>Products</h3><div class="number" id="statTotalProducts">0</div></div>
                     </div>
+                    <!-- LOW STOCK ALERTS -->
+                    <div id="lowStockAlerts" class="alert-card" style="display:none;">
+                        <h4><i class="fas fa-exclamation-triangle"></i> Low Stock Alert!</h4>
+                        <ul id="lowStockList" style="list-style:none; padding:0;"></ul>
+                    </div>
                     <div style="background:#e6f0ff; padding:20px; border-radius:12px; border-left:5px solid var(--red);">
                         <p><strong><i class="fas fa-info-circle"></i> Welcome Admin!</strong></p>
-                        <p style="color:#555; font-size:0.9rem;">Manage orders, products, and customers.</p>
+                        <p style="color:#555; font-size:0.9rem;">Manage orders, products, customers, and promotions.</p>
                     </div>
                 </div>
                 <div id="adminOrders" style="display:none;">
@@ -441,6 +480,35 @@
                     <h2 style="color:var(--blue); margin-bottom:20px;">👥 Customer Management</h2>
                     <p style="color:#888; margin-bottom:15px;">View all registered customers and their loyalty points accumulation.</p>
                     <div id="adminCustomerList"><p>Loading customers...</p></div>
+                </div>
+                <div id="adminPromotions" style="display:none;">
+                    <h2 style="color:var(--blue); margin-bottom:20px;">📢 Manage Promotions</h2>
+                    <div class="promo-form">
+                        <div>
+                            <label>Hero Title</label>
+                            <input type="text" id="promoTitle" placeholder="e.g. Taata Owen Supermarket">
+                        </div>
+                        <div>
+                            <label>Hero Tagline</label>
+                            <input type="text" id="promoTagline" placeholder="e.g. Get out of the line, get online!">
+                        </div>
+                        <div>
+                            <label>Hero Subtext</label>
+                            <input type="text" id="promoSubtext" placeholder="e.g. Jinja's freshest groceries...">
+                        </div>
+                        <div>
+                            <label>Hero Background Image URL</label>
+                            <input type="text" id="promoBg" placeholder="https://...">
+                        </div>
+                        <button onclick="savePromo()"><i class="fas fa-save"></i> Save Promo</button>
+                    </div>
+                    <div style="background:#e8f5e9; padding:15px; border-radius:12px; border-left:4px solid #4caf50;">
+                        <p><strong>Current Hero Preview</strong></p>
+                        <p id="previewTitle" style="font-size:1.2rem; font-weight:700;">Taata Owen Supermarket</p>
+                        <p id="previewTagline" style="font-size:1rem;">Get out of the line, get online!</p>
+                        <p id="previewSubtext" style="color:#555;">Jinja's freshest groceries...</p>
+                        <p><small>Background image: <span id="previewBg">Default</span></small></p>
+                    </div>
                 </div>
             </div>
         </div>
@@ -486,9 +554,21 @@
                     </div>
                 </div>
                 <div class="account-actions">
-                    <button class="btn-deposit-account" onclick="depositMoney()"><i class="fas fa-plus-circle"></i> Add Money to Wallet</button>
+                    <button class="btn-deposit-account" onclick="depositMoney()"><i class="fas fa-plus-circle"></i> Add Money</button>
+                    <button class="btn-orders" onclick="viewMyOrders()"><i class="fas fa-list-ul"></i> My Orders</button>
                     <button class="btn-logout" onclick="logoutUser()"><i class="fas fa-sign-out-alt"></i> Logout</button>
                 </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Customer Order History Modal (My Orders) -->
+    <div class="auth-overlay history-modal" id="myOrdersModal">
+        <div class="auth-modal">
+            <button class="close-auth" onclick="document.getElementById('myOrdersModal').classList.remove('active')">&times;</button>
+            <h2 id="myOrdersTitle" style="color:var(--blue);">📦 My Orders</h2>
+            <div class="history-table" id="myOrdersContent">
+                <p>Loading orders...</p>
             </div>
         </div>
     </div>
@@ -504,7 +584,7 @@
         </div>
     </div>
 
-    <!-- Customer History Modal -->
+    <!-- Customer History Modal (Admin view) -->
     <div class="auth-overlay customer-history-modal" id="customerHistoryModal">
         <div class="auth-modal">
             <button class="close-auth" onclick="document.getElementById('customerHistoryModal').classList.remove('active')">&times;</button>
@@ -528,80 +608,97 @@
     <!-- ========================================================== -->
     <script>
         // ============================================================
-        //  GLOBAL DATA & STATE
+        //  GLOBAL DATA & STATE (with quantity & featured)
         // ============================================================
         const defaultSupermarketItems = [
             { id: 1, name: "Matooke (Bunch)", category: "Fresh Produce", price: 15000, icon: "fa-solid fa-leaf",
-                inStock: true },
+                inStock: true, quantity: 15, featured: false },
             { id: 2, name: "Tomatoes (1kg)", category: "Fresh Produce", price: 5000, icon: "fa-solid fa-apple-whole",
-                inStock: true },
+                inStock: true, quantity: 20, featured: false },
             { id: 3, name: "Onions (1kg)", category: "Fresh Produce", price: 4000, icon: "fa-solid fa-circle",
-                inStock: true },
+                inStock: true, quantity: 8, featured: false },
             { id: 4, name: "Chicken (Whole)", category: "Meat & Poultry", price: 35000, icon: "fa-solid fa-drumstick-bite",
-                inStock: true },
-            { id: 5, name: "Beef (1kg)", category: "Meat & Poultry", price: 18000, icon: "fa-solid fa-cow", inStock: true },
+                inStock: true, quantity: 4, featured: true },
+            { id: 5, name: "Beef (1kg)", category: "Meat & Poultry", price: 18000, icon: "fa-solid fa-cow", inStock: true,
+                quantity: 3, featured: false },
             { id: 6, name: "Fresh Milk (1L)", category: "Dairy & Eggs", price: 4500, icon: "fa-solid fa-glass-whiskey",
-                inStock: true },
-            { id: 7, name: "Eggs (Tray)", category: "Dairy & Eggs", price: 12000, icon: "fa-solid fa-egg", inStock: true },
+                inStock: true, quantity: 12, featured: false },
+            { id: 7, name: "Eggs (Tray)", category: "Dairy & Eggs", price: 12000, icon: "fa-solid fa-egg", inStock: true,
+                quantity: 6, featured: false },
             { id: 8, name: "Bread (Loaf)", category: "Bakery", price: 5000, icon: "fa-solid fa-bread-slice",
-                inStock: true },
+                inStock: true, quantity: 10, featured: false },
             { id: 9, name: "Cooking Oil (5L)", category: "Pantry Staples", price: 25000, icon: "fa-solid fa-oil-can",
-                inStock: true },
+                inStock: true, quantity: 7, featured: false },
             { id: 10, name: "Sugar (2kg)", category: "Pantry Staples", price: 8000, icon: "fa-solid fa-cube",
-                inStock: true },
+                inStock: true, quantity: 2, featured: false },
             { id: 11, name: "Rice (5kg)", category: "Pantry Staples", price: 18000, icon: "fa-solid fa-seedling",
-                inStock: true },
+                inStock: true, quantity: 5, featured: false },
             { id: 12, name: "Beans (2kg)", category: "Pantry Staples", price: 12000, icon: "fa-solid fa-seedling",
-                inStock: true },
+                inStock: true, quantity: 1, featured: false },
             { id: 13, name: "Soda (2L)", category: "Beverages", price: 6000, icon: "fa-solid fa-wine-bottle",
-                inStock: true },
+                inStock: true, quantity: 14, featured: false },
             { id: 14, name: "Fresh Juice (1L)", category: "Beverages", price: 8000, icon: "fa-solid fa-blender-phone",
-                inStock: true },
+                inStock: true, quantity: 9, featured: false },
             { id: 15, name: "Biscuits (Pack)", category: "Snacks & Sweets", price: 3000, icon: "fa-solid fa-cookie",
-                inStock: true },
+                inStock: true, quantity: 11, featured: false },
             { id: 16, name: "Frozen Chicken (1kg)", category: "Frozen Foods", price: 28000, icon: "fa-solid fa-snowflake",
-                inStock: true },
+                inStock: true, quantity: 4, featured: false },
             { id: 17, name: "Soap (Bar)", category: "Household Supplies", price: 3000, icon: "fa-solid fa-soap",
-                inStock: true },
+                inStock: true, quantity: 25, featured: false },
             { id: 18, name: "Detergent (1kg)", category: "Household Supplies", price: 8000, icon: "fa-solid fa-bucket",
-                inStock: true },
+                inStock: true, quantity: 3, featured: false },
             { id: 19, name: "Toothpaste", category: "Personal Care", price: 5000, icon: "fa-solid fa-tooth",
-                inStock: true },
+                inStock: true, quantity: 6, featured: false },
             { id: 20, name: "Shampoo (500ml)", category: "Personal Care", price: 12000, icon: "fa-solid fa-spray-can",
-                inStock: true },
+                inStock: true, quantity: 1, featured: false },
         ];
 
         const defaultRestaurantItems = [
             { id: 101, name: "Rolex (Chapati + Eggs)", category: "Fast Food", price: 7000, icon: "fa-solid fa-egg",
-                description: "Classic Ugandan street roll", prepTime: "10 min", badge: "popular", inStock: true },
+                description: "Classic Ugandan street roll", prepTime: "10 min", badge: "popular", inStock: true,
+                quantity: 10, featured: false },
             { id: 102, name: "Chapati (2 pcs)", category: "Fast Food", price: 3000, icon: "fa-solid fa-bread-slice",
-                description: "Soft, flaky flatbread", prepTime: "5 min", badge: null, inStock: true },
+                description: "Soft, flaky flatbread", prepTime: "5 min", badge: null, inStock: true, quantity: 10,
+                featured: false },
             { id: 103, name: "Samosa (2 pcs)", category: "Fast Food", price: 4000, icon: "fa-solid fa-cube",
-                description: "Spiced meat or veg pastry", prepTime: "8 min", badge: null, inStock: true },
+                description: "Spiced meat or veg pastry", prepTime: "8 min", badge: null, inStock: true, quantity: 10,
+                featured: false },
             { id: 104, name: "Chips (Large)", category: "Fast Food", price: 5000, icon: "fa-solid fa-fries",
-                description: "Golden crispy fries", prepTime: "8 min", badge: null, inStock: true },
+                description: "Golden crispy fries", prepTime: "8 min", badge: null, inStock: true, quantity: 10,
+                featured: false },
             { id: 105, name: "Chicken Stew + Rice", category: "Main Course", price: 18000, icon: "fa-solid fa-drumstick-bite",
-                description: "Tender chicken stew with rice", prepTime: "20 min", badge: "special", inStock: true },
+                description: "Tender chicken stew with rice", prepTime: "20 min", badge: "special", inStock: true,
+                quantity: 5, featured: true },
             { id: 106, name: "Beans + Matooke", category: "Main Course", price: 12000, icon: "fa-solid fa-utensils",
-                description: "Rich bean stew with matooke", prepTime: "15 min", badge: null, inStock: true },
+                description: "Rich bean stew with matooke", prepTime: "15 min", badge: null, inStock: true, quantity: 10,
+                featured: false },
             { id: 107, name: "Grilled Fish + Chips", category: "Main Course", price: 22000, icon: "fa-solid fa-fish",
-                description: "Fresh Nile perch with chips", prepTime: "25 min", badge: "special", inStock: true },
+                description: "Fresh Nile perch with chips", prepTime: "25 min", badge: "special", inStock: true,
+                quantity: 4, featured: false },
             { id: 108, name: "Beef Stew + Rice", category: "Main Course", price: 20000, icon: "fa-solid fa-cow",
-                description: "Tender beef in rich gravy", prepTime: "20 min", badge: null, inStock: true },
+                description: "Tender beef in rich gravy", prepTime: "20 min", badge: null, inStock: true, quantity: 10,
+                featured: false },
             { id: 109, name: "Fresh Juice (Passion)", category: "Beverages", price: 5000, icon: "fa-solid fa-wine-bottle",
-                description: "Freshly squeezed", prepTime: "5 min", badge: null, inStock: true },
+                description: "Freshly squeezed", prepTime: "5 min", badge: null, inStock: true, quantity: 10,
+                featured: false },
             { id: 110, name: "Soda (Can)", category: "Beverages", price: 3000, icon: "fa-solid fa-wine-bottle",
-                description: "Chilled soft drink", prepTime: "2 min", badge: null, inStock: true },
+                description: "Chilled soft drink", prepTime: "2 min", badge: null, inStock: true, quantity: 10,
+                featured: false },
             { id: 111, name: "Bottled Water", category: "Beverages", price: 2000, icon: "fa-solid fa-wine-bottle",
-                description: "Pure mineral water", prepTime: "1 min", badge: null, inStock: true },
+                description: "Pure mineral water", prepTime: "1 min", badge: null, inStock: true, quantity: 10,
+                featured: false },
             { id: 112, name: "Milkshake", category: "Beverages", price: 8000, icon: "fa-solid fa-wine-bottle",
-                description: "Creamy vanilla/strawberry", prepTime: "5 min", badge: "popular", inStock: true },
+                description: "Creamy vanilla/strawberry", prepTime: "5 min", badge: "popular", inStock: true,
+                quantity: 10, featured: false },
             { id: 113, name: "Extra Chapati", category: "Sides", price: 2000, icon: "fa-solid fa-bread-slice",
-                description: "One extra fluffy chapati", prepTime: "3 min", badge: null, inStock: true },
+                description: "One extra fluffy chapati", prepTime: "3 min", badge: null, inStock: true, quantity: 10,
+                featured: false },
             { id: 114, name: "Extra Rice", category: "Sides", price: 3000, icon: "fa-solid fa-seedling",
-                description: "Extra steamed rice", prepTime: "5 min", badge: null, inStock: true },
+                description: "Extra steamed rice", prepTime: "5 min", badge: null, inStock: true, quantity: 10,
+                featured: false },
             { id: 115, name: "Fresh Salad", category: "Sides", price: 4000, icon: "fa-solid fa-leaf",
-                description: "Mixed greens with tomatoes", prepTime: "5 min", badge: null, inStock: true },
+                description: "Mixed greens with tomatoes", prepTime: "5 min", badge: null, inStock: true, quantity: 10,
+                featured: false },
         ];
 
         let supermarketItems = JSON.parse(localStorage.getItem('taata_supermarket_items'));
@@ -615,6 +712,17 @@
             restaurantItems = defaultRestaurantItems;
             localStorage.setItem('taata_restaurant_items', JSON.stringify(restaurantItems));
         }
+
+        // Ensure all products have quantity & featured fields (for upgrades)
+        [supermarketItems, restaurantItems].forEach(items => {
+            items.forEach(p => {
+                if (p.quantity === undefined) p.quantity = 10;
+                if (p.featured === undefined) p.featured = false;
+                p.inStock = p.quantity > 0;
+            });
+        });
+        localStorage.setItem('taata_supermarket_items', JSON.stringify(supermarketItems));
+        localStorage.setItem('taata_restaurant_items', JSON.stringify(restaurantItems));
 
         const allProducts = [...supermarketItems.map(p => ({ ...p, type: 'supermarket' })), ...restaurantItems.map(p => ({ ...p,
             type: 'restaurant' }))];
@@ -762,6 +870,49 @@
         }
 
         // ============================================================
+        //  CUSTOMER ORDER HISTORY ("My Orders")
+        // ============================================================
+        function viewMyOrders() {
+            if (!currentUser) return;
+            const modal = document.getElementById('myOrdersModal');
+            const title = document.getElementById('myOrdersTitle');
+            const content = document.getElementById('myOrdersContent');
+
+            title.textContent = `📦 My Orders - ${currentUser}`;
+            const orders = JSON.parse(localStorage.getItem('taata_orders')) || [];
+            const userOrders = orders.filter(o => o.customer === currentUser);
+
+            if (userOrders.length === 0) {
+                content.innerHTML = `<p style="color:#888; text-align:center; padding:20px;">You haven't placed any orders yet.</p>`;
+            } else {
+                let html = `<table>
+                    <thead><tr>
+                        <th>#</th><th>Time</th>
+                        <th>Items</th>
+                        <th>Total (UGX)</th>
+                        <th>Points Earned</th>
+                        <th>Status</th>
+                    </tr></thead><tbody>`;
+                userOrders.slice().reverse().forEach((order, idx) => {
+                    const statusColor = getStatusColor(order.status);
+                    html += `<tr>
+                        <td>${idx + 1}</td>
+                        <td>${order.timestamp}</td>
+                        <td style="max-width:150px; word-break:break-word;">${order.items}</td>
+                        <td>${order.total.toLocaleString()}</td>
+                        <td>${order.pointsEarned || 0}</td>
+                        <td><span class="status-badge" style="background:${statusColor}; padding:2px 10px; border-radius:20px;">${order.status}</span></td>
+                    </tr>`;
+                });
+                html += `</tbody></table>`;
+                content.innerHTML = html;
+            }
+            modal.classList.add('active');
+            // close account modal
+            document.getElementById('accountModal').classList.remove('active');
+        }
+
+        // ============================================================
         //  SEARCH
         // ============================================================
         function searchProducts() {
@@ -771,8 +922,9 @@
                 card.classList.toggle('hidden', query !== '' && !text.includes(query));
             });
             document.querySelectorAll('.no-search-results').forEach(el => el.remove());
-            ['supermarketGrid', 'restaurantGrid'].forEach(gridId => {
+            ['supermarketGrid', 'restaurantGrid', 'featuredGrid'].forEach(gridId => {
                 const grid = document.getElementById(gridId);
+                if (!grid) return;
                 const visible = grid.querySelectorAll('.product-card:not(.hidden)');
                 if (visible.length === 0 && grid.querySelectorAll('.product-card').length > 0) {
                     const msg = document.createElement('p');
@@ -786,7 +938,7 @@
         }
 
         // ============================================================
-        //  UI RENDERING
+        //  UI RENDERING (with featured & quantity)
         // ============================================================
         function getCategories(items) {
             const cats = items.map(item => item.category);
@@ -840,13 +992,17 @@
             });
         }
 
-        function renderGrid(gridId, items, filterCategory = 'All') {
+        function renderGrid(gridId, items, filterCategory = 'All', isFeatured = false) {
             const grid = document.getElementById(gridId);
+            if (!grid) return;
             grid.innerHTML = '';
-            const filtered = filterCategory === 'All' ? items : items.filter(item => item.category === filterCategory);
+            let filtered = filterCategory === 'All' ? items : items.filter(item => item.category === filterCategory);
+            if (isFeatured) {
+                filtered = filtered.filter(item => item.featured === true);
+            }
             if (filtered.length === 0) {
                 grid.innerHTML =
-                    `<p style="grid-column:1/-1; text-align:center; padding:40px; color:#888;">No items in this category.</p>`;
+                    `<p style="grid-column:1/-1; text-align:center; padding:40px; color:#888;">${isFeatured ? 'No featured products yet.' : 'No items in this category.'}</p>`;
                 return;
             }
             filtered.forEach(item => {
@@ -857,12 +1013,15 @@
                     `<span class="badge badge-special"><i class="fas fa-crown"></i> Chef's Special</span>`;
                 else if (item.badge === 'popular') badgeHtml =
                     `<span class="badge badge-popular"><i class="fas fa-fire"></i> Popular</span>`;
+                if (item.featured) badgeHtml += `<span class="badge badge-featured"><i class="fas fa-star"></i> Featured</span>`;
                 let metaHtml = item.prepTime ? `<div class="meta-info"><i class="fas fa-clock"></i> ${item.prepTime}</div>` :
                     '';
                 let descHtml = item.description ? `<div class="description">${item.description}</div>` : '';
-                const stockHtml =
-                    `<span class="stock-badge ${item.inStock ? 'in-stock' : 'out-of-stock'}">${item.inStock ? '✅ In Stock' : '❌ Out of Stock'}</span>`;
-                const disabledAttr = item.inStock ? '' : 'disabled';
+                const stockClass = item.quantity <= 0 ? 'out-of-stock' : (item.quantity < 5 ? 'low-stock' : 'in-stock');
+                const stockLabel = item.quantity <= 0 ? '❌ Out of Stock' : (item.quantity < 5 ?
+                    `⚠️ Low Stock (${item.quantity} left)` : `✅ In Stock (${item.quantity})`);
+                const stockHtml = `<span class="stock-badge ${stockClass}">${stockLabel}</span>`;
+                const disabledAttr = item.quantity > 0 ? '' : 'disabled';
                 card.innerHTML = `
                         ${badgeHtml}
                         <div class="icon"><i class="${item.icon}"></i></div>
@@ -872,30 +1031,27 @@
                         ${metaHtml}
                         <div class="price">UGX ${item.price.toLocaleString()}</div>
                         ${stockHtml}
-                        <button onclick="addToCart(${item.id})" ${disabledAttr}><i class="fas fa-plus"></i> ${item.inStock ? 'Add' : 'Unavailable'}</button>
+                        <button onclick="addToCart(${item.id})" ${disabledAttr}><i class="fas fa-plus"></i> ${item.quantity > 0 ? 'Add' : 'Unavailable'}</button>
                     `;
                 grid.appendChild(card);
             });
         }
 
         // ============================================================
-        //  🛒 CART LOGIC (NOW REQUIRES LOGIN)
+        //  🛒 CART LOGIC (GUESTS CAN ADD)
         // ============================================================
         function addToCart(id) {
-            // 1. Check if user is logged in
-            if (!currentUser) {
-                alert('⚠️ Please login or sign up first to add items to your cart.');
-                toggleAuthModal(); // open login modal
-                return;
-            }
-
             try {
                 const product = allProducts.find(p => p.id === id);
                 if (!product) { alert('Product not found!'); return; }
-                if (!product.inStock) { alert('Sorry, this item is out of stock.'); return; }
+                if (product.quantity <= 0) { alert('Sorry, this item is out of stock.'); return; }
 
                 const existing = cart.find(c => c.id === id && c.type === product.type);
                 if (existing) {
+                    if (existing.qty >= product.quantity) {
+                        alert(`Only ${product.quantity} units available.`);
+                        return;
+                    }
                     existing.qty += 1;
                 } else {
                     cart.push({ ...product, qty: 1 });
@@ -1014,7 +1170,6 @@
                 });
                 container.innerHTML = html;
 
-                // ---- DYNAMIC SHIPPING ----
                 const shipping = getShippingCost();
                 const freeDelivery = subtotal >= 200000 && shipping > 0;
                 const finalShipping = freeDelivery ? 0 : shipping;
@@ -1022,21 +1177,16 @@
                 const shippingLabel = isPickup ? 'Pickup (Free)' : (freeDelivery ? '🎉 FREE Delivery' :
                     `Delivery UGX ${shipping.toLocaleString()}`);
 
-                let discount = 0;
-                let walletPay = 0;
-                let points = getPointsBalance();
-                let wallet = getWalletBalance();
-
-                const usePointsCheck = document.getElementById('usePoints');
-                const useWalletCheck = document.getElementById('useWallet');
-
-                if (usePointsCheck && usePointsCheck.checked && currentUser) {
+                let discount = 0,
+                    walletPay = 0;
+                let points = getPointsBalance(),
+                    wallet = getWalletBalance();
+                if (document.getElementById('usePoints')?.checked && currentUser) {
                     discount = Math.min(points, Math.floor(subtotal / 1000) * 1000);
                 }
-                if (useWalletCheck && useWalletCheck.checked && currentUser) {
+                if (document.getElementById('useWallet')?.checked && currentUser) {
                     walletPay = Math.min(wallet, subtotal - discount);
                 }
-
                 let finalTotal = subtotal - discount - walletPay + finalShipping;
                 if (finalTotal < 0) finalTotal = 0;
                 let pointsEarned = Math.floor(finalTotal / 1000);
@@ -1060,9 +1210,6 @@
             }
         }
 
-        // ============================================================
-        //  ✅ CART TOGGLE
-        // ============================================================
         window.toggleCart = function() {
             const sidebar = document.getElementById('cartSidebar');
             const overlay = document.getElementById('cartOverlay');
@@ -1072,7 +1219,6 @@
             }
             sidebar.classList.toggle('open');
             overlay.classList.toggle('active');
-
             if (sidebar.classList.contains('open')) {
                 toggleAddressField();
                 updateCartUI();
@@ -1083,12 +1229,11 @@
         };
 
         // ============================================================
-        //  ✅ CHECKOUT - PLACE ORDER (REQUIRES LOGIN)
+        //  ✅ CHECKOUT - PLACE ORDER (GUESTS BLOCKED)
         // ============================================================
         function placeOrder() {
-            // 1. Check if user is logged in
             if (!currentUser) {
-                alert('⚠️ Please login or sign up first to place an order.');
+                alert('⚠️ Please login or sign up first to complete your checkout.');
                 toggleAuthModal();
                 return;
             }
@@ -1104,81 +1249,51 @@
                 const paymentEl = document.querySelector('input[name="payment"]:checked');
                 const payment = paymentEl ? paymentEl.value : 'momo';
 
-                if (cart.length === 0) {
-                    alert('❌ Your cart is empty! Add some items first.');
-                    return;
-                }
-                if (!name) {
-                    alert('⚠️ Please enter your full name (contact person).');
-                    document.getElementById('custName')?.focus();
-                    return;
-                }
-                if (!phone) {
-                    alert('⚠️ Please enter your phone number.');
-                    document.getElementById('custPhone')?.focus();
-                    return;
-                }
-                if (orderType === 'delivery' && !address) {
-                    alert('⚠️ Please enter a delivery address.');
-                    document.getElementById('custAddress')?.focus();
-                    return;
-                }
-                if (orderType === 'pickup') {
-                    address = 'Taata Owen Supermarket, Jinja Central (Pickup)';
-                }
+                if (cart.length === 0) { alert('❌ Your cart is empty!'); return; }
+                if (!name) { alert('⚠️ Please enter your full name (contact person).');
+                    document.getElementById('custName')?.focus(); return; }
+                if (!phone) { alert('⚠️ Please enter your phone number.');
+                    document.getElementById('custPhone')?.focus(); return; }
+                if (orderType === 'delivery' && !address) { alert('⚠️ Please enter a delivery address.');
+                    document.getElementById('custAddress')?.focus(); return; }
+                if (orderType === 'pickup') address = 'Taata Owen Supermarket, Jinja Central (Pickup)';
 
                 console.log("✅ Validation passed");
 
                 let subtotal = cart.reduce((sum, c) => sum + (c.price * c.qty), 0);
                 const shipping = getShippingCost();
-                const freeDelivery = subtotal >= 200000 && shipping > 0;
-                const finalShipping = freeDelivery ? 0 : shipping;
+                const finalShipping = (subtotal >= 200000 && shipping > 0) ? 0 : shipping;
 
                 let discount = 0,
                     walletPay = 0;
-                let finalTotal = subtotal + finalShipping;
-                let pointsEarned = 0;
-
-                // Since we already have currentUser, apply wallet/points
-                let points = getPointsBalance();
-                const usePointsCheck = document.getElementById('usePoints');
-                if (usePointsCheck && usePointsCheck.checked) {
+                let points = getPointsBalance(),
+                    wallet = getWalletBalance();
+                if (document.getElementById('usePoints')?.checked) {
                     discount = Math.min(points, Math.floor(subtotal / 1000) * 1000);
                 }
-
-                let wallet = getWalletBalance();
-                const useWalletCheck = document.getElementById('useWallet');
-                if (useWalletCheck && useWalletCheck.checked) {
+                if (document.getElementById('useWallet')?.checked) {
                     walletPay = Math.min(wallet, subtotal - discount);
                 }
-
-                finalTotal = subtotal - discount - walletPay + finalShipping;
+                let finalTotal = subtotal - discount - walletPay + finalShipping;
                 if (finalTotal < 0) finalTotal = 0;
-
                 if (walletPay > 0) setWalletBalance(wallet - walletPay);
                 if (discount > 0) setPointsBalance(points - discount);
-
-                pointsEarned = Math.floor(finalTotal / 1000);
+                let pointsEarned = Math.floor(finalTotal / 1000);
                 if (pointsEarned > 0) setPointsBalance(getPointsBalance() + pointsEarned);
-
                 const pointsMsg = `⭐ Points Earned: ${pointsEarned}`;
 
                 const hasRestaurantItems = cart.some(item => item.type === 'restaurant');
                 const estimatedTime = hasRestaurantItems ? '15-30 minutes' : '1-2 hours';
                 const orderSummary = cart.map(c => `${c.name} x${c.qty}`).join(', ');
-                const paymentMethod = {
-                    momo: 'MTN Mobile Money',
-                    airtel: 'Airtel Money',
-                    card: 'Credit/Debit Card',
-                    cash: 'Cash'
-                } [payment] || payment;
+                const paymentMethod = { momo: 'MTN MoMo', airtel: 'Airtel Money', card: 'Card', cash: 'Cash' } [payment] ||
+                    payment;
                 const orderTypeLabel = orderType === 'delivery' ? '🚚 Delivery' : '🏪 Pickup';
 
                 const orders = JSON.parse(localStorage.getItem('taata_orders')) || [];
                 orders.push({
                     timestamp: new Date().toLocaleString(),
-                    customer: currentUser, // username
-                    contactName: name, // entered full name
+                    customer: currentUser,
+                    contactName: name,
                     phone: phone,
                     address: address,
                     orderType: orderTypeLabel,
@@ -1190,7 +1305,34 @@
                 });
                 localStorage.setItem('taata_orders', JSON.stringify(orders));
 
-                console.log("✅ Order saved:", orders);
+                // Reduce product quantities (simple inventory deduction)
+                cart.forEach(cartItem => {
+                    const product = allProducts.find(p => p.id === cartItem.id && p.type === cartItem.type);
+                    if (product) {
+                        product.quantity -= cartItem.qty;
+                        if (product.quantity < 0) product.quantity = 0;
+                        product.inStock = product.quantity > 0;
+                        // Update the correct array
+                        if (product.type === 'supermarket') {
+                            const idx = supermarketItems.findIndex(p => p.id === product.id);
+                            if (idx > -1) {
+                                supermarketItems[idx].quantity = product.quantity;
+                                supermarketItems[idx].inStock = product.inStock;
+                            }
+                        } else {
+                            const idx = restaurantItems.findIndex(p => p.id === product.id);
+                            if (idx > -1) {
+                                restaurantItems[idx].quantity = product.quantity;
+                                restaurantItems[idx].inStock = product.inStock;
+                            }
+                        }
+                    }
+                });
+                localStorage.setItem('taata_supermarket_items', JSON.stringify(supermarketItems));
+                localStorage.setItem('taata_restaurant_items', JSON.stringify(restaurantItems));
+
+                // Auto-notification: WhatsApp & Email simulation
+                sendAutoNotification(orders[orders.length - 1]);
 
                 alert(`
         ✅ ORDER PLACED SUCCESSFULLY!
@@ -1219,11 +1361,78 @@
                 document.getElementById('custName').value = '';
                 document.getElementById('custPhone').value = '';
                 document.getElementById('custAddress').value = '';
+                // Refresh UI to reflect new stock
+                refreshCustomerUI();
 
             } catch (error) {
                 console.error("❌ Place order error:", error);
                 alert("⚠️ Something went wrong. Please check the console (F12) and try again.");
             }
+        }
+
+        // ============================================================
+        //  📱 AUTO-NOTIFICATIONS (WhatsApp + Email simulation)
+        // ============================================================
+        function sendAutoNotification(order) {
+            // WhatsApp – open automatically when status is changed to Out for Delivery or Delivered
+            // We'll trigger this from the admin status update as well
+            const phone = order.phone;
+            const customer = order.customer;
+            const total = order.total;
+            const orderIdx = JSON.parse(localStorage.getItem('taata_orders') || []).length;
+
+            let rawPhone = phone.replace(/\s/g, '');
+            if (rawPhone.startsWith('0')) rawPhone = '256' + rawPhone.substring(1);
+            if (!rawPhone.startsWith('256')) rawPhone = '256' + rawPhone;
+
+            const msg = `Hello ${customer}, your order #${orderIdx} (UGX ${total.toLocaleString()}) has been placed successfully and is now being processed. You will receive updates shortly. - Taata Owen Team`;
+            // We don't auto-open WhatsApp on order placement to avoid spam, but we log it.
+            console.log(`📱 WhatsApp Auto-Notification for ${customer} (${phone}): ${msg}`);
+            console.log(`📧 Email Auto-Notification for ${customer}: Order #${orderIdx} confirmed.`);
+
+            // Store notification in local storage for history (optional)
+            const notifications = JSON.parse(localStorage.getItem('taata_notifications')) || [];
+            notifications.push({
+                timestamp: new Date().toLocaleString(),
+                customer: customer,
+                phone: phone,
+                message: msg,
+                type: 'Order Placement'
+            });
+            localStorage.setItem('taata_notifications', JSON.stringify(notifications));
+        }
+
+        // Admin status update auto-notify
+        function updateOrderStatusAndNotify(index, newStatus) {
+            const orders = JSON.parse(localStorage.getItem('taata_orders')) || [];
+            if (!orders[index]) return;
+            orders[index].status = newStatus;
+            localStorage.setItem('taata_orders', JSON.stringify(orders));
+
+            // Auto-notify if status is Out for Delivery or Delivered
+            if (newStatus === 'Out for Delivery' || newStatus === 'Delivered') {
+                const order = orders[index];
+                let rawPhone = order.phone.replace(/\s/g, '');
+                if (rawPhone.startsWith('0')) rawPhone = '256' + rawPhone.substring(1);
+                if (!rawPhone.startsWith('256')) rawPhone = '256' + rawPhone;
+
+                const statusMsg = newStatus === 'Out for Delivery' ?
+                    `🚚 Your order #${index+1} is out for delivery!` :
+                    `✅ Your order #${index+1} has been delivered. Thank you!`;
+                const fullMsg =
+                    `Hello ${order.customer}, ${statusMsg} - Taata Owen Team`;
+
+                // Open WhatsApp (this will trigger a new tab)
+                const url = `https://wa.me/${rawPhone}?text=${encodeURIComponent(fullMsg)}`;
+                window.open(url, '_blank');
+
+                // Log email simulation
+                console.log(`📧 Email sent to ${order.customer}: ${statusMsg}`);
+            }
+
+            renderAdminOrders();
+            renderAdminDashboard();
+            renderAdminCustomers();
         }
 
         // ============================================================
@@ -1262,7 +1471,7 @@
         }
 
         // ============================================================
-        //  ADMIN APP LOGIC
+        //  ADMIN APP LOGIC (with Promotions & Low Stock)
         // ============================================================
         function showAdminLogin() {
             document.getElementById('adminLoginModal').classList.add('active');
@@ -1282,6 +1491,7 @@
                 renderAdminOrders();
                 renderAdminProducts();
                 renderAdminCustomers();
+                loadPromoPreview();
             } else {
                 document.getElementById('adminLoginError').textContent = '❌ Incorrect password. Try again.';
             }
@@ -1296,20 +1506,20 @@
         function showAdminSection(section) {
             document.querySelectorAll('.admin-sidebar button').forEach(b => b.classList.remove('active'));
             const btns = document.querySelectorAll('.admin-sidebar button');
-            if (section === 'dashboard') btns[0].classList.add('active');
-            else if (section === 'orders') btns[1].classList.add('active');
-            else if (section === 'products') btns[2].classList.add('active');
-            else if (section === 'customers') btns[3].classList.add('active');
+            const map = { 'dashboard': 0, 'orders': 1, 'products': 2, 'customers': 3, 'promotions': 4 };
+            if (map[section] !== undefined) btns[map[section]].classList.add('active');
 
             document.getElementById('adminDashboard').style.display = section === 'dashboard' ? 'block' : 'none';
             document.getElementById('adminOrders').style.display = section === 'orders' ? 'block' : 'none';
             document.getElementById('adminProducts').style.display = section === 'products' ? 'block' : 'none';
             document.getElementById('adminCustomers').style.display = section === 'customers' ? 'block' : 'none';
+            document.getElementById('adminPromotions').style.display = section === 'promotions' ? 'block' : 'none';
 
             if (section === 'dashboard') renderAdminDashboard();
             if (section === 'orders') renderAdminOrders();
             if (section === 'products') renderAdminProducts();
             if (section === 'customers') renderAdminCustomers();
+            if (section === 'promotions') loadPromoPreview();
         }
 
         function renderAdminDashboard() {
@@ -1322,10 +1532,72 @@
             document.getElementById('statTotalRevenue').textContent = `UGX ${totalRevenue.toLocaleString()}`;
             document.getElementById('statPendingOrders').textContent = pending;
             document.getElementById('statTotalProducts').textContent = supermarketItems.length + restaurantItems.length;
+
+            // LOW STOCK ALERTS
+            const allItems = [...supermarketItems, ...restaurantItems];
+            const lowStockItems = allItems.filter(item => item.quantity > 0 && item.quantity < 5);
+            const alertDiv = document.getElementById('lowStockAlerts');
+            const list = document.getElementById('lowStockList');
+            if (lowStockItems.length > 0) {
+                alertDiv.style.display = 'block';
+                list.innerHTML = lowStockItems.map(item =>
+                    `<li><i class="fas fa-box"></i> <strong>${item.name}</strong> (${item.type}) - Only ${item.quantity} left! <span style="color:red;">⚠️ Restock soon</span></li>`
+                ).join('');
+            } else {
+                alertDiv.style.display = 'none';
+            }
         }
 
         // ============================================================
-        //  🆕 CUSTOMER MANAGEMENT
+        //  PROMOTIONS MANAGEMENT
+        // ============================================================
+        function loadPromoPreview() {
+            const promo = JSON.parse(localStorage.getItem('taata_promo')) || {
+                title: 'Taata Owen <span class="highlight-red">Supermarket</span>',
+                tagline: 'Get out of the line, get online!',
+                subtext: "Jinja's freshest groceries & tasty restaurant meals, delivered to your door.",
+                bg: 'https://i.ibb.co/KjkypGTv/supermarket-aisle-view-stockcake.jpg'
+            };
+            document.getElementById('promoTitle').value = promo.title.replace(/<[^>]*>/g, '');
+            document.getElementById('promoTagline').value = promo.tagline;
+            document.getElementById('promoSubtext').value = promo.subtext;
+            document.getElementById('promoBg').value = promo.bg;
+
+            document.getElementById('previewTitle').innerHTML = promo.title;
+            document.getElementById('previewTagline').textContent = promo.tagline;
+            document.getElementById('previewSubtext').textContent = promo.subtext;
+            document.getElementById('previewBg').textContent = promo.bg || 'Default';
+            // Update live hero
+            document.querySelector('.hero h1').innerHTML = promo.title;
+            document.querySelector('.hero .tagline').innerHTML = `<i class="fas fa-shopping-basket"></i> ${promo.tagline}`;
+            document.querySelector('.hero .sub-text').textContent = promo.subtext;
+            document.querySelector('.hero').style.setProperty('--hero-bg', `url(${promo.bg})`);
+        }
+
+        function savePromo() {
+            const title = document.getElementById('promoTitle').value.trim();
+            const tagline = document.getElementById('promoTagline').value.trim();
+            const subtext = document.getElementById('promoSubtext').value.trim();
+            const bg = document.getElementById('promoBg').value.trim();
+
+            // If title is plain text, wrap "Supermarket" with highlight
+            const formattedTitle = title.includes('Supermarket') ?
+                title.replace('Supermarket', '<span class="highlight-red">Supermarket</span>') :
+                `<span class="highlight-red">${title}</span>`;
+
+            const promo = {
+                title: formattedTitle,
+                tagline: tagline || 'Get out of the line, get online!',
+                subtext: subtext || "Jinja's freshest groceries...",
+                bg: bg || 'https://i.ibb.co/KjkypGTv/supermarket-aisle-view-stockcake.jpg'
+            };
+            localStorage.setItem('taata_promo', JSON.stringify(promo));
+            loadPromoPreview();
+            alert('✅ Promotions updated successfully!');
+        }
+
+        // ============================================================
+        //  CUSTOMER MANAGEMENT
         // ============================================================
         function renderAdminCustomers() {
             const container = document.getElementById('adminCustomerList');
@@ -1355,8 +1627,6 @@
                 const totalPointsEarned = userOrders.reduce((sum, o) => sum + (o.pointsEarned || 0), 0);
                 const currentPoints = parseInt(localStorage.getItem(`taata_${username}_points`)) || 0;
                 const wallet = parseInt(localStorage.getItem(`taata_${username}_wallet`)) || 0;
-
-                // Get most recent phone from orders
                 const phone = userOrders.length > 0 ? userOrders[userOrders.length - 1].phone : 'N/A';
 
                 html += `<tr>
@@ -1392,8 +1662,7 @@
             } else {
                 let html = `<table>
                     <thead><tr>
-                        <th>#</th>
-                        <th>Time</th>
+                        <th>#</th><th>Time</th>
                         <th>Items</th>
                         <th>Total (UGX)</th>
                         <th>Points Earned</th>
@@ -1412,7 +1681,6 @@
                 html += `</tbody></table>`;
                 content.innerHTML = html;
             }
-
             modal.classList.add('active');
         }
 
@@ -1424,31 +1692,21 @@
             if (rawPhone.startsWith('0')) rawPhone = '256' + rawPhone.substring(1);
             if (!rawPhone.startsWith('256')) rawPhone = '256' + rawPhone;
 
-            const msg = `Hello ${customer}, your order #${orderIndex + 1} (UGX ${total.toLocaleString()}) is ready for pickup/delivery at Taata Owen Supermarket! 🛍️ Thank you for choosing us. - Taata Owen Team`;
+            const msg =
+                `Hello ${customer}, your order #${orderIndex + 1} (UGX ${total.toLocaleString()}) is ready for pickup/delivery at Taata Owen Supermarket! 🛍️ Thank you for choosing us. - Taata Owen Team`;
             const url = `https://wa.me/${rawPhone}?text=${encodeURIComponent(msg)}`;
             window.open(url, '_blank');
         }
 
         function markOrderDelivered(index) {
-            const orders = JSON.parse(localStorage.getItem('taata_orders')) || [];
-            if (orders[index]) {
-                orders[index].status = 'Delivered';
-                localStorage.setItem('taata_orders', JSON.stringify(orders));
-                renderAdminOrders();
-                renderAdminDashboard();
-                renderAdminCustomers();
-                alert('✅ Order marked as Delivered!');
-            }
+            updateOrderStatusAndNotify(index, 'Delivered');
         }
 
         function clearDeliveredOrders() {
             let orders = JSON.parse(localStorage.getItem('taata_orders')) || [];
             const deliveredCount = orders.filter(o => o.status === 'Delivered').length;
-            if (deliveredCount === 0) {
-                alert('No delivered orders to clear.');
-                return;
-            }
-            if (confirm(`Delete ${deliveredCount} completed orders? This cannot be undone.`)) {
+            if (deliveredCount === 0) { alert('No delivered orders to clear.'); return; }
+            if (confirm(`Delete ${deliveredCount} completed orders?`)) {
                 orders = orders.filter(o => o.status !== 'Delivered');
                 localStorage.setItem('taata_orders', JSON.stringify(orders));
                 renderAdminOrders();
@@ -1471,7 +1729,7 @@
                 const reversedIndex = orders.length - 1 - index;
                 const statusOptions = ['Pending', 'Preparing', 'Out for Delivery', 'Delivered'];
                 let statusSelect =
-                    `<select class="status-select" onchange="updateOrderStatus(${reversedIndex}, this.value)" style="background:${getStatusColor(order.status)}">`;
+                    `<select class="status-select" onchange="updateOrderStatusAndNotify(${reversedIndex}, this.value)" style="background:${getStatusColor(order.status)}">`;
                 statusOptions.forEach(s => {
                     statusSelect +=
                         `<option value="${s}" ${s === order.status ? 'selected' : ''}>${s}</option>`;
@@ -1505,37 +1763,30 @@
             return map[status] || 'white';
         }
 
-        function updateOrderStatus(index, newStatus) {
-            const orders = JSON.parse(localStorage.getItem('taata_orders')) || [];
-            if (orders[index]) {
-                orders[index].status = newStatus;
-                localStorage.setItem('taata_orders', JSON.stringify(orders));
-                renderAdminOrders();
-                renderAdminDashboard();
-                renderAdminCustomers();
-            }
-        }
-
         // ============================================================
-        //  PRODUCT MANAGEMENT (ADMIN)
+        //  PRODUCT MANAGEMENT (ADMIN) – with quantity & featured
         // ============================================================
         function renderAdminProducts() {
             const container = document.getElementById('adminProductList');
             const allItems = [...supermarketItems, ...restaurantItems];
             let html = `<table>
-                        <thead><tr><th>Name</th><th>Category</th><th>Price</th><th>Type</th><th>Stock</th><th>Actions</th></tr></thead><tbody>`;
+                        <thead><tr><th>Name</th><th>Category</th><th>Price</th><th>Qty</th><th>Featured</th><th>Type</th><th>Stock</th><th>Actions</th></tr></thead><tbody>`;
             allItems.forEach(item => {
-                const stockText = item.inStock ? '✅ In Stock' : '❌ Out of Stock';
-                const stockColor = item.inStock ? 'in-stock-badge' : 'out-of-stock-badge';
+                const stockText = item.quantity > 0 ? (item.quantity < 5 ? `⚠️ ${item.quantity}` :
+                    `✅ ${item.quantity}`) : '❌ 0';
+                const stockColor = item.quantity <= 0 ? 'out-of-stock-badge' : (item.quantity < 5 ?
+                    'low-stock' : 'in-stock-badge');
                 html += `<tr>
                             <td><strong>${item.name}</strong></td>
                             <td>${item.category}</td>
                             <td>UGX ${item.price.toLocaleString()}</td>
+                            <td>${item.quantity}</td>
+                            <td>${item.featured ? '⭐ Yes' : 'No'}</td>
                             <td>${item.type === 'supermarket' ? '🏪 Supermarket' : '🍽️ Restaurant'}</td>
                             <td><span class="${stockColor}">${stockText}</span></td>
                             <td>
                                 <button class="btn-sm btn-edit" onclick="editProduct(${item.id}, '${item.type}')"><i class="fas fa-edit"></i> Edit</button>
-                                <button class="btn-sm toggle-stock-btn" onclick="toggleStock(${item.id}, '${item.type}')">Toggle Stock</button>
+                                <button class="btn-sm toggle-stock-btn" onclick="toggleFeatured(${item.id}, '${item.type}')">Toggle Featured</button>
                                 <button class="btn-sm btn-delete" onclick="deleteProduct(${item.id}, '${item.type}')"><i class="fas fa-trash"></i> Delete</button>
                             </td>
                         </tr>`;
@@ -1544,11 +1795,24 @@
             container.innerHTML = html;
         }
 
+        function toggleFeatured(id, type) {
+            let items = type === 'supermarket' ? supermarketItems : restaurantItems;
+            const item = items.find(p => p.id === id);
+            if (item) {
+                item.featured = !item.featured;
+                if (type === 'supermarket') localStorage.setItem('taata_supermarket_items', JSON.stringify(items));
+                else localStorage.setItem('taata_restaurant_items', JSON.stringify(items));
+                renderAdminProducts();
+                refreshCustomerUI();
+            }
+        }
+
         function toggleStock(id, type) {
             let items = type === 'supermarket' ? supermarketItems : restaurantItems;
             const item = items.find(p => p.id === id);
             if (item) {
                 item.inStock = !item.inStock;
+                item.quantity = item.inStock ? 10 : 0;
                 if (type === 'supermarket') localStorage.setItem('taata_supermarket_items', JSON.stringify(items));
                 else localStorage.setItem('taata_restaurant_items', JSON.stringify(items));
                 renderAdminProducts();
@@ -1576,10 +1840,14 @@
                             <input type="text" id="newProductName" placeholder="Product Name">
                             <input type="text" id="newProductCategory" placeholder="Category">
                             <input type="number" id="newProductPrice" placeholder="Price (UGX)">
+                            <input type="number" id="newProductQuantity" placeholder="Quantity" value="10">
                             <select id="newProductType">
                                 <option value="supermarket">Supermarket</option>
                                 <option value="restaurant">Restaurant</option>
                             </select>
+                            <div class="featured-check">
+                                <input type="checkbox" id="newProductFeatured"> <label for="newProductFeatured">Featured</label>
+                            </div>
                             <button onclick="addProduct()"><i class="fas fa-save"></i> Save Product</button>
                         </div>
                     `;
@@ -1589,8 +1857,10 @@
             const name = document.getElementById('newProductName').value.trim();
             const category = document.getElementById('newProductCategory').value.trim();
             const price = parseInt(document.getElementById('newProductPrice').value);
+            const quantity = parseInt(document.getElementById('newProductQuantity').value) || 10;
             const type = document.getElementById('newProductType').value;
-            if (!name || !category || !price) { alert('Please fill all fields.'); return; }
+            const featured = document.getElementById('newProductFeatured').checked;
+            if (!name || !category || !price) { alert('Please fill all required fields.'); return; }
 
             const newId = type === 'supermarket' ? Math.max(0, ...supermarketItems.map(i => i.id)) + 1 : Math.max(100, ...restaurantItems
                 .map(i => i.id)) + 1;
@@ -1601,7 +1871,9 @@
                 category: category,
                 price: price,
                 icon: "fa-solid fa-box",
-                inStock: true,
+                inStock: quantity > 0,
+                quantity: quantity,
+                featured: featured,
                 type: type
             };
 
@@ -1630,10 +1902,14 @@
             if (newCategory === null) return;
             const newPrice = prompt('Price (UGX):', item.price);
             if (newPrice === null) return;
+            const newQty = prompt('Quantity:', item.quantity);
+            if (newQty === null) return;
 
             item.name = newName.trim();
             item.category = newCategory.trim();
             item.price = parseInt(newPrice);
+            item.quantity = parseInt(newQty);
+            item.inStock = item.quantity > 0;
 
             if (type === 'supermarket') localStorage.setItem('taata_supermarket_items', JSON.stringify(items));
             else localStorage.setItem('taata_restaurant_items', JSON.stringify(items));
@@ -1652,7 +1928,9 @@
             renderCategoryPills('restaurantCategoryPills', restaurantItems, restaurantFilter, 'restaurantGrid',
                 'restaurant');
             renderGrid('restaurantGrid', restaurantItems, restaurantFilter);
+            renderGrid('featuredGrid', [...supermarketItems, ...restaurantItems], 'All', true);
             searchProducts();
+            // Update featured grid
         }
 
         // ============================================================
@@ -1674,6 +1952,7 @@
             renderAdminOrders();
             renderAdminProducts();
             renderAdminCustomers();
+            loadPromoPreview();
         } else {
             document.getElementById('customerApp').style.display = 'block';
             document.getElementById('adminApp').style.display = 'none';
@@ -1684,16 +1963,16 @@
         renderGrid('supermarketGrid', supermarketItems, 'All');
         renderCategoryPills('restaurantCategoryPills', restaurantItems, 'All', 'restaurantGrid', 'restaurant');
         renderGrid('restaurantGrid', restaurantItems, 'All');
+        renderGrid('featuredGrid', [...supermarketItems, ...restaurantItems], 'All', true);
         updateCartUI();
         updateRestaurantStatus();
         setInterval(updateRestaurantStatus, 60000);
         toggleAddressField();
+        loadPromoPreview();
 
-        console.log('🔥 Taata Owen Supermarket & Restaurant is LIVE!');
-        console.log('🔐 Admin Login: Click "Admin Login" at the bottom. Password: admin123');
-        console.log('👥 Admin can now manage Customers and see Loyalty Points accumulation.');
-        console.log('🔒 Users must login to add items to cart and place orders.');
-
+        console.log('🔥 Taata Owen Supermarket & Restaurant is LIVE with Ultimate Upgrade!');
+        console.log('🔐 Admin Login: admin123');
+        console.log('⭐ Features: Order History, Auto-Notifications, Featured Products, Low Stock Alerts, Promo Manager.');
         window.placeOrder = placeOrder;
     </script>
 </body>
