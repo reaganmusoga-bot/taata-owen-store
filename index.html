@@ -242,6 +242,12 @@
         .admin-content .product-form { background:var(--light-gray); padding:20px; border-radius:12px; margin:15px 0; display:grid; grid-template-columns:repeat(auto-fit,minmax(150px,1fr)); gap:15px; align-items:end; }
         .admin-content .product-form input, .admin-content .product-form select { padding:10px; border:1px solid #ccc; border-radius:8px; width:100%; }
         .admin-content .product-form button { padding:10px 20px; background:var(--blue); color:#fff; border:none; border-radius:8px; font-weight:700; cursor:pointer; }
+
+        /* Customer History Modal */
+        .customer-history-modal .auth-modal { max-width:700px; width:95%; }
+        .customer-history-modal .auth-modal .history-table { max-height:400px; overflow-y:auto; }
+        .customer-history-modal .auth-modal .history-table table { font-size:0.8rem; }
+        .customer-history-modal .auth-modal .history-table th { background:var(--red); color:#fff; position:sticky; top:0; }
     </style>
 </head>
 <body>
@@ -334,7 +340,7 @@
             <div class="product-grid" id="restaurantGrid"></div>
         </div>
 
-        <!-- ===== CART SIDEBAR (INSERTED HERE) ===== -->
+        <!-- ===== CART SIDEBAR ===== -->
         <div class="cart-overlay" id="cartOverlay" onclick="toggleCart()"></div>
         <div class="cart-sidebar" id="cartSidebar">
             <button class="close-cart" onclick="toggleCart()">&times;</button>
@@ -403,6 +409,8 @@
                 <button class="active" onclick="showAdminSection('dashboard')"><i class="fas fa-chart-pie"></i> Dashboard</button>
                 <button onclick="showAdminSection('orders')"><i class="fas fa-clipboard-list"></i> Orders</button>
                 <button onclick="showAdminSection('products')"><i class="fas fa-boxes"></i> Products</button>
+                <!-- NEW CUSTOMERS TAB -->
+                <button onclick="showAdminSection('customers')"><i class="fas fa-users"></i> Customers</button>
                 <button class="logout-btn" onclick="logoutAdmin()"><i class="fas fa-sign-out-alt"></i> Logout</button>
             </div>
             <div class="admin-content">
@@ -416,7 +424,7 @@
                     </div>
                     <div style="background:#e6f0ff; padding:20px; border-radius:12px; border-left:5px solid var(--red);">
                         <p><strong><i class="fas fa-info-circle"></i> Welcome Admin!</strong></p>
-                        <p style="color:#555; font-size:0.9rem;">Manage orders, products, and notify clients instantly via WhatsApp.</p>
+                        <p style="color:#555; font-size:0.9rem;">Manage orders, products, and customers.</p>
                     </div>
                 </div>
                 <div id="adminOrders" style="display:none;">
@@ -429,6 +437,12 @@
                     <button class="btn-add" onclick="showAddProductForm()"><i class="fas fa-plus"></i> Add New Product</button>
                     <div id="adminProductFormContainer"></div>
                     <div id="adminProductList"><p>Loading products...</p></div>
+                </div>
+                <!-- NEW CUSTOMERS CONTENT -->
+                <div id="adminCustomers" style="display:none;">
+                    <h2 style="color:var(--blue); margin-bottom:20px;">👥 Customer Management</h2>
+                    <p style="color:#888; margin-bottom:15px;">View all registered customers and their loyalty points accumulation.</p>
+                    <div id="adminCustomerList"><p>Loading customers...</p></div>
                 </div>
             </div>
         </div>
@@ -489,6 +503,17 @@
             <input type="password" id="adminPasswordInput" placeholder="Enter Admin Password" onkeydown="if(event.key==='Enter') loginAdmin()" />
             <button class="auth-btn" onclick="loginAdmin()" style="background:var(--gold); color:#222;">Login</button>
             <div style="margin-top:10px; color:red; font-size:0.8rem;" id="adminLoginError"></div>
+        </div>
+    </div>
+
+    <!-- Customer History Modal (NEW) -->
+    <div class="auth-overlay customer-history-modal" id="customerHistoryModal">
+        <div class="auth-modal">
+            <button class="close-auth" onclick="document.getElementById('customerHistoryModal').classList.remove('active')">&times;</button>
+            <h2 id="historyModalTitle" style="color:var(--blue);">Customer Order History</h2>
+            <div class="history-table" id="customerHistoryContent">
+                <p>Loading history...</p>
+            </div>
         </div>
     </div>
 
@@ -1227,7 +1252,7 @@
         }
 
         // ============================================================
-        //  ADMIN APP LOGIC
+        //  ADMIN APP LOGIC (UPDATED)
         // ============================================================
         function showAdminLogin() {
             document.getElementById('adminLoginModal').classList.add('active');
@@ -1246,6 +1271,7 @@
                 renderAdminDashboard();
                 renderAdminOrders();
                 renderAdminProducts();
+                renderAdminCustomers(); // Load customers on login
             } else {
                 document.getElementById('adminLoginError').textContent = '❌ Incorrect password. Try again.';
             }
@@ -1260,17 +1286,21 @@
         function showAdminSection(section) {
             document.querySelectorAll('.admin-sidebar button').forEach(b => b.classList.remove('active'));
             const btns = document.querySelectorAll('.admin-sidebar button');
+            // Map index: 0=dashboard, 1=orders, 2=products, 3=customers, 4=logout
             if (section === 'dashboard') btns[0].classList.add('active');
             else if (section === 'orders') btns[1].classList.add('active');
             else if (section === 'products') btns[2].classList.add('active');
+            else if (section === 'customers') btns[3].classList.add('active');
 
             document.getElementById('adminDashboard').style.display = section === 'dashboard' ? 'block' : 'none';
             document.getElementById('adminOrders').style.display = section === 'orders' ? 'block' : 'none';
             document.getElementById('adminProducts').style.display = section === 'products' ? 'block' : 'none';
+            document.getElementById('adminCustomers').style.display = section === 'customers' ? 'block' : 'none';
 
             if (section === 'dashboard') renderAdminDashboard();
             if (section === 'orders') renderAdminOrders();
             if (section === 'products') renderAdminProducts();
+            if (section === 'customers') renderAdminCustomers();
         }
 
         function renderAdminDashboard() {
@@ -1285,6 +1315,101 @@
             document.getElementById('statTotalProducts').textContent = supermarketItems.length + restaurantItems.length;
         }
 
+        // ============================================================
+        //  🆕 CUSTOMER MANAGEMENT (RENDER & HISTORY)
+        // ============================================================
+        function renderAdminCustomers() {
+            const container = document.getElementById('adminCustomerList');
+            const users = JSON.parse(localStorage.getItem('taata_users')) || {};
+            const orders = JSON.parse(localStorage.getItem('taata_orders')) || [];
+            const usernames = Object.keys(users);
+
+            if (usernames.length === 0) {
+                container.innerHTML = '<p style="color:#888;">No registered customers yet.</p>';
+                return;
+            }
+
+            let html = `<table>
+                <thead><tr>
+                    <th>Username</th>
+                    <th>Phone</th>
+                    <th>Orders</th>
+                    <th>Total Points Earned</th>
+                    <th>Current Points</th>
+                    <th>Wallet Balance</th>
+                    <th>Action</th>
+                </tr></thead><tbody>`;
+
+            usernames.forEach(username => {
+                const userOrders = orders.filter(o => o.customer === username);
+                const totalOrders = userOrders.length;
+                const totalPointsEarned = userOrders.reduce((sum, o) => sum + (o.pointsEarned || 0), 0);
+                const currentPoints = parseInt(localStorage.getItem(`taata_${username}_points`)) || 0;
+                const wallet = parseInt(localStorage.getItem(`taata_${username}_wallet`)) || 0;
+
+                // Get the most recent phone number from orders, or N/A
+                const phone = userOrders.length > 0 ? userOrders[userOrders.length - 1].phone : 'N/A';
+
+                html += `<tr>
+                    <td><strong>${username}</strong></td>
+                    <td>${phone}</td>
+                    <td>${totalOrders}</td>
+                    <td>${totalPointsEarned}</td>
+                    <td>${currentPoints}</td>
+                    <td>UGX ${wallet.toLocaleString()}</td>
+                    <td>
+                        <button class="btn-sm btn-edit" onclick="viewCustomerHistory('${username}')">
+                            <i class="fas fa-history"></i> View History
+                        </button>
+                    </td>
+                </tr>`;
+            });
+
+            html += `</tbody></table>`;
+            container.innerHTML = html;
+        }
+
+        function viewCustomerHistory(username) {
+            const modal = document.getElementById('customerHistoryModal');
+            const title = document.getElementById('historyModalTitle');
+            const content = document.getElementById('customerHistoryContent');
+
+            title.textContent = `📜 Order History - ${username}`;
+            const orders = JSON.parse(localStorage.getItem('taata_orders')) || [];
+            const userOrders = orders.filter(o => o.customer === username);
+
+            if (userOrders.length === 0) {
+                content.innerHTML = `<p style="color:#888;">No orders placed by this customer yet.</p>`;
+            } else {
+                let html = `<table>
+                    <thead><tr>
+                        <th>#</th>
+                        <th>Time</th>
+                        <th>Items</th>
+                        <th>Total (UGX)</th>
+                        <th>Points Earned</th>
+                        <th>Status</th>
+                    </tr></thead><tbody>`;
+                userOrders.slice().reverse().forEach((order, idx) => {
+                    html += `<tr>
+                        <td>${idx + 1}</td>
+                        <td>${order.timestamp}</td>
+                        <td style="max-width:150px; word-break:break-word;">${order.items}</td>
+                        <td>${order.total.toLocaleString()}</td>
+                        <td>${order.pointsEarned || 0}</td>
+                        <td><span class="status-badge" style="background:${getStatusColor(order.status)}; padding:2px 10px; border-radius:20px;">${order.status}</span></td>
+                    </tr>`;
+                });
+                html += `</tbody></table>`;
+                content.innerHTML = html;
+            }
+
+            modal.classList.add('active');
+        }
+
+        // ============================================================
+        //  ADMIN ORDER FUNCTIONS (UPDATED to refresh customers)
+        // ============================================================
         function sendWhatsApp(phone, customer, orderIndex, total) {
             let rawPhone = phone.replace(/\s/g, '');
             if (rawPhone.startsWith('0')) rawPhone = '256' + rawPhone.substring(1);
@@ -1302,6 +1427,7 @@
                 localStorage.setItem('taata_orders', JSON.stringify(orders));
                 renderAdminOrders();
                 renderAdminDashboard();
+                renderAdminCustomers();
                 alert('✅ Order marked as Delivered!');
             }
         }
@@ -1318,6 +1444,7 @@
                 localStorage.setItem('taata_orders', JSON.stringify(orders));
                 renderAdminOrders();
                 renderAdminDashboard();
+                renderAdminCustomers();
                 alert('✅ Delivered orders cleared!');
             }
         }
@@ -1375,6 +1502,7 @@
                 localStorage.setItem('taata_orders', JSON.stringify(orders));
                 renderAdminOrders();
                 renderAdminDashboard();
+                renderAdminCustomers();
             }
         }
 
@@ -1535,6 +1663,7 @@
             renderAdminDashboard();
             renderAdminOrders();
             renderAdminProducts();
+            renderAdminCustomers(); // Load customers
         } else {
             document.getElementById('customerApp').style.display = 'block';
             document.getElementById('adminApp').style.display = 'none';
@@ -1552,8 +1681,7 @@
 
         console.log('🔥 Taata Owen Supermarket & Restaurant is LIVE!');
         console.log('🔐 Admin Login: Click "Admin Login" at the bottom. Password: admin123');
-        console.log('🛒 Cart & Checkout are FULLY ACTIVE with dynamic pickup/delivery.');
-        console.log('📌 Click the cart icon or floating button to open checkout.');
+        console.log('👥 Admin can now manage Customers and see Loyalty Points accumulation.');
 
         // Make sure placeOrder is globally accessible
         window.placeOrder = placeOrder;
