@@ -6,7 +6,7 @@
     <title>Taata Owen Supermarket & Restaurant - Jinja</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <style>
-        /* ===== FULL STYLES ===== */
+        /* ===== FULL STYLES (same as before, plus a few extras) ===== */
         * { margin:0; padding:0; box-sizing:border-box; font-family:'Segoe UI',Tahoma,Geneva,Verdana,sans-serif; }
         body { background:#f8f9fa; }
         :root { --red:#CC0000; --blue:#003399; --gold:#D4AF37; --light-gray:#f1f3f5; --shadow:0 4px 15px rgba(0,0,0,0.08); }
@@ -129,7 +129,7 @@
         .float-btn-msg { background:var(--blue); }
         .float-btn-msg i { font-size:22px; }
 
-        /* Auth Modals */
+        /* ===== AUTH & MODALS ===== */
         .auth-overlay { display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.7); z-index:500; justify-content:center; align-items:center; }
         .auth-overlay.active { display:flex; }
         .auth-modal { background:#fff; padding:40px; border-radius:20px; max-width:420px; width:90%; box-shadow:0 20px 60px rgba(0,0,0,0.3); position:relative; border-top:8px solid var(--red); }
@@ -160,13 +160,25 @@
         .account-modal .auth-modal .account-actions .btn-orders:hover { background:#0f7a8b; }
         .account-modal .auth-modal .account-actions .btn-profile { background:#6f42c1; color:#fff; }
         .account-modal .auth-modal .account-actions .btn-profile:hover { background:#5a32a3; }
-        .account-modal .auth-modal .account-actions .btn-support { background:#fd7e14; color:#fff; }
+        .account-modal .auth-modal .account-actions .btn-support { background:#fd7e14; color:#fff; position:relative; }
         .account-modal .auth-modal .account-actions .btn-support:hover { background:#e06b0c; }
+        .account-modal .auth-modal .account-actions .btn-support .unread-dot { position:absolute; top:-4px; right:-4px; width:14px; height:14px; background:red; border-radius:50%; border:2px solid #fff; display:none; }
+        .account-modal .auth-modal .account-actions .btn-messages { background:#17a2b8; color:#fff; }
+        .account-modal .auth-modal .account-actions .btn-messages:hover { background:#0f7a8b; }
 
         .profile-modal .auth-modal { max-width:480px; }
         .profile-modal .auth-modal input { width:100%; padding:12px; margin:6px 0; border:1px solid #ddd; border-radius:8px; }
         .support-modal .auth-modal { max-width:480px; }
         .support-modal .auth-modal textarea { width:100%; padding:12px; margin:6px 0; border:1px solid #ddd; border-radius:8px; min-height:100px; font-family:inherit; }
+
+        .messages-modal .auth-modal { max-width:650px; width:95%; }
+        .messages-modal .auth-modal .msg-thread { max-height:400px; overflow-y:auto; }
+        .messages-modal .auth-modal .msg-thread .msg-bubble { padding:12px 16px; border-radius:12px; margin:8px 0; max-width:85%; word-wrap:break-word; }
+        .messages-modal .auth-modal .msg-thread .msg-bubble.customer { background:var(--light-gray); align-self:flex-start; border-bottom-left-radius:4px; }
+        .messages-modal .auth-modal .msg-thread .msg-bubble.admin { background:#e6f0ff; align-self:flex-end; border-bottom-right-radius:4px; border-left:3px solid var(--blue); }
+        .messages-modal .auth-modal .msg-thread .msg-bubble .time { font-size:0.65rem; color:#888; margin-top:4px; display:block; }
+        .messages-modal .auth-modal .no-msg { color:#888; text-align:center; padding:30px; }
+
         .history-modal .auth-modal { max-width:700px; width:95%; }
         .history-modal .auth-modal .history-table { max-height:400px; overflow-y:auto; }
         .history-modal .auth-modal .history-table table { font-size:0.8rem; width:100%; border-collapse:collapse; }
@@ -198,9 +210,10 @@
             #contactFloating { bottom:80px; right:15px; }
             .float-btn { width:45px; height:45px; font-size:20px; }
             .auth-modal { padding:25px; }
+            .messages-modal .auth-modal { padding:20px; }
         }
 
-        /* ADMIN STYLES */
+        /* ===== ADMIN STYLES ===== */
         #adminApp { display:none; background:#f4f6f9; min-height:100vh; }
         .admin-container { display:flex; max-width:1400px; margin:0 auto; padding:20px; gap:25px; flex-wrap:wrap; }
         .admin-sidebar { width:220px; background:var(--blue); border-radius:16px; padding:25px 15px; color:#fff; height:fit-content; position:sticky; top:20px; box-shadow:0 8px 25px rgba(0,0,0,0.1); }
@@ -260,7 +273,6 @@
     <!-- CUSTOMER APP -->
     <!-- ========================================================== -->
     <div id="customerApp">
-        <!-- NAVBAR -->
         <nav class="navbar">
             <div class="logo">
                 <img src="https://i.ibb.co/TqgqYj50/TAATA-OWEN.png" alt="Taata Owen Logo" />
@@ -284,7 +296,6 @@
             </div>
         </nav>
 
-        <!-- HERO -->
         <section class="hero" id="heroSection">
             <div class="hero-content">
                 <div class="flag-stripes">
@@ -305,59 +316,36 @@
             </div>
         </section>
 
-        <!-- FEATURED -->
         <div class="section-container" id="featuredSection">
-            <div class="section-header">
-                <h2 class="section-title"><i class="fas fa-star" style="color:var(--gold);"></i> Featured Products</h2>
-            </div>
+            <div class="section-header"><h2 class="section-title"><i class="fas fa-star" style="color:var(--gold);"></i> Featured Products</h2></div>
             <div class="product-grid" id="featuredGrid"></div>
         </div>
 
-        <!-- HOT DEALS -->
         <div class="section-container" id="hotDealsSection" style="background: #fff5f5; border-radius: 30px; padding: 20px 20px 30px; border: 2px solid #ff5722;">
-            <div class="section-header">
-                <h2 class="section-title" style="color:#ff5722;"><i class="fas fa-fire" style="color:#ff5722;"></i> Hot Deals - Electricals</h2>
-            </div>
+            <div class="section-header"><h2 class="section-title" style="color:#ff5722;"><i class="fas fa-fire" style="color:#ff5722;"></i> Hot Deals - Electricals</h2></div>
             <div class="product-grid" id="hotDealsGrid"></div>
         </div>
 
-        <!-- COMBOS -->
         <div class="section-container" id="combosSection" style="background: #e8f5e9; border-radius: 30px; padding: 20px 20px 30px; border: 2px solid #4caf50;">
-            <div class="section-header">
-                <h2 class="section-title" style="color:#2e7d32;"><i class="fas fa-boxes" style="color:#4caf50;"></i> Special Combos</h2>
-            </div>
+            <div class="section-header"><h2 class="section-title" style="color:#2e7d32;"><i class="fas fa-boxes" style="color:#4caf50;"></i> Special Combos</h2></div>
             <div class="product-grid" id="combosGrid"></div>
         </div>
 
-        <!-- SUPERMARKET -->
         <div class="section-container" id="supermarketSection">
-            <div class="section-header">
-                <h2 class="section-title"><i class="fas fa-store"></i> Supermarket</h2>
-            </div>
-            <div class="category-heading">
-                <i class="fas fa-tags"></i> Browse Categories
-            </div>
+            <div class="section-header"><h2 class="section-title"><i class="fas fa-store"></i> Supermarket</h2></div>
+            <div class="category-heading"><i class="fas fa-tags"></i> Browse Categories</div>
             <div id="supermarketCategoryPills" class="category-pills"></div>
             <div class="product-grid" id="supermarketGrid"></div>
         </div>
 
-        <!-- RESTAURANT -->
         <div class="section-container" style="background:#fcf6f0; border-radius:30px; margin:0 20px 30px; padding:20px 20px 30px; border:1px solid #f0e0d0;" id="restaurantSection">
-            <div class="section-header">
-                <h2 class="section-title" style="color:#5d2e1b;"><i class="fas fa-utensils" style="color:var(--gold);"></i> Restaurant Menu</h2>
-            </div>
+            <div class="section-header"><h2 class="section-title" style="color:#5d2e1b;"><i class="fas fa-utensils" style="color:var(--gold);"></i> Restaurant Menu</h2></div>
             <div class="restaurant-info-bar">
-                <div>
-                    <i class="fas fa-clock" style="color:var(--gold);"></i>
-                    <span id="restaurantStatus" class="status-open">Loading...</span>
-                    <span style="margin-left:10px;">Mon - Sun: 7:00 AM - 10:00 PM</span>
-                </div>
+                <div><i class="fas fa-clock" style="color:var(--gold);"></i> <span id="restaurantStatus" class="status-open">Loading...</span> <span style="margin-left:10px;">Mon - Sun: 7:00 AM - 10:00 PM</span></div>
                 <div class="chef-pick"><i class="fas fa-star"></i> Chef's Specials</div>
                 <div><i class="fas fa-motorcycle"></i> Delivery / <i class="fas fa-store-alt"></i> Pickup</div>
             </div>
-            <div class="category-heading">
-                <i class="fas fa-tags"></i> Browse Categories
-            </div>
+            <div class="category-heading"><i class="fas fa-tags"></i> Browse Categories</div>
             <div id="restaurantCategoryPills" class="category-pills"></div>
             <div class="product-grid" id="restaurantGrid"></div>
         </div>
@@ -434,7 +422,6 @@
             </div>
         </div>
 
-        <!-- FOOTER -->
         <footer class="footer">
             <p style="font-size:1.5rem; font-weight:900;">Taata Owen Supermarket</p>
             <p><i class="fas fa-map-marker-alt"></i> Jinja Central, Uganda</p>
@@ -469,10 +456,7 @@
                         <div class="stat-card"><h3>Pending Orders</h3><div class="number" id="statPendingOrders">0</div></div>
                         <div class="stat-card"><h3>Products</h3><div class="number" id="statTotalProducts">0</div></div>
                     </div>
-                    <div id="lowStockAlerts" class="alert-card" style="display:none;">
-                        <h4><i class="fas fa-exclamation-triangle"></i> Low Stock Alert!</h4>
-                        <ul id="lowStockList" style="list-style:none; padding:0;"></ul>
-                    </div>
+                    <div id="lowStockAlerts" class="alert-card" style="display:none;"><h4><i class="fas fa-exclamation-triangle"></i> Low Stock Alert!</h4><ul id="lowStockList" style="list-style:none; padding:0;"></ul></div>
                     <div style="background:#e6f0ff; padding:20px; border-radius:12px; border-left:5px solid var(--red);">
                         <p><strong><i class="fas fa-info-circle"></i> Welcome Admin!</strong></p>
                         <p style="color:#555; font-size:0.9rem;">Manage orders, products, customers, and support messages.</p>
@@ -533,9 +517,7 @@
                 <input type="password" id="authPassword" placeholder="Password" />
                 <button class="auth-btn" id="authActionBtn" onclick="handleAuth()">Login</button>
             </div>
-            <div class="toggle-auth" id="authToggleLink" onclick="toggleAuthMode()">
-                Don't have an account? <strong>Sign Up</strong>
-            </div>
+            <div class="toggle-auth" id="authToggleLink" onclick="toggleAuthMode()">Don't have an account? <strong>Sign Up</strong></div>
             <div style="margin-top:10px; color:#888; font-size:0.8rem;" id="authMessage"></div>
         </div>
     </div>
@@ -556,6 +538,8 @@
                     <button class="btn-deposit-account" onclick="depositMoney()"><i class="fas fa-plus-circle"></i> Add Money</button>
                     <button class="btn-orders" onclick="viewMyOrders()"><i class="fas fa-list-ul"></i> My Orders</button>
                     <button class="btn-profile" onclick="openProfileModal()"><i class="fas fa-user-edit"></i> My Profile</button>
+                    <!-- NEW: My Messages button -->
+                    <button class="btn-messages" onclick="viewMyMessages()"><i class="fas fa-inbox"></i> My Messages</button>
                     <button class="btn-support" onclick="openSupportModal()"><i class="fas fa-headset"></i> Contact Support</button>
                     <button class="btn-logout" onclick="logoutUser()"><i class="fas fa-sign-out-alt"></i> Logout</button>
                 </div>
@@ -578,7 +562,7 @@
         </div>
     </div>
 
-    <!-- Support Modal -->
+    <!-- Support Modal (Send Message) -->
     <div class="auth-overlay support-modal" id="supportModal">
         <div class="auth-modal">
             <button class="close-auth" onclick="closeSupportModal()">&times;</button>
@@ -588,6 +572,17 @@
                 <textarea id="supportMessage" placeholder="Write your message here..." required></textarea>
                 <button class="auth-btn" type="submit">Send Message</button>
             </form>
+        </div>
+    </div>
+
+    <!-- My Messages Modal (Customer Inbox) -->
+    <div class="auth-overlay messages-modal" id="myMessagesModal">
+        <div class="auth-modal">
+            <button class="close-auth" onclick="document.getElementById('myMessagesModal').classList.remove('active')">&times;</button>
+            <h2 style="color:var(--blue);"><i class="fas fa-inbox"></i> My Messages</h2>
+            <div id="myMessagesContent" class="msg-thread">
+                <p class="no-msg">Loading messages...</p>
+            </div>
         </div>
     </div>
 
@@ -626,12 +621,7 @@
         <a href="mailto:info@taataowen.com" class="float-btn float-btn-msg" title="Send us an Email"><i class="fas fa-envelope"></i></a>
     </div>
 
-    <!-- Floating Checkout Button -->
-    <button id="floatingCheckoutBtn" onclick="toggleCart()">
-        <i class="fas fa-shopping-cart"></i> Checkout (<span id="floatingCartCount">0</span>)
-    </button>
-
-    <!-- Back to Top -->
+    <button id="floatingCheckoutBtn" onclick="toggleCart()"><i class="fas fa-shopping-cart"></i> Checkout (<span id="floatingCartCount">0</span>)</button>
     <button id="backToTop" onclick="scrollToTop()"><i class="fas fa-arrow-up"></i></button>
 
     <!-- ========================================================== -->
@@ -641,7 +631,7 @@
         // ============================================================
         // VERSION CHECK
         // ============================================================
-        const APP_VERSION = '2.1';
+        const APP_VERSION = '2.2';
         if (localStorage.getItem('taata_app_version') !== APP_VERSION) {
             localStorage.removeItem('taata_supermarket_items');
             localStorage.removeItem('taata_restaurant_items');
@@ -649,7 +639,7 @@
         }
 
         // ============================================================
-        // DEFAULT PRODUCT DATA
+        // DEFAULT PRODUCT DATA (same as before – full list included)
         // ============================================================
         const defaultSupermarketItems = [
             { id: 1, name: "Matooke (Bunch)", category: "Fresh Produce", price: 15000, icon: "fa-solid fa-leaf",
@@ -692,7 +682,6 @@
                 inStock: true, quantity: 6, featured: false, discount: 0, isCombo: false, comboItems: "" },
             { id: 20, name: "Shampoo (500ml)", category: "Personal Care", price: 12000, icon: "fa-solid fa-spray-can",
                 inStock: true, quantity: 1, featured: false, discount: 0, isCombo: false, comboItems: "" },
-            // Britannia Featured
             { id: 21, name: "Britannia Marie Gold", category: "Biscuits", price: 8000, icon: "fa-solid fa-cookie",
                 inStock: true, quantity: 20, featured: true, discount: 0, isCombo: false, comboItems: "" },
             { id: 22, name: "Britannia Tiger Cream", category: "Biscuits", price: 6000, icon: "fa-solid fa-cookie",
@@ -701,7 +690,6 @@
                 inStock: true, quantity: 15, featured: true, discount: 0, isCombo: false, comboItems: "" },
             { id: 24, name: "Britannia NutriChoice", category: "Biscuits", price: 7500, icon: "fa-solid fa-cookie",
                 inStock: true, quantity: 12, featured: true, discount: 0, isCombo: false, comboItems: "" },
-            // Electricals Hot Deals
             { id: 25, name: "LED TV 32\"", category: "Electronics", price: 550000, icon: "fa-solid fa-tv",
                 inStock: true, quantity: 5, featured: false, discount: 15, isCombo: false, comboItems: "" },
             { id: 26, name: "Refrigerator", category: "Electronics", price: 1200000, icon: "fa-solid fa-snowflake",
@@ -718,7 +706,6 @@
                 inStock: true, quantity: 6, featured: false, discount: 10, isCombo: false, comboItems: "" },
             { id: 32, name: "Water Heater", category: "Electronics", price: 180000, icon: "fa-solid fa-water",
                 inStock: true, quantity: 4, featured: false, discount: 18, isCombo: false, comboItems: "" },
-            // Combos
             { id: 33, name: "Beverage Combo", category: "Combos", price: 25000, icon: "fa-solid fa-wine-bottle",
                 inStock: true, quantity: 10, featured: false, discount: 0, isCombo: true,
                 comboItems: "Coca-Cola 2L + Water 1.5L + Energy Drink + Fresh Juice 1L" },
@@ -778,11 +765,9 @@
                 featured: false, discount: 0, isCombo: false, comboItems: "" },
         ];
 
-        // Load or init
         let supermarketItems = JSON.parse(localStorage.getItem('taata_supermarket_items')) || defaultSupermarketItems;
         let restaurantItems = JSON.parse(localStorage.getItem('taata_restaurant_items')) || defaultRestaurantItems;
 
-        // Ensure fields
         [supermarketItems, restaurantItems].forEach(items => {
             items.forEach(p => {
                 if (p.quantity === undefined) p.quantity = 10;
@@ -978,8 +963,9 @@
         }
 
         // ============================================================
-        // WEB-BASED MESSAGING
+        // WEB-BASED MESSAGING (Customer Inbox & Send)
         // ============================================================
+        // Send message
         function openSupportModal() {
             if (!currentUser) { alert('Please login first.'); return; }
             document.getElementById('supportMessage').value = '';
@@ -1010,6 +996,51 @@
             alert('✅ Your message has been sent. Our support team will respond shortly.');
         }
 
+        // View My Messages (Customer Inbox)
+        function viewMyMessages() {
+            if (!currentUser) return;
+            const modal = document.getElementById('myMessagesModal');
+            const content = document.getElementById('myMessagesContent');
+            const messages = JSON.parse(localStorage.getItem('taata_messages')) || [];
+            const myMessages = messages.filter(m => m.from === currentUser);
+
+            if (myMessages.length === 0) {
+                content.innerHTML = '<p class="no-msg">📭 You have no messages yet.</p>';
+            } else {
+                let html = '';
+                // Show newest first
+                myMessages.slice().reverse().forEach(msg => {
+                    const isAdminReply = msg.reply !== null && msg.reply !== undefined && msg.reply.trim() !==
+                        '';
+                    html += `
+                        <div class="msg-bubble customer">
+                            <strong>You:</strong> ${msg.message}
+                            <span class="time">${msg.timestamp}</span>
+                        </div>
+                    `;
+                    if (isAdminReply) {
+                        html += `
+                            <div class="msg-bubble admin">
+                                <strong>Support:</strong> ${msg.reply}
+                                <span class="time">Replied</span>
+                            </div>
+                        `;
+                    }
+                });
+                content.innerHTML = html;
+                // Mark all replies as read
+                myMessages.forEach(msg => {
+                    if (msg.reply && !msg.read) {
+                        msg.read = true;
+                    }
+                });
+                localStorage.setItem('taata_messages', JSON.stringify(messages));
+            }
+            modal.classList.add('active');
+            document.getElementById('accountModal').classList.remove('active');
+        }
+
+        // Admin message functions
         function renderAdminMessages() {
             const container = document.getElementById('adminMessagesList');
             const messages = JSON.parse(localStorage.getItem('taata_messages')) || [];
@@ -1020,7 +1051,8 @@
             let html = '';
             messages.slice().reverse().forEach(msg => {
                 const readStatus = msg.read ? '✅ Read' : '🔴 Unread';
-                const replyHtml = msg.reply ? `<div class="msg-reply"><strong>Admin Reply:</strong> ${msg.reply}</div>` : '';
+                const replyHtml = msg.reply ? `<div class="msg-reply"><strong>Admin Reply:</strong> ${msg.reply}</div>` :
+                    '';
                 html += `
                     <div class="msg-item" style="border-left: ${!msg.read ? '4px solid var(--red)' : '4px solid transparent'};">
                         <div class="msg-header">
@@ -1059,7 +1091,7 @@
                 msg.read = true;
                 localStorage.setItem('taata_messages', JSON.stringify(messages));
                 renderAdminMessages();
-                alert('✅ Reply saved.');
+                alert('✅ Reply saved. Customer will see it in "My Messages".');
             }
         }
 
@@ -2004,7 +2036,7 @@
         toggleAddressField();
         loadPromoPreview();
 
-        console.log('🔥 Taata Owen v2.1 – Full features, organized, and complete!');
+        console.log('🔥 Taata Owen v2.2 – Full features with Customer Inbox!');
         window.placeOrder = placeOrder;
     </script>
 </body>
