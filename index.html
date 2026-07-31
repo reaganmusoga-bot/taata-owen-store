@@ -353,8 +353,8 @@
                     <label><input type="radio" name="orderType" value="delivery" checked onchange="toggleAddressField()"> <i class="fas fa-truck"></i> Delivery</label>
                     <label><input type="radio" name="orderType" value="pickup" onchange="toggleAddressField()"> <i class="fas fa-store-alt"></i> Pickup</label>
                 </div>
-                <label>Full Name</label>
-                <input type="text" id="custName" placeholder="e.g. John Muwonge">
+                <label>Full Name (Contact Person)</label>
+                <input type="text" id="custName" placeholder="e.g. Nabiga Sebastian">
                 <label>Phone Number</label>
                 <input type="tel" id="custPhone" placeholder="e.g. 0777123456">
                 <label id="addressLabel">Delivery Address</label>
@@ -409,7 +409,6 @@
                 <button class="active" onclick="showAdminSection('dashboard')"><i class="fas fa-chart-pie"></i> Dashboard</button>
                 <button onclick="showAdminSection('orders')"><i class="fas fa-clipboard-list"></i> Orders</button>
                 <button onclick="showAdminSection('products')"><i class="fas fa-boxes"></i> Products</button>
-                <!-- NEW CUSTOMERS TAB -->
                 <button onclick="showAdminSection('customers')"><i class="fas fa-users"></i> Customers</button>
                 <button class="logout-btn" onclick="logoutAdmin()"><i class="fas fa-sign-out-alt"></i> Logout</button>
             </div>
@@ -438,7 +437,6 @@
                     <div id="adminProductFormContainer"></div>
                     <div id="adminProductList"><p>Loading products...</p></div>
                 </div>
-                <!-- NEW CUSTOMERS CONTENT -->
                 <div id="adminCustomers" style="display:none;">
                     <h2 style="color:var(--blue); margin-bottom:20px;">👥 Customer Management</h2>
                     <p style="color:#888; margin-bottom:15px;">View all registered customers and their loyalty points accumulation.</p>
@@ -506,7 +504,7 @@
         </div>
     </div>
 
-    <!-- Customer History Modal (NEW) -->
+    <!-- Customer History Modal -->
     <div class="auth-overlay customer-history-modal" id="customerHistoryModal">
         <div class="auth-modal">
             <button class="close-auth" onclick="document.getElementById('customerHistoryModal').classList.remove('active')">&times;</button>
@@ -881,9 +879,16 @@
         }
 
         // ============================================================
-        //  🛒 CART LOGIC
+        //  🛒 CART LOGIC (NOW REQUIRES LOGIN)
         // ============================================================
         function addToCart(id) {
+            // 1. Check if user is logged in
+            if (!currentUser) {
+                alert('⚠️ Please login or sign up first to add items to your cart.');
+                toggleAuthModal(); // open login modal
+                return;
+            }
+
             try {
                 const product = allProducts.find(p => p.id === id);
                 if (!product) { alert('Product not found!'); return; }
@@ -1056,7 +1061,7 @@
         }
 
         // ============================================================
-        //  ✅ CART TOGGLE (FIXED)
+        //  ✅ CART TOGGLE
         // ============================================================
         window.toggleCart = function() {
             const sidebar = document.getElementById('cartSidebar');
@@ -1078,9 +1083,16 @@
         };
 
         // ============================================================
-        //  ✅ CHECKOUT - PLACE ORDER
+        //  ✅ CHECKOUT - PLACE ORDER (REQUIRES LOGIN)
         // ============================================================
         function placeOrder() {
+            // 1. Check if user is logged in
+            if (!currentUser) {
+                alert('⚠️ Please login or sign up first to place an order.');
+                toggleAuthModal();
+                return;
+            }
+
             try {
                 console.log("🚀 Place Order triggered!");
 
@@ -1097,7 +1109,7 @@
                     return;
                 }
                 if (!name) {
-                    alert('⚠️ Please enter your full name.');
+                    alert('⚠️ Please enter your full name (contact person).');
                     document.getElementById('custName')?.focus();
                     return;
                 }
@@ -1127,32 +1139,29 @@
                 let finalTotal = subtotal + finalShipping;
                 let pointsEarned = 0;
 
-                if (currentUser) {
-                    let points = getPointsBalance();
-                    const usePointsCheck = document.getElementById('usePoints');
-                    if (usePointsCheck && usePointsCheck.checked) {
-                        discount = Math.min(points, Math.floor(subtotal / 1000) * 1000);
-                    }
-
-                    let wallet = getWalletBalance();
-                    const useWalletCheck = document.getElementById('useWallet');
-                    if (useWalletCheck && useWalletCheck.checked) {
-                        walletPay = Math.min(wallet, subtotal - discount);
-                    }
-
-                    finalTotal = subtotal - discount - walletPay + finalShipping;
-                    if (finalTotal < 0) finalTotal = 0;
-
-                    if (walletPay > 0) setWalletBalance(wallet - walletPay);
-                    if (discount > 0) setPointsBalance(points - discount);
-
-                    pointsEarned = Math.floor(finalTotal / 1000);
-                    if (pointsEarned > 0) setPointsBalance(getPointsBalance() + pointsEarned);
-
-                    var pointsMsg = `⭐ Points Earned: ${pointsEarned}`;
-                } else {
-                    var pointsMsg = '⚠️ Create an account to earn points!';
+                // Since we already have currentUser, apply wallet/points
+                let points = getPointsBalance();
+                const usePointsCheck = document.getElementById('usePoints');
+                if (usePointsCheck && usePointsCheck.checked) {
+                    discount = Math.min(points, Math.floor(subtotal / 1000) * 1000);
                 }
+
+                let wallet = getWalletBalance();
+                const useWalletCheck = document.getElementById('useWallet');
+                if (useWalletCheck && useWalletCheck.checked) {
+                    walletPay = Math.min(wallet, subtotal - discount);
+                }
+
+                finalTotal = subtotal - discount - walletPay + finalShipping;
+                if (finalTotal < 0) finalTotal = 0;
+
+                if (walletPay > 0) setWalletBalance(wallet - walletPay);
+                if (discount > 0) setPointsBalance(points - discount);
+
+                pointsEarned = Math.floor(finalTotal / 1000);
+                if (pointsEarned > 0) setPointsBalance(getPointsBalance() + pointsEarned);
+
+                const pointsMsg = `⭐ Points Earned: ${pointsEarned}`;
 
                 const hasRestaurantItems = cart.some(item => item.type === 'restaurant');
                 const estimatedTime = hasRestaurantItems ? '15-30 minutes' : '1-2 hours';
@@ -1168,7 +1177,8 @@
                 const orders = JSON.parse(localStorage.getItem('taata_orders')) || [];
                 orders.push({
                     timestamp: new Date().toLocaleString(),
-                    customer: name,
+                    customer: currentUser, // username
+                    contactName: name, // entered full name
                     phone: phone,
                     address: address,
                     orderType: orderTypeLabel,
@@ -1185,8 +1195,8 @@
                 alert(`
         ✅ ORDER PLACED SUCCESSFULLY!
 
-        👤 Customer: ${name}
-        📞 Phone: ${phone}
+        👤 Customer: ${currentUser}
+        📞 Contact: ${name} (${phone})
         📍 ${orderType === 'delivery' ? 'Delivery Address' : 'Pickup Location'}: ${address}
         🏷️ Order Type: ${orderTypeLabel}
         💳 Payment: ${paymentMethod}
@@ -1252,7 +1262,7 @@
         }
 
         // ============================================================
-        //  ADMIN APP LOGIC (UPDATED)
+        //  ADMIN APP LOGIC
         // ============================================================
         function showAdminLogin() {
             document.getElementById('adminLoginModal').classList.add('active');
@@ -1271,7 +1281,7 @@
                 renderAdminDashboard();
                 renderAdminOrders();
                 renderAdminProducts();
-                renderAdminCustomers(); // Load customers on login
+                renderAdminCustomers();
             } else {
                 document.getElementById('adminLoginError').textContent = '❌ Incorrect password. Try again.';
             }
@@ -1286,7 +1296,6 @@
         function showAdminSection(section) {
             document.querySelectorAll('.admin-sidebar button').forEach(b => b.classList.remove('active'));
             const btns = document.querySelectorAll('.admin-sidebar button');
-            // Map index: 0=dashboard, 1=orders, 2=products, 3=customers, 4=logout
             if (section === 'dashboard') btns[0].classList.add('active');
             else if (section === 'orders') btns[1].classList.add('active');
             else if (section === 'products') btns[2].classList.add('active');
@@ -1316,7 +1325,7 @@
         }
 
         // ============================================================
-        //  🆕 CUSTOMER MANAGEMENT (RENDER & HISTORY)
+        //  🆕 CUSTOMER MANAGEMENT
         // ============================================================
         function renderAdminCustomers() {
             const container = document.getElementById('adminCustomerList');
@@ -1347,7 +1356,7 @@
                 const currentPoints = parseInt(localStorage.getItem(`taata_${username}_points`)) || 0;
                 const wallet = parseInt(localStorage.getItem(`taata_${username}_wallet`)) || 0;
 
-                // Get the most recent phone number from orders, or N/A
+                // Get most recent phone from orders
                 const phone = userOrders.length > 0 ? userOrders[userOrders.length - 1].phone : 'N/A';
 
                 html += `<tr>
@@ -1397,7 +1406,7 @@
                         <td style="max-width:150px; word-break:break-word;">${order.items}</td>
                         <td>${order.total.toLocaleString()}</td>
                         <td>${order.pointsEarned || 0}</td>
-                        <td><span class="status-badge" style="background:${getStatusColor(order.status)}; padding:2px 10px; border-radius:20px;">${order.status}</span></td>
+                        <td><span style="background:${getStatusColor(order.status)}; padding:2px 10px; border-radius:20px;">${order.status}</span></td>
                     </tr>`;
                 });
                 html += `</tbody></table>`;
@@ -1408,7 +1417,7 @@
         }
 
         // ============================================================
-        //  ADMIN ORDER FUNCTIONS (UPDATED to refresh customers)
+        //  ADMIN ORDER FUNCTIONS
         // ============================================================
         function sendWhatsApp(phone, customer, orderIndex, total) {
             let rawPhone = phone.replace(/\s/g, '');
@@ -1457,7 +1466,7 @@
                 return;
             }
             let html = `<table>
-                        <thead><tr><th>#</th><th>Time</th><th>Customer</th><th>Phone</th><th>Type</th><th>Items</th><th>Total</th><th>Points</th><th>Status</th><th>Actions</th></tr></thead><tbody>`;
+                        <thead><tr><th>#</th><th>Time</th><th>Customer</th><th>Contact</th><th>Phone</th><th>Type</th><th>Items</th><th>Total</th><th>Points</th><th>Status</th><th>Actions</th></tr></thead><tbody>`;
             orders.slice().reverse().forEach((order, index) => {
                 const reversedIndex = orders.length - 1 - index;
                 const statusOptions = ['Pending', 'Preparing', 'Out for Delivery', 'Delivered'];
@@ -1473,6 +1482,7 @@
                             <td>${reversedIndex + 1}</td>
                             <td>${order.timestamp}</td>
                             <td><strong>${order.customer}</strong></td>
+                            <td>${order.contactName || ''}</td>
                             <td>${order.phone}</td>
                             <td>${order.orderType}</td>
                             <td style="max-width:150px; word-break:break-word;">${order.items}</td>
@@ -1663,7 +1673,7 @@
             renderAdminDashboard();
             renderAdminOrders();
             renderAdminProducts();
-            renderAdminCustomers(); // Load customers
+            renderAdminCustomers();
         } else {
             document.getElementById('customerApp').style.display = 'block';
             document.getElementById('adminApp').style.display = 'none';
@@ -1682,8 +1692,8 @@
         console.log('🔥 Taata Owen Supermarket & Restaurant is LIVE!');
         console.log('🔐 Admin Login: Click "Admin Login" at the bottom. Password: admin123');
         console.log('👥 Admin can now manage Customers and see Loyalty Points accumulation.');
+        console.log('🔒 Users must login to add items to cart and place orders.');
 
-        // Make sure placeOrder is globally accessible
         window.placeOrder = placeOrder;
     </script>
 </body>
