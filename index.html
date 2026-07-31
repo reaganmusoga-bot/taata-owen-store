@@ -97,7 +97,6 @@
             }
         }
 
-        /* Updated Account Button (Username) */
         .navbar .account-btn {
             background: rgba(255, 255, 255, 0.15);
             border: 2px solid rgba(255, 255, 255, 0.5);
@@ -715,7 +714,7 @@
             font-weight: 600;
         }
 
-        /* ========== ACCOUNT MODAL (NEW) ========== */
+        /* Account Modal */
         .account-modal .auth-modal {
             max-width: 450px;
             border-top-color: var(--gold);
@@ -882,7 +881,7 @@
             }
         }
 
-        /* ========== ADMIN STYLES (unchanged) ========== */
+        /* ========== ADMIN STYLES ========== */
         #adminApp {
             display: none;
             background: #f4f6f9;
@@ -1135,7 +1134,7 @@
                     <i class="fas fa-search"></i>
                     <input type="text" id="searchInput" placeholder="Search products..." onkeyup="searchProducts()">
                 </div>
-                <!-- ACCOUNT BUTTON (Username) -->
+                <!-- ACCOUNT BUTTON -->
                 <button class="account-btn" onclick="toggleAccountModal()">
                     <i class="fas fa-user-circle"></i> <span id="accountNameDisplay">Login</span> <i class="fas fa-chevron-down"></i>
                 </button>
@@ -1267,7 +1266,7 @@
     <!-- =============== MODALS ================================== -->
     <!-- ========================================================== -->
 
-    <!-- Customer Auth Modal (Login/Signup) -->
+    <!-- Customer Auth Modal -->
     <div class="auth-overlay" id="authModal">
         <div class="auth-modal">
             <button class="close-auth" onclick="toggleAuthModal()">&times;</button>
@@ -1284,7 +1283,7 @@
         </div>
     </div>
 
-    <!-- ========== ACCOUNT MODAL (NEW & IMPROVED) ========== -->
+    <!-- Account Modal -->
     <div class="auth-overlay account-modal" id="accountModal">
         <div class="auth-modal">
             <button class="close-auth" onclick="toggleAccountModal()">&times;</button>
@@ -1292,7 +1291,6 @@
                 <div class="avatar"><i class="fas fa-user"></i></div>
                 <h2 id="accountModalName">User</h2>
                 <p class="member-since"><i class="fas fa-calendar-alt"></i> Member since today</p>
-
                 <div class="account-stats">
                     <div class="stat-item">
                         <div class="label"><i class="fas fa-wallet"></i> Wallet Balance</div>
@@ -1303,7 +1301,6 @@
                         <div class="value points-value" id="accountModalPoints">0</div>
                     </div>
                 </div>
-
                 <div class="account-actions">
                     <button class="btn-deposit-account" onclick="depositMoney()"><i class="fas fa-plus-circle"></i> Add Money to Wallet</button>
                     <button class="btn-logout" onclick="logoutUser()"><i class="fas fa-sign-out-alt"></i> Logout</button>
@@ -1523,7 +1520,6 @@
             document.getElementById('accountModalName').textContent = currentUser;
             document.getElementById('accountModalWallet').textContent = `UGX ${data.wallet.toLocaleString()}`;
             document.getElementById('accountModalPoints').textContent = data.points.toLocaleString();
-            // Also update navbar
             document.getElementById('walletBalanceDisplay').textContent = data.wallet.toLocaleString();
         }
 
@@ -1572,19 +1568,15 @@
         function searchProducts() {
             const query = document.getElementById('searchInput').value.toLowerCase().trim();
             const allCards = document.querySelectorAll('.product-card');
-            let visibleCount = 0;
             allCards.forEach(card => {
                 const text = card.textContent.toLowerCase();
                 if (query === '' || text.includes(query)) {
                     card.classList.remove('hidden');
-                    visibleCount++;
                 } else {
                     card.classList.add('hidden');
                 }
             });
-            // Remove old no-results messages
             document.querySelectorAll('.no-search-results').forEach(el => el.remove());
-            // Check if any grid has no visible items
             ['supermarketGrid', 'restaurantGrid'].forEach(gridId => {
                 const grid = document.getElementById(gridId);
                 const visible = grid.querySelectorAll('.product-card:not(.hidden)');
@@ -1728,11 +1720,9 @@
             const count = cart.reduce((sum, c) => sum + c.qty, 0);
             document.getElementById('cartCount').textContent = count;
 
-            // Update wallet display if logged in
             if (currentUser) {
                 const data = loadUserData();
                 document.getElementById('walletBalanceDisplay').textContent = data.wallet.toLocaleString();
-                // Update account modal if open
                 if (document.getElementById('accountModal').classList.contains('active')) {
                     updateAccountModal();
                 }
@@ -1793,71 +1783,80 @@
         }
 
         // ============================================================
-        //  PLACE ORDER
+        //  PLACE ORDER (FIXED)
         // ============================================================
         function placeOrder() {
-            const orderType = document.querySelector('input[name="orderType"]:checked')?.value || 'delivery';
-            const name = document.getElementById('custName').value.trim();
-            const phone = document.getElementById('custPhone').value.trim();
-            const address = document.getElementById('custAddress').value.trim();
-            const location = document.getElementById('custLocation').value;
-            const payment = document.querySelector('input[name="payment"]:checked')?.value || 'momo';
+            try {
+                console.log("🛒 Place Order called.");
 
-            if (cart.length === 0) { alert('❌ Cart is empty!'); return; }
-            if (!name || !phone) { alert('⚠️ Please fill in Name and Phone.'); return; }
-            if (orderType === 'delivery' && !address) { alert('⚠️ Please provide a delivery address.'); return; }
+                // Get form values safely
+                const orderType = document.querySelector('input[name="orderType"]:checked')?.value || 'delivery';
+                const name = document.getElementById('custName')?.value?.trim() || '';
+                const phone = document.getElementById('custPhone')?.value?.trim() || '';
+                const address = document.getElementById('custAddress')?.value?.trim() || '';
+                const location = document.getElementById('custLocation')?.value || 'jinja';
+                const paymentEl = document.querySelector('input[name="payment"]:checked');
+                const payment = paymentEl ? paymentEl.value : 'momo';
 
-            let subtotal = cart.reduce((sum, c) => sum + (c.price * c.qty), 0);
-            const shipping = location === 'jinja' ? 5000 : 20000;
-            let discount = 0,
-                walletPay = 0;
-            let finalTotal = subtotal + (subtotal >= 200000 ? 0 : shipping);
+                if (cart.length === 0) { alert('❌ Your cart is empty!'); return; }
+                if (!name) { alert('⚠️ Enter your full name.'); document.getElementById('custName').focus(); return; }
+                if (!phone) { alert('⚠️ Enter your phone number.'); document.getElementById('custPhone').focus(); return; }
+                if (orderType === 'delivery' && !address) { alert('⚠️ Enter delivery address.');
+                    document.getElementById('custAddress').focus(); return; }
 
-            let pointsEarned = 0;
-            if (currentUser) {
-                let points = getPointsBalance();
-                if (document.getElementById('usePoints')?.checked) {
-                    discount = Math.min(points, Math.floor(subtotal / 1000) * 1000);
+                // Calculate totals
+                let subtotal = cart.reduce((sum, c) => sum + (c.price * c.qty), 0);
+                const shipping = location === 'jinja' ? 5000 : 20000;
+                const freeDelivery = subtotal >= 200000;
+                let discount = 0,
+                    walletPay = 0;
+                let finalTotal = subtotal + (freeDelivery ? 0 : shipping);
+                let pointsEarned = 0;
+
+                if (currentUser) {
+                    let points = getPointsBalance();
+                    if (document.getElementById('usePoints')?.checked) {
+                        discount = Math.min(points, Math.floor(subtotal / 1000) * 1000);
+                    }
+                    let wallet = getWalletBalance();
+                    if (document.getElementById('useWallet')?.checked) {
+                        walletPay = Math.min(wallet, subtotal - discount);
+                    }
+                    finalTotal = subtotal - discount - walletPay + (freeDelivery ? 0 : shipping);
+                    if (finalTotal < 0) finalTotal = 0;
+                    if (walletPay > 0) setWalletBalance(wallet - walletPay);
+                    if (discount > 0) setPointsBalance(points - discount);
+                    pointsEarned = Math.floor(finalTotal / 1000);
+                    if (pointsEarned > 0) setPointsBalance(getPointsBalance() + pointsEarned);
+                    var pointsMsg = `⭐ Points Earned: ${pointsEarned}`;
+                } else {
+                    var pointsMsg = '⚠️ Create an account to earn points!';
                 }
-                let wallet = getWalletBalance();
-                if (document.getElementById('useWallet')?.checked) {
-                    walletPay = Math.min(wallet, subtotal - discount);
-                }
-                finalTotal = subtotal - discount - walletPay + (subtotal >= 200000 ? 0 : shipping);
-                if (finalTotal < 0) finalTotal = 0;
-                if (walletPay > 0) setWalletBalance(wallet - walletPay);
-                if (discount > 0) setPointsBalance(points - discount);
-                pointsEarned = Math.floor(finalTotal / 1000);
-                if (pointsEarned > 0) setPointsBalance(getPointsBalance() + pointsEarned);
-                var pointsMsg = `⭐ Points Earned: ${pointsEarned}`;
-            } else {
-                var pointsMsg = '⚠️ Create an account to earn points!';
-            }
 
-            const hasRestaurantItems = cart.some(item => item.type === 'restaurant');
-            const estimatedTime = hasRestaurantItems ? '15-30 minutes' : '1-2 hours';
+                const hasRestaurantItems = cart.some(item => item.type === 'restaurant');
+                const estimatedTime = hasRestaurantItems ? '15-30 minutes' : '1-2 hours';
+                const orderSummary = cart.map(c => `${c.name} x${c.qty}`).join(', ');
+                const paymentMethod = { momo: 'MTN Mobile Money', airtel: 'Airtel Money', card: 'Credit/Debit Card',
+                    cash: 'Cash on Delivery' } [payment] || payment;
+                const orderTypeLabel = orderType === 'delivery' ? '🚚 Delivery' : '🏪 Pickup';
 
-            const orderSummary = cart.map(c => `${c.name} x${c.qty}`).join(', ');
-            const paymentMethod = { momo: 'MTN Mobile Money', airtel: 'Airtel Money', card: 'Credit/Debit Card',
-                cash: 'Cash on Delivery' } [payment] || payment;
-            const orderTypeLabel = orderType === 'delivery' ? '🚚 Delivery' : '🏪 Pickup';
+                // Save order
+                const orders = JSON.parse(localStorage.getItem('taata_orders')) || [];
+                orders.push({
+                    timestamp: new Date().toLocaleString(),
+                    customer: name,
+                    phone: phone,
+                    address: address,
+                    orderType: orderTypeLabel,
+                    payment: paymentMethod,
+                    items: orderSummary,
+                    total: finalTotal,
+                    pointsEarned: pointsEarned,
+                    status: 'Pending'
+                });
+                localStorage.setItem('taata_orders', JSON.stringify(orders));
 
-            const orders = JSON.parse(localStorage.getItem('taata_orders')) || [];
-            orders.push({
-                timestamp: new Date().toLocaleString(),
-                customer: name,
-                phone: phone,
-                address: address,
-                orderType: orderTypeLabel,
-                payment: paymentMethod,
-                items: orderSummary,
-                total: finalTotal,
-                pointsEarned: pointsEarned,
-                status: 'Pending'
-            });
-            localStorage.setItem('taata_orders', JSON.stringify(orders));
-
-            alert(`
+                alert(`
         ✅ ORDER PLACED SUCCESSFULLY!
 
         👤 Customer: ${name}
@@ -1878,12 +1877,18 @@
         Thank you for choosing Taata Owen! 🇺🇬
         `);
 
-            cart = [];
-            updateCartUI();
-            toggleCart();
-            document.getElementById('custName').value = '';
-            document.getElementById('custPhone').value = '';
-            document.getElementById('custAddress').value = '';
+                cart = [];
+                updateCartUI();
+                toggleCart();
+                document.getElementById('custName').value = '';
+                document.getElementById('custPhone').value = '';
+                document.getElementById('custAddress').value = '';
+
+                console.log("✅ Order placed successfully.");
+            } catch (error) {
+                console.error("❌ placeOrder error:", error);
+                alert("⚠️ Something went wrong. Check console (F12) for details.");
+            }
         }
 
         function updateRestaurantStatus() {
@@ -1917,7 +1922,7 @@
         }
 
         // ============================================================
-        //  ADMIN APP LOGIC (unchanged)
+        //  ADMIN APP LOGIC
         // ============================================================
         function showAdminLogin() {
             document.getElementById('adminLoginModal').classList.add('active');
