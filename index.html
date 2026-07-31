@@ -1129,20 +1129,16 @@
                 <span>Jinja</span>
             </div>
             <div class="right-icons">
-                <!-- SEARCH BAR -->
                 <div class="search-box">
                     <i class="fas fa-search"></i>
                     <input type="text" id="searchInput" placeholder="Search products..." onkeyup="searchProducts()">
                 </div>
-                <!-- ACCOUNT BUTTON -->
                 <button class="account-btn" onclick="toggleAccountModal()">
                     <i class="fas fa-user-circle"></i> <span id="accountNameDisplay">Login</span> <i class="fas fa-chevron-down"></i>
                 </button>
-                <!-- WALLET DISPLAY -->
                 <div class="wallet-display" onclick="toggleAccountModal()">
                     <i class="fas fa-wallet"></i> UGX <span id="walletBalanceDisplay">0</span>
                 </div>
-                <!-- CART -->
                 <div class="cart-icon" onclick="toggleCart()">
                     <i class="fas fa-shopping-cart"></i>
                     <span class="badge" id="cartCount">0</span>
@@ -1150,7 +1146,6 @@
             </div>
         </nav>
 
-        <!-- HERO -->
         <section class="hero">
             <div class="hero-content">
                 <div class="flag-stripes">
@@ -1559,18 +1554,13 @@
         }
 
         // ============================================================
-        //  SEARCH FUNCTION
+        //  SEARCH
         // ============================================================
         function searchProducts() {
             const query = document.getElementById('searchInput').value.toLowerCase().trim();
-            const allCards = document.querySelectorAll('.product-card');
-            allCards.forEach(card => {
+            document.querySelectorAll('.product-card').forEach(card => {
                 const text = card.textContent.toLowerCase();
-                if (query === '' || text.includes(query)) {
-                    card.classList.remove('hidden');
-                } else {
-                    card.classList.add('hidden');
-                }
+                card.classList.toggle('hidden', query !== '' && !text.includes(query));
             });
             document.querySelectorAll('.no-search-results').forEach(el => el.remove());
             ['supermarketGrid', 'restaurantGrid'].forEach(gridId => {
@@ -1681,7 +1671,7 @@
         }
 
         // ============================================================
-        //  🛒 CART LOGIC (REWRITTEN & BULLETPROOF)
+        //  🛒 CART LOGIC (FIXED)
         // ============================================================
         function addToCart(id) {
             try {
@@ -1720,11 +1710,9 @@
 
         function updateCartUI() {
             try {
-                // Update badge count
                 const totalItems = cart.reduce((sum, c) => sum + c.qty, 0);
                 document.getElementById('cartCount').textContent = totalItems;
 
-                // Update wallet display
                 if (currentUser) {
                     const data = loadUserData();
                     document.getElementById('walletBalanceDisplay').textContent = data.wallet.toLocaleString();
@@ -1735,19 +1723,15 @@
 
                 const container = document.getElementById('cartItems');
                 const summaryContainer = document.getElementById('cartSummary');
-
-                if (!container) {
-                    console.warn("Cart items container not found");
-                    return;
-                }
+                if (!container) return;
 
                 if (cart.length === 0) {
-                    container.innerHTML = '<p style="color:#888; text-align:center; margin-top:20px;">🛒 Your cart is empty.</p>';
+                    container.innerHTML =
+                    '<p style="color:#888; text-align:center; margin-top:20px;">🛒 Your cart is empty.</p>';
                     if (summaryContainer) summaryContainer.innerHTML = '';
                     return;
                 }
 
-                // Build cart items HTML
                 let html = '';
                 let subtotal = 0;
                 cart.forEach(item => {
@@ -1772,7 +1756,6 @@
                 });
                 container.innerHTML = html;
 
-                // Calculate totals & shipping
                 const location = document.getElementById('custLocation')?.value || 'jinja';
                 const shipping = location === 'jinja' ? 5000 : 20000;
                 const freeDelivery = subtotal >= 200000;
@@ -1796,7 +1779,6 @@
                 if (finalTotal < 0) finalTotal = 0;
                 let pointsEarned = Math.floor(finalTotal / 1000);
 
-                // Build summary HTML
                 let summaryHtml = `
                     <div class="cart-total">
                         <p>Subtotal: UGX ${subtotal.toLocaleString()}</p>
@@ -1841,11 +1823,11 @@
         }
 
         // ============================================================
-        //  ✅ CHECKOUT & PLACE ORDER (FIXED)
+        //  ✅ CHECKOUT - PLACE ORDER (FIXED & FORCED)
         // ============================================================
         function placeOrder() {
             try {
-                console.log("🚀 Place Order triggered");
+                console.log("🚀 Place Order triggered!");
 
                 // 1. Get all form values safely
                 const orderType = document.querySelector('input[name="orderType"]:checked')?.value || 'delivery';
@@ -1904,7 +1886,6 @@
                     finalTotal = subtotal - discount - walletPay + (freeDelivery ? 0 : shipping);
                     if (finalTotal < 0) finalTotal = 0;
 
-                    // Deduct wallet & points
                     if (walletPay > 0) setWalletBalance(wallet - walletPay);
                     if (discount > 0) setPointsBalance(points - discount);
 
@@ -1928,7 +1909,7 @@
                 } [payment] || payment;
                 const orderTypeLabel = orderType === 'delivery' ? '🚚 Delivery' : '🏪 Pickup';
 
-                // 5. Save order to localStorage (Admin panel)
+                // 5. Save order to localStorage
                 const orders = JSON.parse(localStorage.getItem('taata_orders')) || [];
                 orders.push({
                     timestamp: new Date().toLocaleString(),
@@ -1978,7 +1959,7 @@
 
             } catch (error) {
                 console.error("❌ Place order error:", error);
-                alert("⚠️ Something went wrong while placing your order. Please check the console (F12) for details.");
+                alert("⚠️ Something went wrong. Please check the console (F12) and try again.");
             }
         }
 
@@ -2018,7 +1999,7 @@
         }
 
         // ============================================================
-        //  ADMIN APP LOGIC
+        //  ADMIN APP LOGIC (unchanged)
         // ============================================================
         function showAdminLogin() {
             document.getElementById('adminLoginModal').classList.add('active');
@@ -2341,6 +2322,10 @@
         console.log('🔥 Taata Owen Supermarket & Restaurant is LIVE!');
         console.log('🔐 Admin Login: Click "Admin Login" at the bottom. Password: admin123');
         console.log('🛒 Cart & Checkout are FULLY ACTIVE.');
+        console.log('📋 If checkout fails, please check the console for errors.');
+
+        // Force the placeOrder function to be globally accessible
+        window.placeOrder = placeOrder;
     </script>
 </body>
 </html>
