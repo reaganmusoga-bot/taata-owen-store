@@ -349,7 +349,7 @@
             </div>
         </section>
 
-        <!-- FEATURED PRODUCTS -->
+        <!-- FEATURED PRODUCTS (Britannia) -->
         <div class="section-container" id="featuredSection">
             <div class="section-header">
                 <h2 class="section-title"><i class="fas fa-star" style="color:var(--gold);"></i> Featured Products</h2>
@@ -357,10 +357,10 @@
             <div class="product-grid" id="featuredGrid"></div>
         </div>
 
-        <!-- HOT DEALS -->
+        <!-- HOT DEALS (Electricals) -->
         <div class="section-container" id="hotDealsSection" style="background: #fff5f5; border-radius: 30px; padding: 20px 20px 30px; border: 2px solid #ff5722;">
             <div class="section-header">
-                <h2 class="section-title" style="color:#ff5722;"><i class="fas fa-fire" style="color:#ff5722;"></i> Hot Deals</h2>
+                <h2 class="section-title" style="color:#ff5722;"><i class="fas fa-fire" style="color:#ff5722;"></i> Hot Deals - Electricals</h2>
             </div>
             <div class="product-grid" id="hotDealsGrid"></div>
         </div>
@@ -647,105 +647,137 @@
     <!-- ========================================================== -->
     <script>
         // ============================================================
-        //  GLOBAL DATA & STATE (with quantity, featured, discount, combo)
+        //  GLOBAL DATA & STATE (with Electricals, Britannia, Combos)
         // ============================================================
         const defaultSupermarketItems = [
+            // ========== REGULAR PRODUCTS ==========
             { id: 1, name: "Matooke (Bunch)", category: "Fresh Produce", price: 15000, icon: "fa-solid fa-leaf",
-                inStock: true, quantity: 15, featured: false, discount: 20, isCombo: false },
+                inStock: true, quantity: 15, featured: false, discount: 0, isCombo: false, comboItems: "" },
             { id: 2, name: "Tomatoes (1kg)", category: "Fresh Produce", price: 5000, icon: "fa-solid fa-apple-whole",
-                inStock: true, quantity: 20, featured: false, discount: 0, isCombo: false },
+                inStock: true, quantity: 20, featured: false, discount: 0, isCombo: false, comboItems: "" },
             { id: 3, name: "Onions (1kg)", category: "Fresh Produce", price: 4000, icon: "fa-solid fa-circle",
-                inStock: true, quantity: 8, featured: false, discount: 0, isCombo: false },
+                inStock: true, quantity: 8, featured: false, discount: 0, isCombo: false, comboItems: "" },
             { id: 4, name: "Chicken (Whole)", category: "Meat & Poultry", price: 35000, icon: "fa-solid fa-drumstick-bite",
-                inStock: true, quantity: 4, featured: true, discount: 10, isCombo: false },
+                inStock: true, quantity: 4, featured: false, discount: 0, isCombo: false, comboItems: "" },
             { id: 5, name: "Beef (1kg)", category: "Meat & Poultry", price: 18000, icon: "fa-solid fa-cow", inStock: true,
-                quantity: 3, featured: false, discount: 0, isCombo: false },
+                quantity: 3, featured: false, discount: 0, isCombo: false, comboItems: "" },
             { id: 6, name: "Fresh Milk (1L)", category: "Dairy & Eggs", price: 4500, icon: "fa-solid fa-glass-whiskey",
-                inStock: true, quantity: 12, featured: false, discount: 0, isCombo: false },
+                inStock: true, quantity: 12, featured: false, discount: 0, isCombo: false, comboItems: "" },
             { id: 7, name: "Eggs (Tray)", category: "Dairy & Eggs", price: 12000, icon: "fa-solid fa-egg", inStock: true,
-                quantity: 6, featured: false, discount: 0, isCombo: false },
+                quantity: 6, featured: false, discount: 0, isCombo: false, comboItems: "" },
             { id: 8, name: "Bread (Loaf)", category: "Bakery", price: 5000, icon: "fa-solid fa-bread-slice",
-                inStock: true, quantity: 10, featured: false, discount: 0, isCombo: false },
+                inStock: true, quantity: 10, featured: false, discount: 0, isCombo: false, comboItems: "" },
             { id: 9, name: "Cooking Oil (5L)", category: "Pantry Staples", price: 25000, icon: "fa-solid fa-oil-can",
-                inStock: true, quantity: 7, featured: false, discount: 0, isCombo: false },
+                inStock: true, quantity: 7, featured: false, discount: 0, isCombo: false, comboItems: "" },
             { id: 10, name: "Sugar (2kg)", category: "Pantry Staples", price: 8000, icon: "fa-solid fa-cube",
-                inStock: true, quantity: 2, featured: false, discount: 15, isCombo: false },
+                inStock: true, quantity: 2, featured: false, discount: 0, isCombo: false, comboItems: "" },
             { id: 11, name: "Rice (5kg)", category: "Pantry Staples", price: 18000, icon: "fa-solid fa-seedling",
-                inStock: true, quantity: 5, featured: false, discount: 0, isCombo: false },
+                inStock: true, quantity: 5, featured: false, discount: 0, isCombo: false, comboItems: "" },
             { id: 12, name: "Beans (2kg)", category: "Pantry Staples", price: 12000, icon: "fa-solid fa-seedling",
-                inStock: true, quantity: 1, featured: false, discount: 0, isCombo: false },
+                inStock: true, quantity: 1, featured: false, discount: 0, isCombo: false, comboItems: "" },
             { id: 13, name: "Soda (2L)", category: "Beverages", price: 6000, icon: "fa-solid fa-wine-bottle",
-                inStock: true, quantity: 14, featured: false, discount: 0, isCombo: false },
+                inStock: true, quantity: 14, featured: false, discount: 0, isCombo: false, comboItems: "" },
             { id: 14, name: "Fresh Juice (1L)", category: "Beverages", price: 8000, icon: "fa-solid fa-blender-phone",
-                inStock: true, quantity: 9, featured: false, discount: 0, isCombo: false },
+                inStock: true, quantity: 9, featured: false, discount: 0, isCombo: false, comboItems: "" },
             { id: 15, name: "Biscuits (Pack)", category: "Snacks & Sweets", price: 3000, icon: "fa-solid fa-cookie",
-                inStock: true, quantity: 11, featured: false, discount: 0, isCombo: false },
+                inStock: true, quantity: 11, featured: false, discount: 0, isCombo: false, comboItems: "" },
             { id: 16, name: "Frozen Chicken (1kg)", category: "Frozen Foods", price: 28000, icon: "fa-solid fa-snowflake",
-                inStock: true, quantity: 4, featured: false, discount: 0, isCombo: false },
+                inStock: true, quantity: 4, featured: false, discount: 0, isCombo: false, comboItems: "" },
             { id: 17, name: "Soap (Bar)", category: "Household Supplies", price: 3000, icon: "fa-solid fa-soap",
-                inStock: true, quantity: 25, featured: false, discount: 0, isCombo: false },
+                inStock: true, quantity: 25, featured: false, discount: 0, isCombo: false, comboItems: "" },
             { id: 18, name: "Detergent (1kg)", category: "Household Supplies", price: 8000, icon: "fa-solid fa-bucket",
-                inStock: true, quantity: 3, featured: false, discount: 0, isCombo: false },
+                inStock: true, quantity: 3, featured: false, discount: 0, isCombo: false, comboItems: "" },
             { id: 19, name: "Toothpaste", category: "Personal Care", price: 5000, icon: "fa-solid fa-tooth",
-                inStock: true, quantity: 6, featured: false, discount: 0, isCombo: false },
+                inStock: true, quantity: 6, featured: false, discount: 0, isCombo: false, comboItems: "" },
             { id: 20, name: "Shampoo (500ml)", category: "Personal Care", price: 12000, icon: "fa-solid fa-spray-can",
-                inStock: true, quantity: 1, featured: false, discount: 0, isCombo: false },
-            // Combo Product (Supermarket)
-            { id: 21, name: "Family Feast Combo", category: "Combos", price: 40000, icon: "fa-solid fa-utensils",
+                inStock: true, quantity: 1, featured: false, discount: 0, isCombo: false, comboItems: "" },
+
+            // ========== FEATURED - BRITANNIA PRODUCTS ==========
+            { id: 21, name: "Britannia Marie Gold", category: "Biscuits", price: 8000, icon: "fa-solid fa-cookie",
+                inStock: true, quantity: 20, featured: true, discount: 0, isCombo: false, comboItems: "" },
+            { id: 22, name: "Britannia Tiger Cream", category: "Biscuits", price: 6000, icon: "fa-solid fa-cookie",
+                inStock: true, quantity: 18, featured: true, discount: 0, isCombo: false, comboItems: "" },
+            { id: 23, name: "Britannia Good Day", category: "Biscuits", price: 5500, icon: "fa-solid fa-cookie",
+                inStock: true, quantity: 15, featured: true, discount: 0, isCombo: false, comboItems: "" },
+            { id: 24, name: "Britannia NutriChoice", category: "Biscuits", price: 7500, icon: "fa-solid fa-cookie",
+                inStock: true, quantity: 12, featured: true, discount: 0, isCombo: false, comboItems: "" },
+
+            // ========== HOT DEALS - ELECTRICALS ==========
+            { id: 25, name: "LED TV 32\"", category: "Electronics", price: 550000, icon: "fa-solid fa-tv",
+                inStock: true, quantity: 5, featured: false, discount: 15, isCombo: false, comboItems: "" },
+            { id: 26, name: "Refrigerator", category: "Electronics", price: 1200000, icon: "fa-solid fa-snowflake",
+                inStock: true, quantity: 3, featured: false, discount: 12, isCombo: false, comboItems: "" },
+            { id: 27, name: "Microwave Oven", category: "Electronics", price: 350000, icon: "fa-solid fa-micro-wave",
+                inStock: true, quantity: 6, featured: false, discount: 20, isCombo: false, comboItems: "" },
+            { id: 28, name: "Electric Cooker", category: "Electronics", price: 280000, icon: "fa-solid fa-fire-burner",
+                inStock: true, quantity: 4, featured: false, discount: 10, isCombo: false, comboItems: "" },
+            { id: 29, name: "Blender", category: "Electronics", price: 150000, icon: "fa-solid fa-blender",
+                inStock: true, quantity: 7, featured: false, discount: 25, isCombo: false, comboItems: "" },
+            { id: 30, name: "Iron Box", category: "Electronics", price: 80000, icon: "fa-solid fa-iron",
+                inStock: true, quantity: 10, featured: false, discount: 15, isCombo: false, comboItems: "" },
+            { id: 31, name: "Stand Fan", category: "Electronics", price: 120000, icon: "fa-solid fa-fan",
+                inStock: true, quantity: 6, featured: false, discount: 10, isCombo: false, comboItems: "" },
+            { id: 32, name: "Water Heater", category: "Electronics", price: 180000, icon: "fa-solid fa-water",
+                inStock: true, quantity: 4, featured: false, discount: 18, isCombo: false, comboItems: "" },
+
+            // ========== COMBOS ==========
+            { id: 33, name: "Beverage Combo", category: "Combos", price: 25000, icon: "fa-solid fa-wine-bottle",
                 inStock: true, quantity: 10, featured: false, discount: 0, isCombo: true,
-                comboItems: "Chicken Stew + Matooke + Soda" },
+                comboItems: "Coca-Cola 2L + Water 1.5L + Energy Drink + Fresh Juice 1L" },
+            { id: 34, name: "Movie Combo", category: "Combos", price: 18000, icon: "fa-solid fa-film",
+                inStock: true, quantity: 10, featured: false, discount: 0, isCombo: true,
+                comboItems: "Popcorn Large + Soda 2L + Nachos" },
+            { id: 35, name: "Unilever Combo", category: "Combos", price: 22000, icon: "fa-solid fa-box-open",
+                inStock: true, quantity: 10, featured: false, discount: 0, isCombo: true,
+                comboItems: "Soap Bar + Detergent 1kg + Toothpaste + Shampoo 500ml" },
         ];
 
         const defaultRestaurantItems = [
             { id: 101, name: "Rolex (Chapati + Eggs)", category: "Fast Food", price: 7000, icon: "fa-solid fa-egg",
                 description: "Classic Ugandan street roll", prepTime: "10 min", badge: "popular", inStock: true,
-                quantity: 10, featured: false, discount: 0, isCombo: false },
+                quantity: 10, featured: false, discount: 0, isCombo: false, comboItems: "" },
             { id: 102, name: "Chapati (2 pcs)", category: "Fast Food", price: 3000, icon: "fa-solid fa-bread-slice",
                 description: "Soft, flaky flatbread", prepTime: "5 min", badge: null, inStock: true, quantity: 10,
-                featured: false, discount: 0, isCombo: false },
+                featured: false, discount: 0, isCombo: false, comboItems: "" },
             { id: 103, name: "Samosa (2 pcs)", category: "Fast Food", price: 4000, icon: "fa-solid fa-cube",
                 description: "Spiced meat or veg pastry", prepTime: "8 min", badge: null, inStock: true, quantity: 10,
-                featured: false, discount: 0, isCombo: false },
+                featured: false, discount: 0, isCombo: false, comboItems: "" },
             { id: 104, name: "Chips (Large)", category: "Fast Food", price: 5000, icon: "fa-solid fa-fries",
                 description: "Golden crispy fries", prepTime: "8 min", badge: null, inStock: true, quantity: 10,
-                featured: false, discount: 0, isCombo: false },
+                featured: false, discount: 0, isCombo: false, comboItems: "" },
             { id: 105, name: "Chicken Stew + Rice", category: "Main Course", price: 18000, icon: "fa-solid fa-drumstick-bite",
                 description: "Tender chicken stew with rice", prepTime: "20 min", badge: "special", inStock: true,
-                quantity: 5, featured: true, discount: 0, isCombo: false },
+                quantity: 5, featured: false, discount: 0, isCombo: false, comboItems: "" },
             { id: 106, name: "Beans + Matooke", category: "Main Course", price: 12000, icon: "fa-solid fa-utensils",
                 description: "Rich bean stew with matooke", prepTime: "15 min", badge: null, inStock: true, quantity: 10,
-                featured: false, discount: 0, isCombo: false },
+                featured: false, discount: 0, isCombo: false, comboItems: "" },
             { id: 107, name: "Grilled Fish + Chips", category: "Main Course", price: 22000, icon: "fa-solid fa-fish",
                 description: "Fresh Nile perch with chips", prepTime: "25 min", badge: "special", inStock: true,
-                quantity: 4, featured: false, discount: 0, isCombo: false },
+                quantity: 4, featured: false, discount: 0, isCombo: false, comboItems: "" },
             { id: 108, name: "Beef Stew + Rice", category: "Main Course", price: 20000, icon: "fa-solid fa-cow",
                 description: "Tender beef in rich gravy", prepTime: "20 min", badge: null, inStock: true, quantity: 10,
-                featured: false, discount: 0, isCombo: false },
+                featured: false, discount: 0, isCombo: false, comboItems: "" },
             { id: 109, name: "Fresh Juice (Passion)", category: "Beverages", price: 5000, icon: "fa-solid fa-wine-bottle",
                 description: "Freshly squeezed", prepTime: "5 min", badge: null, inStock: true, quantity: 10,
-                featured: false, discount: 0, isCombo: false },
+                featured: false, discount: 0, isCombo: false, comboItems: "" },
             { id: 110, name: "Soda (Can)", category: "Beverages", price: 3000, icon: "fa-solid fa-wine-bottle",
                 description: "Chilled soft drink", prepTime: "2 min", badge: null, inStock: true, quantity: 10,
-                featured: false, discount: 0, isCombo: false },
+                featured: false, discount: 0, isCombo: false, comboItems: "" },
             { id: 111, name: "Bottled Water", category: "Beverages", price: 2000, icon: "fa-solid fa-wine-bottle",
                 description: "Pure mineral water", prepTime: "1 min", badge: null, inStock: true, quantity: 10,
-                featured: false, discount: 0, isCombo: false },
+                featured: false, discount: 0, isCombo: false, comboItems: "" },
             { id: 112, name: "Milkshake", category: "Beverages", price: 8000, icon: "fa-solid fa-wine-bottle",
                 description: "Creamy vanilla/strawberry", prepTime: "5 min", badge: "popular", inStock: true,
-                quantity: 10, featured: false, discount: 0, isCombo: false },
+                quantity: 10, featured: false, discount: 0, isCombo: false, comboItems: "" },
             { id: 113, name: "Extra Chapati", category: "Sides", price: 2000, icon: "fa-solid fa-bread-slice",
                 description: "One extra fluffy chapati", prepTime: "3 min", badge: null, inStock: true, quantity: 10,
-                featured: false, discount: 0, isCombo: false },
+                featured: false, discount: 0, isCombo: false, comboItems: "" },
             { id: 114, name: "Extra Rice", category: "Sides", price: 3000, icon: "fa-solid fa-seedling",
                 description: "Extra steamed rice", prepTime: "5 min", badge: null, inStock: true, quantity: 10,
-                featured: false, discount: 0, isCombo: false },
+                featured: false, discount: 0, isCombo: false, comboItems: "" },
             { id: 115, name: "Fresh Salad", category: "Sides", price: 4000, icon: "fa-solid fa-leaf",
                 description: "Mixed greens with tomatoes", prepTime: "5 min", badge: null, inStock: true, quantity: 10,
-                featured: false, discount: 0, isCombo: false },
-            // Combo Product (Restaurant)
-            { id: 116, name: "Breakfast Special Combo", category: "Combos", price: 15000, icon: "fa-solid fa-mug-hot",
-                inStock: true, quantity: 10, featured: false, discount: 0, isCombo: true,
-                comboItems: "Rolex + Chapati + Fresh Juice" },
+                featured: false, discount: 0, isCombo: false, comboItems: "" },
         ];
 
         let supermarketItems = JSON.parse(localStorage.getItem('taata_supermarket_items'));
@@ -987,7 +1019,7 @@
         }
 
         // ============================================================
-        //  UI RENDERING (with featured, discount, combo)
+        //  UI RENDERING
         // ============================================================
         function getCategories(items) {
             const cats = items.map(item => item.category);
@@ -1010,7 +1042,9 @@
                 'Fast Food': 'fa-solid fa-burger',
                 'Main Course': 'fa-solid fa-utensils',
                 'Sides': 'fa-solid fa-plate-wheat',
-                'Combos': 'fa-solid fa-boxes'
+                'Combos': 'fa-solid fa-boxes',
+                'Biscuits': 'fa-solid fa-cookie',
+                'Electronics': 'fa-solid fa-microchip'
             };
             return map[cat] || 'fa-solid fa-tag';
         }
@@ -1089,7 +1123,6 @@
                 const stockHtml = `<span class="stock-badge ${stockClass}">${stockLabel}</span>`;
                 const disabledAttr = item.quantity > 0 ? '' : 'disabled';
 
-                // Price calculation with discount
                 let priceHtml = `<div class="price">`;
                 if (item.discount > 0) {
                     const discountedPrice = item.price - (item.price * (item.discount / 100));
@@ -1817,7 +1850,7 @@
         }
 
         // ============================================================
-        //  PRODUCT MANAGEMENT (ADMIN) – with discount & combo
+        //  PRODUCT MANAGEMENT (ADMIN)
         // ============================================================
         function renderAdminProducts() {
             const container = document.getElementById('adminProductList');
@@ -2018,7 +2051,7 @@
         loadPromoPreview();
 
         console.log('🔥 Taata Owen Ultimate Upgrade LIVE!');
-        console.log('⭐ Features: Featured, Hot Deals, Combos, WhatsApp & Email floating buttons.');
+        console.log('⭐ Features: Featured (Britannia), Hot Deals (Electricals), Combos (Beverage, Movie, Unilever).');
         window.placeOrder = placeOrder;
     </script>
 </body>
