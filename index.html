@@ -1,11 +1,12 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Taata Owen Supermarket & Restaurant - Jinja</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <style>
+        /* ===== ALL STYLES (same as before, but I'll include the full CSS for completeness) ===== */
         * {
             margin: 0;
             padding: 0;
@@ -475,7 +476,7 @@
             display: none !important;
         }
 
-        /* ===== CART SIDEBAR ===== */
+        /* ===== CART SIDEBAR (FIXED) ===== */
         .cart-overlay {
             display: none;
             position: fixed;
@@ -1755,7 +1756,7 @@
         }
 
         // ============================================================
-        //  🔥 DYNAMIC SHIPPING & ORDER TYPE HANDLING (NEW)
+        //  🔥 DYNAMIC SHIPPING & ORDER TYPE HANDLING
         // ============================================================
         function toggleAddressField() {
             const isPickup = document.querySelector('input[name="orderType"]:checked')?.value === 'pickup';
@@ -1766,17 +1767,14 @@
             const pickupNote = document.getElementById('pickupNote');
 
             if (isPickup) {
-                // Pickup: hide address & location, show pickup note
                 if (addrInput) { addrInput.style.display = 'none';
                     addrInput.required = false; }
                 if (addrLabel) { addrLabel.style.display = 'none'; }
                 if (locationSelect) { locationSelect.style.display = 'none'; }
                 if (locationLabel) { locationLabel.style.display = 'none'; }
                 if (pickupNote) { pickupNote.classList.add('show'); }
-                // Set address to a default pickup location
                 if (addrInput) addrInput.value = 'Taata Owen Supermarket, Jinja Central';
             } else {
-                // Delivery: show address & location, hide pickup note
                 if (addrInput) { addrInput.style.display = 'block';
                     addrInput.required = true;
                     addrInput.value = ''; }
@@ -1819,7 +1817,7 @@
 
                 if (cart.length === 0) {
                     container.innerHTML =
-                    '<p style="color:#888; text-align:center; margin-top:20px;">🛒 Your cart is empty.</p>';
+                        '<p style="color:#888; text-align:center; margin-top:20px;">🛒 Your cart is empty.</p>';
                     if (summaryContainer) summaryContainer.innerHTML = '';
                     return;
                 }
@@ -1894,18 +1892,32 @@
             }
         }
 
-        function toggleCart() {
+        // ============================================================
+        //  ✅ CART TOGGLE (FIXED)
+        // ============================================================
+        window.toggleCart = function() {
             const sidebar = document.getElementById('cartSidebar');
             const overlay = document.getElementById('cartOverlay');
-            if (!sidebar || !overlay) return;
+            if (!sidebar || !overlay) {
+                alert('Cart elements not found!');
+                return;
+            }
+            // Toggle the open/active classes
             sidebar.classList.toggle('open');
             overlay.classList.toggle('active');
+
+            // If cart is now open, update UI and address fields
             if (sidebar.classList.contains('open')) {
-                // Ensure address fields are correctly toggled when cart opens
                 toggleAddressField();
                 updateCartUI();
+                console.log('✅ Cart opened');
+            } else {
+                console.log('✅ Cart closed');
             }
-        }
+        };
+
+        // Also attach to global so inline onclick works
+        window.toggleCart = window.toggleCart;
 
         // ============================================================
         //  ✅ CHECKOUT - PLACE ORDER
@@ -2409,7 +2421,9 @@
         console.log('🔥 Taata Owen Supermarket & Restaurant is LIVE!');
         console.log('🔐 Admin Login: Click "Admin Login" at the bottom. Password: admin123');
         console.log('🛒 Cart & Checkout are FULLY ACTIVE with dynamic pickup/delivery.');
+        console.log('📌 Click the cart icon or floating button to open checkout.');
 
+        // Make sure placeOrder is globally accessible
         window.placeOrder = placeOrder;
     </script>
 </body>
