@@ -6,7 +6,6 @@
     <title>Taata Owen Supermarket & Restaurant - Jinja</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <style>
-        /* ===== ALL STYLES (compressed for brevity, but complete) ===== */
         * { margin:0; padding:0; box-sizing:border-box; font-family:'Segoe UI',Tahoma,Geneva,Verdana,sans-serif; }
         body { background:#f8f9fa; }
         :root { --red:#CC0000; --blue:#003399; --gold:#D4AF37; --light-gray:#f1f3f5; --shadow:0 4px 15px rgba(0,0,0,0.08); }
@@ -88,14 +87,18 @@
             transition:all 0.2s; border-bottom:5px solid var(--red); position:relative;
         }
         .product-card:hover { transform:scale(1.03); }
-        .product-card .badge { position:absolute; top:12px; right:12px; font-size:0.6rem; font-weight:800; padding:4px 12px; border-radius:30px; text-transform:uppercase; }
+        .product-card .badge { position:absolute; top:12px; right:12px; font-size:0.6rem; font-weight:800; padding:4px 12px; border-radius:30px; text-transform:uppercase; z-index:2; }
         .badge-special { background:var(--gold); color:#222; }
         .badge-popular { background:var(--red); color:#fff; }
         .badge-featured { background:var(--blue); color:#fff; }
+        .badge-hot { background:#ff5722; color:#fff; }
+        .badge-combo { background:#4caf50; color:#fff; }
         .product-card .icon { font-size:48px; color:var(--blue); background:var(--light-gray); padding:12px; border-radius:50%; width:80px; height:80px; display:flex; align-items:center; justify-content:center; margin:0 auto 12px; }
         .product-card h3 { font-size:0.95rem; color:#222; min-height:40px; }
         .product-card .description { font-size:0.75rem; color:#777; margin:5px 0 8px; font-style:italic; }
         .product-card .price { font-size:1.2rem; font-weight:800; color:var(--red); margin:8px 0; }
+        .product-card .original-price { font-size:0.9rem; color:#888; text-decoration:line-through; margin-right:8px; }
+        .product-card .discount-badge { background:#ff5722; color:#fff; padding:2px 8px; border-radius:20px; font-size:0.7rem; font-weight:700; margin-left:5px; }
         .product-card .meta-info { display:flex; justify-content:center; gap:12px; font-size:0.7rem; color:#888; margin-bottom:10px; }
         .product-card .stock-badge { font-size:0.65rem; padding:2px 10px; border-radius:20px; display:inline-block; margin-bottom:8px; }
         .in-stock { background:#d4edda; color:#155724; }
@@ -105,6 +108,7 @@
         .product-card button:hover { background:var(--red); }
         .product-card button:disabled { background:#6c757d; cursor:not-allowed; }
         .product-card.hidden { display:none !important; }
+        .product-card .combo-items { font-size:0.7rem; color:#555; margin:5px 0; background:var(--light-gray); padding:5px; border-radius:8px; }
 
         /* ===== CART SIDEBAR ===== */
         .cart-overlay {
@@ -150,6 +154,21 @@
         .pickup-note { background:#e8f5e9; padding:10px 14px; border-radius:10px; font-size:0.85rem; color:#2e7d32; border-left:4px solid #4caf50; margin:10px 0; display:none; }
         .pickup-note.show { display:block; }
 
+        /* ===== FLOATING CONTACT BUTTONS ===== */
+        #contactFloating {
+            position:fixed; bottom:100px; right:25px; z-index:1000;
+            display:flex; flex-direction:column; gap:12px;
+        }
+        .float-btn {
+            width:55px; height:55px; border-radius:50%; display:flex; align-items:center; justify-content:center;
+            color:#fff; font-size:24px; text-decoration:none; box-shadow:0 4px 15px rgba(0,0,0,0.2);
+            transition:0.3s; border:none; cursor:pointer;
+        }
+        .float-btn:hover { transform:scale(1.1); }
+        .float-btn-wa { background:#25D366; }
+        .float-btn-msg { background:var(--blue); }
+        .float-btn-msg i { font-size:22px; }
+
         /* ===== AUTH MODALS ===== */
         .auth-overlay { display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.7); z-index:500; justify-content:center; align-items:center; }
         .auth-overlay.active { display:flex; }
@@ -180,7 +199,6 @@
         .account-modal .auth-modal .account-actions .btn-orders { background:#17a2b8; color:#fff; }
         .account-modal .auth-modal .account-actions .btn-orders:hover { background:#0f7a8b; }
 
-        /* Order History Modal */
         .history-modal .auth-modal { max-width:700px; width:95%; }
         .history-modal .auth-modal .history-table { max-height:400px; overflow-y:auto; }
         .history-modal .auth-modal .history-table table { font-size:0.8rem; width:100%; border-collapse:collapse; }
@@ -196,7 +214,7 @@
 
         /* ===== FLOATING CHECKOUT & BACK TO TOP ===== */
         #floatingCheckoutBtn {
-            display:none; position:fixed; bottom:30px; right:30px; z-index:999;
+            display:none; position:fixed; bottom:30px; right:95px; z-index:999;
             background:var(--red); color:#fff; border:none; border-radius:50px;
             padding:15px 25px; font-weight:700; box-shadow:0 4px 20px rgba(204,0,0,0.5);
             cursor:pointer; transition:0.3s;
@@ -216,11 +234,13 @@
             .cart-sidebar { width:100%; right:-100%; }
             .navbar .search-box input { width:100px; }
             #backToTop { bottom:20px; left:20px; padding:12px 15px; font-size:16px; }
-            #floatingCheckoutBtn { bottom:20px; right:20px; padding:12px 20px; font-size:0.9rem; }
+            #floatingCheckoutBtn { bottom:20px; right:80px; padding:10px 18px; font-size:0.8rem; }
             .account-modal .auth-modal .account-stats { grid-template-columns:1fr; }
             .order-type-toggle label { padding:10px 16px; font-size:0.9rem; }
             .payment-options { grid-template-columns:1fr 1fr; }
             .history-modal .auth-modal { padding:20px; }
+            #contactFloating { bottom:80px; right:15px; }
+            .float-btn { width:45px; height:45px; font-size:20px; }
         }
 
         /* ===== ADMIN STYLES ===== */
@@ -261,13 +281,11 @@
         .admin-content .product-form .featured-check input { width:auto; }
         .admin-content .product-form button { padding:10px 20px; background:var(--blue); color:#fff; border:none; border-radius:8px; font-weight:700; cursor:pointer; }
 
-        /* Promo form */
         .promo-form { background:var(--light-gray); padding:20px; border-radius:12px; margin-bottom:20px; display:grid; grid-template-columns:1fr 1fr; gap:15px; align-items:end; }
         .promo-form input, .promo-form textarea { padding:10px; border:1px solid #ccc; border-radius:8px; width:100%; }
         .promo-form button { padding:10px 20px; background:var(--blue); color:#fff; border:none; border-radius:8px; font-weight:700; cursor:pointer; }
         @media (max-width:600px) { .promo-form { grid-template-columns:1fr; } }
 
-        /* Customer History Modal */
         .customer-history-modal .auth-modal { max-width:700px; width:95%; }
         .customer-history-modal .auth-modal .history-table { max-height:400px; overflow-y:auto; }
         .customer-history-modal .auth-modal .history-table table { font-size:0.8rem; }
@@ -337,6 +355,22 @@
                 <h2 class="section-title"><i class="fas fa-star" style="color:var(--gold);"></i> Featured Products</h2>
             </div>
             <div class="product-grid" id="featuredGrid"></div>
+        </div>
+
+        <!-- HOT DEALS -->
+        <div class="section-container" id="hotDealsSection" style="background: #fff5f5; border-radius: 30px; padding: 20px 20px 30px; border: 2px solid #ff5722;">
+            <div class="section-header">
+                <h2 class="section-title" style="color:#ff5722;"><i class="fas fa-fire" style="color:#ff5722;"></i> Hot Deals</h2>
+            </div>
+            <div class="product-grid" id="hotDealsGrid"></div>
+        </div>
+
+        <!-- COMBOS -->
+        <div class="section-container" id="combosSection" style="background: #e8f5e9; border-radius: 30px; padding: 20px 20px 30px; border: 2px solid #4caf50;">
+            <div class="section-header">
+                <h2 class="section-title" style="color:#2e7d32;"><i class="fas fa-boxes" style="color:#4caf50;"></i> Special Combos</h2>
+            </div>
+            <div class="product-grid" id="combosGrid"></div>
         </div>
 
         <!-- SUPERMARKET -->
@@ -455,7 +489,6 @@
                         <div class="stat-card"><h3>Pending Orders</h3><div class="number" id="statPendingOrders">0</div></div>
                         <div class="stat-card"><h3>Products</h3><div class="number" id="statTotalProducts">0</div></div>
                     </div>
-                    <!-- LOW STOCK ALERTS -->
                     <div id="lowStockAlerts" class="alert-card" style="display:none;">
                         <h4><i class="fas fa-exclamation-triangle"></i> Low Stock Alert!</h4>
                         <ul id="lowStockList" style="list-style:none; padding:0;"></ul>
@@ -595,6 +628,12 @@
         </div>
     </div>
 
+    <!-- ===== FLOATING CONTACT BUTTONS ===== -->
+    <div id="contactFloating">
+        <a href="https://wa.me/256786605822" target="_blank" class="float-btn float-btn-wa" title="Chat on WhatsApp"><i class="fab fa-whatsapp"></i></a>
+        <a href="mailto:info@taataowen.com" class="float-btn float-btn-msg" title="Send us an Email"><i class="fas fa-envelope"></i></a>
+    </div>
+
     <!-- Floating Checkout Button -->
     <button id="floatingCheckoutBtn" onclick="toggleCart()">
         <i class="fas fa-shopping-cart"></i> Checkout (<span id="floatingCartCount">0</span>)
@@ -608,97 +647,105 @@
     <!-- ========================================================== -->
     <script>
         // ============================================================
-        //  GLOBAL DATA & STATE (with quantity & featured)
+        //  GLOBAL DATA & STATE (with quantity, featured, discount, combo)
         // ============================================================
         const defaultSupermarketItems = [
             { id: 1, name: "Matooke (Bunch)", category: "Fresh Produce", price: 15000, icon: "fa-solid fa-leaf",
-                inStock: true, quantity: 15, featured: false },
+                inStock: true, quantity: 15, featured: false, discount: 20, isCombo: false },
             { id: 2, name: "Tomatoes (1kg)", category: "Fresh Produce", price: 5000, icon: "fa-solid fa-apple-whole",
-                inStock: true, quantity: 20, featured: false },
+                inStock: true, quantity: 20, featured: false, discount: 0, isCombo: false },
             { id: 3, name: "Onions (1kg)", category: "Fresh Produce", price: 4000, icon: "fa-solid fa-circle",
-                inStock: true, quantity: 8, featured: false },
+                inStock: true, quantity: 8, featured: false, discount: 0, isCombo: false },
             { id: 4, name: "Chicken (Whole)", category: "Meat & Poultry", price: 35000, icon: "fa-solid fa-drumstick-bite",
-                inStock: true, quantity: 4, featured: true },
+                inStock: true, quantity: 4, featured: true, discount: 10, isCombo: false },
             { id: 5, name: "Beef (1kg)", category: "Meat & Poultry", price: 18000, icon: "fa-solid fa-cow", inStock: true,
-                quantity: 3, featured: false },
+                quantity: 3, featured: false, discount: 0, isCombo: false },
             { id: 6, name: "Fresh Milk (1L)", category: "Dairy & Eggs", price: 4500, icon: "fa-solid fa-glass-whiskey",
-                inStock: true, quantity: 12, featured: false },
+                inStock: true, quantity: 12, featured: false, discount: 0, isCombo: false },
             { id: 7, name: "Eggs (Tray)", category: "Dairy & Eggs", price: 12000, icon: "fa-solid fa-egg", inStock: true,
-                quantity: 6, featured: false },
+                quantity: 6, featured: false, discount: 0, isCombo: false },
             { id: 8, name: "Bread (Loaf)", category: "Bakery", price: 5000, icon: "fa-solid fa-bread-slice",
-                inStock: true, quantity: 10, featured: false },
+                inStock: true, quantity: 10, featured: false, discount: 0, isCombo: false },
             { id: 9, name: "Cooking Oil (5L)", category: "Pantry Staples", price: 25000, icon: "fa-solid fa-oil-can",
-                inStock: true, quantity: 7, featured: false },
+                inStock: true, quantity: 7, featured: false, discount: 0, isCombo: false },
             { id: 10, name: "Sugar (2kg)", category: "Pantry Staples", price: 8000, icon: "fa-solid fa-cube",
-                inStock: true, quantity: 2, featured: false },
+                inStock: true, quantity: 2, featured: false, discount: 15, isCombo: false },
             { id: 11, name: "Rice (5kg)", category: "Pantry Staples", price: 18000, icon: "fa-solid fa-seedling",
-                inStock: true, quantity: 5, featured: false },
+                inStock: true, quantity: 5, featured: false, discount: 0, isCombo: false },
             { id: 12, name: "Beans (2kg)", category: "Pantry Staples", price: 12000, icon: "fa-solid fa-seedling",
-                inStock: true, quantity: 1, featured: false },
+                inStock: true, quantity: 1, featured: false, discount: 0, isCombo: false },
             { id: 13, name: "Soda (2L)", category: "Beverages", price: 6000, icon: "fa-solid fa-wine-bottle",
-                inStock: true, quantity: 14, featured: false },
+                inStock: true, quantity: 14, featured: false, discount: 0, isCombo: false },
             { id: 14, name: "Fresh Juice (1L)", category: "Beverages", price: 8000, icon: "fa-solid fa-blender-phone",
-                inStock: true, quantity: 9, featured: false },
+                inStock: true, quantity: 9, featured: false, discount: 0, isCombo: false },
             { id: 15, name: "Biscuits (Pack)", category: "Snacks & Sweets", price: 3000, icon: "fa-solid fa-cookie",
-                inStock: true, quantity: 11, featured: false },
+                inStock: true, quantity: 11, featured: false, discount: 0, isCombo: false },
             { id: 16, name: "Frozen Chicken (1kg)", category: "Frozen Foods", price: 28000, icon: "fa-solid fa-snowflake",
-                inStock: true, quantity: 4, featured: false },
+                inStock: true, quantity: 4, featured: false, discount: 0, isCombo: false },
             { id: 17, name: "Soap (Bar)", category: "Household Supplies", price: 3000, icon: "fa-solid fa-soap",
-                inStock: true, quantity: 25, featured: false },
+                inStock: true, quantity: 25, featured: false, discount: 0, isCombo: false },
             { id: 18, name: "Detergent (1kg)", category: "Household Supplies", price: 8000, icon: "fa-solid fa-bucket",
-                inStock: true, quantity: 3, featured: false },
+                inStock: true, quantity: 3, featured: false, discount: 0, isCombo: false },
             { id: 19, name: "Toothpaste", category: "Personal Care", price: 5000, icon: "fa-solid fa-tooth",
-                inStock: true, quantity: 6, featured: false },
+                inStock: true, quantity: 6, featured: false, discount: 0, isCombo: false },
             { id: 20, name: "Shampoo (500ml)", category: "Personal Care", price: 12000, icon: "fa-solid fa-spray-can",
-                inStock: true, quantity: 1, featured: false },
+                inStock: true, quantity: 1, featured: false, discount: 0, isCombo: false },
+            // Combo Product (Supermarket)
+            { id: 21, name: "Family Feast Combo", category: "Combos", price: 40000, icon: "fa-solid fa-utensils",
+                inStock: true, quantity: 10, featured: false, discount: 0, isCombo: true,
+                comboItems: "Chicken Stew + Matooke + Soda" },
         ];
 
         const defaultRestaurantItems = [
             { id: 101, name: "Rolex (Chapati + Eggs)", category: "Fast Food", price: 7000, icon: "fa-solid fa-egg",
                 description: "Classic Ugandan street roll", prepTime: "10 min", badge: "popular", inStock: true,
-                quantity: 10, featured: false },
+                quantity: 10, featured: false, discount: 0, isCombo: false },
             { id: 102, name: "Chapati (2 pcs)", category: "Fast Food", price: 3000, icon: "fa-solid fa-bread-slice",
                 description: "Soft, flaky flatbread", prepTime: "5 min", badge: null, inStock: true, quantity: 10,
-                featured: false },
+                featured: false, discount: 0, isCombo: false },
             { id: 103, name: "Samosa (2 pcs)", category: "Fast Food", price: 4000, icon: "fa-solid fa-cube",
                 description: "Spiced meat or veg pastry", prepTime: "8 min", badge: null, inStock: true, quantity: 10,
-                featured: false },
+                featured: false, discount: 0, isCombo: false },
             { id: 104, name: "Chips (Large)", category: "Fast Food", price: 5000, icon: "fa-solid fa-fries",
                 description: "Golden crispy fries", prepTime: "8 min", badge: null, inStock: true, quantity: 10,
-                featured: false },
+                featured: false, discount: 0, isCombo: false },
             { id: 105, name: "Chicken Stew + Rice", category: "Main Course", price: 18000, icon: "fa-solid fa-drumstick-bite",
                 description: "Tender chicken stew with rice", prepTime: "20 min", badge: "special", inStock: true,
-                quantity: 5, featured: true },
+                quantity: 5, featured: true, discount: 0, isCombo: false },
             { id: 106, name: "Beans + Matooke", category: "Main Course", price: 12000, icon: "fa-solid fa-utensils",
                 description: "Rich bean stew with matooke", prepTime: "15 min", badge: null, inStock: true, quantity: 10,
-                featured: false },
+                featured: false, discount: 0, isCombo: false },
             { id: 107, name: "Grilled Fish + Chips", category: "Main Course", price: 22000, icon: "fa-solid fa-fish",
                 description: "Fresh Nile perch with chips", prepTime: "25 min", badge: "special", inStock: true,
-                quantity: 4, featured: false },
+                quantity: 4, featured: false, discount: 0, isCombo: false },
             { id: 108, name: "Beef Stew + Rice", category: "Main Course", price: 20000, icon: "fa-solid fa-cow",
                 description: "Tender beef in rich gravy", prepTime: "20 min", badge: null, inStock: true, quantity: 10,
-                featured: false },
+                featured: false, discount: 0, isCombo: false },
             { id: 109, name: "Fresh Juice (Passion)", category: "Beverages", price: 5000, icon: "fa-solid fa-wine-bottle",
                 description: "Freshly squeezed", prepTime: "5 min", badge: null, inStock: true, quantity: 10,
-                featured: false },
+                featured: false, discount: 0, isCombo: false },
             { id: 110, name: "Soda (Can)", category: "Beverages", price: 3000, icon: "fa-solid fa-wine-bottle",
                 description: "Chilled soft drink", prepTime: "2 min", badge: null, inStock: true, quantity: 10,
-                featured: false },
+                featured: false, discount: 0, isCombo: false },
             { id: 111, name: "Bottled Water", category: "Beverages", price: 2000, icon: "fa-solid fa-wine-bottle",
                 description: "Pure mineral water", prepTime: "1 min", badge: null, inStock: true, quantity: 10,
-                featured: false },
+                featured: false, discount: 0, isCombo: false },
             { id: 112, name: "Milkshake", category: "Beverages", price: 8000, icon: "fa-solid fa-wine-bottle",
                 description: "Creamy vanilla/strawberry", prepTime: "5 min", badge: "popular", inStock: true,
-                quantity: 10, featured: false },
+                quantity: 10, featured: false, discount: 0, isCombo: false },
             { id: 113, name: "Extra Chapati", category: "Sides", price: 2000, icon: "fa-solid fa-bread-slice",
                 description: "One extra fluffy chapati", prepTime: "3 min", badge: null, inStock: true, quantity: 10,
-                featured: false },
+                featured: false, discount: 0, isCombo: false },
             { id: 114, name: "Extra Rice", category: "Sides", price: 3000, icon: "fa-solid fa-seedling",
                 description: "Extra steamed rice", prepTime: "5 min", badge: null, inStock: true, quantity: 10,
-                featured: false },
+                featured: false, discount: 0, isCombo: false },
             { id: 115, name: "Fresh Salad", category: "Sides", price: 4000, icon: "fa-solid fa-leaf",
                 description: "Mixed greens with tomatoes", prepTime: "5 min", badge: null, inStock: true, quantity: 10,
-                featured: false },
+                featured: false, discount: 0, isCombo: false },
+            // Combo Product (Restaurant)
+            { id: 116, name: "Breakfast Special Combo", category: "Combos", price: 15000, icon: "fa-solid fa-mug-hot",
+                inStock: true, quantity: 10, featured: false, discount: 0, isCombo: true,
+                comboItems: "Rolex + Chapati + Fresh Juice" },
         ];
 
         let supermarketItems = JSON.parse(localStorage.getItem('taata_supermarket_items'));
@@ -713,11 +760,14 @@
             localStorage.setItem('taata_restaurant_items', JSON.stringify(restaurantItems));
         }
 
-        // Ensure all products have quantity & featured fields (for upgrades)
+        // Ensure all products have new fields
         [supermarketItems, restaurantItems].forEach(items => {
             items.forEach(p => {
                 if (p.quantity === undefined) p.quantity = 10;
                 if (p.featured === undefined) p.featured = false;
+                if (p.discount === undefined) p.discount = 0;
+                if (p.isCombo === undefined) p.isCombo = false;
+                if (p.comboItems === undefined) p.comboItems = '';
                 p.inStock = p.quantity > 0;
             });
         });
@@ -908,7 +958,6 @@
                 content.innerHTML = html;
             }
             modal.classList.add('active');
-            // close account modal
             document.getElementById('accountModal').classList.remove('active');
         }
 
@@ -922,7 +971,7 @@
                 card.classList.toggle('hidden', query !== '' && !text.includes(query));
             });
             document.querySelectorAll('.no-search-results').forEach(el => el.remove());
-            ['supermarketGrid', 'restaurantGrid', 'featuredGrid'].forEach(gridId => {
+            ['supermarketGrid', 'restaurantGrid', 'featuredGrid', 'hotDealsGrid', 'combosGrid'].forEach(gridId => {
                 const grid = document.getElementById(gridId);
                 if (!grid) return;
                 const visible = grid.querySelectorAll('.product-card:not(.hidden)');
@@ -938,7 +987,7 @@
         }
 
         // ============================================================
-        //  UI RENDERING (with featured & quantity)
+        //  UI RENDERING (with featured, discount, combo)
         // ============================================================
         function getCategories(items) {
             const cats = items.map(item => item.category);
@@ -960,7 +1009,8 @@
                 'Personal Care': 'fa-solid fa-tooth',
                 'Fast Food': 'fa-solid fa-burger',
                 'Main Course': 'fa-solid fa-utensils',
-                'Sides': 'fa-solid fa-plate-wheat'
+                'Sides': 'fa-solid fa-plate-wheat',
+                'Combos': 'fa-solid fa-boxes'
             };
             return map[cat] || 'fa-solid fa-tag';
         }
@@ -992,44 +1042,74 @@
             });
         }
 
-        function renderGrid(gridId, items, filterCategory = 'All', isFeatured = false) {
+        function renderGrid(gridId, items, filterCategory = 'All', isFeatured = false, isHotDeals = false, isCombos =
+            false) {
             const grid = document.getElementById(gridId);
             if (!grid) return;
             grid.innerHTML = '';
             let filtered = filterCategory === 'All' ? items : items.filter(item => item.category === filterCategory);
-            if (isFeatured) {
-                filtered = filtered.filter(item => item.featured === true);
-            }
+
+            if (isFeatured) filtered = filtered.filter(item => item.featured === true);
+            else if (isHotDeals) filtered = filtered.filter(item => item.discount > 0);
+            else if (isCombos) filtered = filtered.filter(item => item.isCombo === true);
+
             if (filtered.length === 0) {
+                let msg = 'No items available.';
+                if (isFeatured) msg = 'No featured products yet.';
+                else if (isHotDeals) msg = 'No hot deals available.';
+                else if (isCombos) msg = 'No combos available.';
                 grid.innerHTML =
-                    `<p style="grid-column:1/-1; text-align:center; padding:40px; color:#888;">${isFeatured ? 'No featured products yet.' : 'No items in this category.'}</p>`;
+                    `<p style="grid-column:1/-1; text-align:center; padding:40px; color:#888;">${msg}</p>`;
                 return;
             }
+
             filtered.forEach(item => {
                 const card = document.createElement('div');
                 card.className = 'product-card';
+
                 let badgeHtml = '';
-                if (item.badge === 'special') badgeHtml =
+                if (item.badge === 'special') badgeHtml +=
                     `<span class="badge badge-special"><i class="fas fa-crown"></i> Chef's Special</span>`;
-                else if (item.badge === 'popular') badgeHtml =
+                if (item.badge === 'popular') badgeHtml +=
                     `<span class="badge badge-popular"><i class="fas fa-fire"></i> Popular</span>`;
                 if (item.featured) badgeHtml += `<span class="badge badge-featured"><i class="fas fa-star"></i> Featured</span>`;
+                if (item.discount > 0) badgeHtml +=
+                    `<span class="badge badge-hot"><i class="fas fa-tag"></i> ${item.discount}% OFF</span>`;
+                if (item.isCombo) badgeHtml += `<span class="badge badge-combo"><i class="fas fa-boxes"></i> Combo</span>`;
+
                 let metaHtml = item.prepTime ? `<div class="meta-info"><i class="fas fa-clock"></i> ${item.prepTime}</div>` :
                     '';
                 let descHtml = item.description ? `<div class="description">${item.description}</div>` : '';
+                let comboHtml = item.comboItems ? `<div class="combo-items"><i class="fas fa-plus-circle"></i> Includes: ${item.comboItems}</div>` :
+                    '';
+
                 const stockClass = item.quantity <= 0 ? 'out-of-stock' : (item.quantity < 5 ? 'low-stock' : 'in-stock');
                 const stockLabel = item.quantity <= 0 ? '❌ Out of Stock' : (item.quantity < 5 ?
                     `⚠️ Low Stock (${item.quantity} left)` : `✅ In Stock (${item.quantity})`);
                 const stockHtml = `<span class="stock-badge ${stockClass}">${stockLabel}</span>`;
                 const disabledAttr = item.quantity > 0 ? '' : 'disabled';
+
+                // Price calculation with discount
+                let priceHtml = `<div class="price">`;
+                if (item.discount > 0) {
+                    const discountedPrice = item.price - (item.price * (item.discount / 100));
+                    priceHtml +=
+                        `<span class="original-price">UGX ${item.price.toLocaleString()}</span> UGX ${Math.round(discountedPrice).toLocaleString()}`;
+                    priceHtml += ` <span class="discount-badge">-${item.discount}%</span>`;
+                } else {
+                    priceHtml += `UGX ${item.price.toLocaleString()}`;
+                }
+                priceHtml += `</div>`;
+
                 card.innerHTML = `
                         ${badgeHtml}
                         <div class="icon"><i class="${item.icon}"></i></div>
                         <span class="category-tag">${item.category}</span>
                         <h3>${item.name}</h3>
                         ${descHtml}
+                        ${comboHtml}
                         ${metaHtml}
-                        <div class="price">UGX ${item.price.toLocaleString()}</div>
+                        ${priceHtml}
                         ${stockHtml}
                         <button onclick="addToCart(${item.id})" ${disabledAttr}><i class="fas fa-plus"></i> ${item.quantity > 0 ? 'Add' : 'Unavailable'}</button>
                     `;
@@ -1038,7 +1118,7 @@
         }
 
         // ============================================================
-        //  🛒 CART LOGIC (GUESTS CAN ADD)
+        //  🛒 CART LOGIC
         // ============================================================
         function addToCart(id) {
             try {
@@ -1080,7 +1160,7 @@
         }
 
         // ============================================================
-        //  🔥 DYNAMIC SHIPPING & ORDER TYPE HANDLING
+        //  DYNAMIC SHIPPING & CART UI
         // ============================================================
         function toggleAddressField() {
             const isPickup = document.querySelector('input[name="orderType"]:checked')?.value === 'pickup';
@@ -1149,7 +1229,11 @@
                 let html = '';
                 let subtotal = 0;
                 cart.forEach(item => {
-                    const total = item.price * item.qty;
+                    let itemPrice = item.price;
+                    if (item.discount > 0) {
+                        itemPrice = item.price - (item.price * (item.discount / 100));
+                    }
+                    const total = Math.round(itemPrice * item.qty);
                     subtotal += total;
                     html += `
                         <div class="cart-item">
@@ -1260,7 +1344,13 @@
 
                 console.log("✅ Validation passed");
 
-                let subtotal = cart.reduce((sum, c) => sum + (c.price * c.qty), 0);
+                let subtotal = 0;
+                cart.forEach(item => {
+                    let price = item.price;
+                    if (item.discount > 0) price = price - (price * (item.discount / 100));
+                    subtotal += Math.round(price * item.qty);
+                });
+
                 const shipping = getShippingCost();
                 const finalShipping = (subtotal >= 200000 && shipping > 0) ? 0 : shipping;
 
@@ -1305,14 +1395,13 @@
                 });
                 localStorage.setItem('taata_orders', JSON.stringify(orders));
 
-                // Reduce product quantities (simple inventory deduction)
+                // Reduce product quantities
                 cart.forEach(cartItem => {
                     const product = allProducts.find(p => p.id === cartItem.id && p.type === cartItem.type);
                     if (product) {
                         product.quantity -= cartItem.qty;
                         if (product.quantity < 0) product.quantity = 0;
                         product.inStock = product.quantity > 0;
-                        // Update the correct array
                         if (product.type === 'supermarket') {
                             const idx = supermarketItems.findIndex(p => p.id === product.id);
                             if (idx > -1) {
@@ -1331,7 +1420,6 @@
                 localStorage.setItem('taata_supermarket_items', JSON.stringify(supermarketItems));
                 localStorage.setItem('taata_restaurant_items', JSON.stringify(restaurantItems));
 
-                // Auto-notification: WhatsApp & Email simulation
                 sendAutoNotification(orders[orders.length - 1]);
 
                 alert(`
@@ -1361,7 +1449,6 @@
                 document.getElementById('custName').value = '';
                 document.getElementById('custPhone').value = '';
                 document.getElementById('custAddress').value = '';
-                // Refresh UI to reflect new stock
                 refreshCustomerUI();
 
             } catch (error) {
@@ -1370,66 +1457,38 @@
             }
         }
 
-        // ============================================================
-        //  📱 AUTO-NOTIFICATIONS (WhatsApp + Email simulation)
-        // ============================================================
         function sendAutoNotification(order) {
-            // WhatsApp – open automatically when status is changed to Out for Delivery or Delivered
-            // We'll trigger this from the admin status update as well
-            const phone = order.phone;
-            const customer = order.customer;
-            const total = order.total;
-            const orderIdx = JSON.parse(localStorage.getItem('taata_orders') || []).length;
-
-            let rawPhone = phone.replace(/\s/g, '');
-            if (rawPhone.startsWith('0')) rawPhone = '256' + rawPhone.substring(1);
-            if (!rawPhone.startsWith('256')) rawPhone = '256' + rawPhone;
-
-            const msg = `Hello ${customer}, your order #${orderIdx} (UGX ${total.toLocaleString()}) has been placed successfully and is now being processed. You will receive updates shortly. - Taata Owen Team`;
-            // We don't auto-open WhatsApp on order placement to avoid spam, but we log it.
-            console.log(`📱 WhatsApp Auto-Notification for ${customer} (${phone}): ${msg}`);
-            console.log(`📧 Email Auto-Notification for ${customer}: Order #${orderIdx} confirmed.`);
-
-            // Store notification in local storage for history (optional)
             const notifications = JSON.parse(localStorage.getItem('taata_notifications')) || [];
             notifications.push({
                 timestamp: new Date().toLocaleString(),
-                customer: customer,
-                phone: phone,
-                message: msg,
+                customer: order.customer,
+                phone: order.phone,
+                message: `Order #${notifications.length+1} placed successfully.`,
                 type: 'Order Placement'
             });
             localStorage.setItem('taata_notifications', JSON.stringify(notifications));
+            console.log(`📱 Auto-Notification logged for ${order.customer}`);
         }
 
-        // Admin status update auto-notify
         function updateOrderStatusAndNotify(index, newStatus) {
             const orders = JSON.parse(localStorage.getItem('taata_orders')) || [];
             if (!orders[index]) return;
             orders[index].status = newStatus;
             localStorage.setItem('taata_orders', JSON.stringify(orders));
 
-            // Auto-notify if status is Out for Delivery or Delivered
             if (newStatus === 'Out for Delivery' || newStatus === 'Delivered') {
                 const order = orders[index];
                 let rawPhone = order.phone.replace(/\s/g, '');
                 if (rawPhone.startsWith('0')) rawPhone = '256' + rawPhone.substring(1);
                 if (!rawPhone.startsWith('256')) rawPhone = '256' + rawPhone;
-
                 const statusMsg = newStatus === 'Out for Delivery' ?
                     `🚚 Your order #${index+1} is out for delivery!` :
                     `✅ Your order #${index+1} has been delivered. Thank you!`;
-                const fullMsg =
-                    `Hello ${order.customer}, ${statusMsg} - Taata Owen Team`;
-
-                // Open WhatsApp (this will trigger a new tab)
+                const fullMsg = `Hello ${order.customer}, ${statusMsg} - Taata Owen Team`;
                 const url = `https://wa.me/${rawPhone}?text=${encodeURIComponent(fullMsg)}`;
                 window.open(url, '_blank');
-
-                // Log email simulation
                 console.log(`📧 Email sent to ${order.customer}: ${statusMsg}`);
             }
-
             renderAdminOrders();
             renderAdminDashboard();
             renderAdminCustomers();
@@ -1471,7 +1530,7 @@
         }
 
         // ============================================================
-        //  ADMIN APP LOGIC (with Promotions & Low Stock)
+        //  ADMIN APP LOGIC (with promotions)
         // ============================================================
         function showAdminLogin() {
             document.getElementById('adminLoginModal').classList.add('active');
@@ -1533,7 +1592,6 @@
             document.getElementById('statPendingOrders').textContent = pending;
             document.getElementById('statTotalProducts').textContent = supermarketItems.length + restaurantItems.length;
 
-            // LOW STOCK ALERTS
             const allItems = [...supermarketItems, ...restaurantItems];
             const lowStockItems = allItems.filter(item => item.quantity > 0 && item.quantity < 5);
             const alertDiv = document.getElementById('lowStockAlerts');
@@ -1567,7 +1625,6 @@
             document.getElementById('previewTagline').textContent = promo.tagline;
             document.getElementById('previewSubtext').textContent = promo.subtext;
             document.getElementById('previewBg').textContent = promo.bg || 'Default';
-            // Update live hero
             document.querySelector('.hero h1').innerHTML = promo.title;
             document.querySelector('.hero .tagline').innerHTML = `<i class="fas fa-shopping-basket"></i> ${promo.tagline}`;
             document.querySelector('.hero .sub-text').textContent = promo.subtext;
@@ -1579,12 +1636,9 @@
             const tagline = document.getElementById('promoTagline').value.trim();
             const subtext = document.getElementById('promoSubtext').value.trim();
             const bg = document.getElementById('promoBg').value.trim();
-
-            // If title is plain text, wrap "Supermarket" with highlight
             const formattedTitle = title.includes('Supermarket') ?
                 title.replace('Supermarket', '<span class="highlight-red">Supermarket</span>') :
                 `<span class="highlight-red">${title}</span>`;
-
             const promo = {
                 title: formattedTitle,
                 tagline: tagline || 'Get out of the line, get online!',
@@ -1691,7 +1745,6 @@
             let rawPhone = phone.replace(/\s/g, '');
             if (rawPhone.startsWith('0')) rawPhone = '256' + rawPhone.substring(1);
             if (!rawPhone.startsWith('256')) rawPhone = '256' + rawPhone;
-
             const msg =
                 `Hello ${customer}, your order #${orderIndex + 1} (UGX ${total.toLocaleString()}) is ready for pickup/delivery at Taata Owen Supermarket! 🛍️ Thank you for choosing us. - Taata Owen Team`;
             const url = `https://wa.me/${rawPhone}?text=${encodeURIComponent(msg)}`;
@@ -1764,29 +1817,28 @@
         }
 
         // ============================================================
-        //  PRODUCT MANAGEMENT (ADMIN) – with quantity & featured
+        //  PRODUCT MANAGEMENT (ADMIN) – with discount & combo
         // ============================================================
         function renderAdminProducts() {
             const container = document.getElementById('adminProductList');
             const allItems = [...supermarketItems, ...restaurantItems];
             let html = `<table>
-                        <thead><tr><th>Name</th><th>Category</th><th>Price</th><th>Qty</th><th>Featured</th><th>Type</th><th>Stock</th><th>Actions</th></tr></thead><tbody>`;
+                        <thead><tr><th>Name</th><th>Category</th><th>Price</th><th>Qty</th><th>Discount</th><th>Combo</th><th>Featured</th><th>Type</th><th>Actions</th></tr></thead><tbody>`;
             allItems.forEach(item => {
                 const stockText = item.quantity > 0 ? (item.quantity < 5 ? `⚠️ ${item.quantity}` :
                     `✅ ${item.quantity}`) : '❌ 0';
-                const stockColor = item.quantity <= 0 ? 'out-of-stock-badge' : (item.quantity < 5 ?
-                    'low-stock' : 'in-stock-badge');
                 html += `<tr>
                             <td><strong>${item.name}</strong></td>
                             <td>${item.category}</td>
                             <td>UGX ${item.price.toLocaleString()}</td>
                             <td>${item.quantity}</td>
-                            <td>${item.featured ? '⭐ Yes' : 'No'}</td>
-                            <td>${item.type === 'supermarket' ? '🏪 Supermarket' : '🍽️ Restaurant'}</td>
-                            <td><span class="${stockColor}">${stockText}</span></td>
+                            <td>${item.discount}%</td>
+                            <td>${item.isCombo ? '✅' : '❌'}</td>
+                            <td>${item.featured ? '⭐' : ''}</td>
+                            <td>${item.type === 'supermarket' ? '🏪' : '🍽️'}</td>
                             <td>
                                 <button class="btn-sm btn-edit" onclick="editProduct(${item.id}, '${item.type}')"><i class="fas fa-edit"></i> Edit</button>
-                                <button class="btn-sm toggle-stock-btn" onclick="toggleFeatured(${item.id}, '${item.type}')">Toggle Featured</button>
+                                <button class="btn-sm toggle-stock-btn" onclick="toggleFeatured(${item.id}, '${item.type}')">⭐</button>
                                 <button class="btn-sm btn-delete" onclick="deleteProduct(${item.id}, '${item.type}')"><i class="fas fa-trash"></i> Delete</button>
                             </td>
                         </tr>`;
@@ -1800,19 +1852,6 @@
             const item = items.find(p => p.id === id);
             if (item) {
                 item.featured = !item.featured;
-                if (type === 'supermarket') localStorage.setItem('taata_supermarket_items', JSON.stringify(items));
-                else localStorage.setItem('taata_restaurant_items', JSON.stringify(items));
-                renderAdminProducts();
-                refreshCustomerUI();
-            }
-        }
-
-        function toggleStock(id, type) {
-            let items = type === 'supermarket' ? supermarketItems : restaurantItems;
-            const item = items.find(p => p.id === id);
-            if (item) {
-                item.inStock = !item.inStock;
-                item.quantity = item.inStock ? 10 : 0;
                 if (type === 'supermarket') localStorage.setItem('taata_supermarket_items', JSON.stringify(items));
                 else localStorage.setItem('taata_restaurant_items', JSON.stringify(items));
                 renderAdminProducts();
@@ -1837,18 +1876,23 @@
             const container = document.getElementById('adminProductFormContainer');
             container.innerHTML = `
                         <div class="product-form">
-                            <input type="text" id="newProductName" placeholder="Product Name">
+                            <input type="text" id="newProductName" placeholder="Name">
                             <input type="text" id="newProductCategory" placeholder="Category">
-                            <input type="number" id="newProductPrice" placeholder="Price (UGX)">
-                            <input type="number" id="newProductQuantity" placeholder="Quantity" value="10">
+                            <input type="number" id="newProductPrice" placeholder="Price">
+                            <input type="number" id="newProductQuantity" placeholder="Qty" value="10">
+                            <input type="number" id="newProductDiscount" placeholder="Discount %" value="0">
                             <select id="newProductType">
                                 <option value="supermarket">Supermarket</option>
                                 <option value="restaurant">Restaurant</option>
                             </select>
                             <div class="featured-check">
-                                <input type="checkbox" id="newProductFeatured"> <label for="newProductFeatured">Featured</label>
+                                <input type="checkbox" id="newProductFeatured"> <label>Featured</label>
                             </div>
-                            <button onclick="addProduct()"><i class="fas fa-save"></i> Save Product</button>
+                            <div class="featured-check">
+                                <input type="checkbox" id="newProductCombo"> <label>Combo</label>
+                            </div>
+                            <input type="text" id="newProductComboItems" placeholder="Combo items (optional)">
+                            <button onclick="addProduct()"><i class="fas fa-save"></i> Save</button>
                         </div>
                     `;
         }
@@ -1858,13 +1902,15 @@
             const category = document.getElementById('newProductCategory').value.trim();
             const price = parseInt(document.getElementById('newProductPrice').value);
             const quantity = parseInt(document.getElementById('newProductQuantity').value) || 10;
+            const discount = parseInt(document.getElementById('newProductDiscount').value) || 0;
             const type = document.getElementById('newProductType').value;
             const featured = document.getElementById('newProductFeatured').checked;
+            const isCombo = document.getElementById('newProductCombo').checked;
+            const comboItems = document.getElementById('newProductComboItems').value.trim();
             if (!name || !category || !price) { alert('Please fill all required fields.'); return; }
 
             const newId = type === 'supermarket' ? Math.max(0, ...supermarketItems.map(i => i.id)) + 1 : Math.max(100, ...restaurantItems
                 .map(i => i.id)) + 1;
-
             const newItem = {
                 id: newId,
                 name: name,
@@ -1874,9 +1920,11 @@
                 inStock: quantity > 0,
                 quantity: quantity,
                 featured: featured,
+                discount: discount,
+                isCombo: isCombo,
+                comboItems: comboItems,
                 type: type
             };
-
             if (type === 'supermarket') {
                 supermarketItems.push(newItem);
                 localStorage.setItem('taata_supermarket_items', JSON.stringify(supermarketItems));
@@ -1884,36 +1932,34 @@
                 restaurantItems.push(newItem);
                 localStorage.setItem('taata_restaurant_items', JSON.stringify(restaurantItems));
             }
-
             document.getElementById('adminProductFormContainer').innerHTML = '';
             renderAdminProducts();
             refreshCustomerUI();
-            alert('✅ Product added successfully!');
+            alert('✅ Product added!');
         }
 
         function editProduct(id, type) {
             let items = type === 'supermarket' ? supermarketItems : restaurantItems;
             const item = items.find(p => p.id === id);
             if (!item) return;
-
-            const newName = prompt('Product Name:', item.name);
+            const newName = prompt('Name:', item.name);
             if (newName === null) return;
             const newCategory = prompt('Category:', item.category);
             if (newCategory === null) return;
-            const newPrice = prompt('Price (UGX):', item.price);
+            const newPrice = prompt('Price:', item.price);
             if (newPrice === null) return;
             const newQty = prompt('Quantity:', item.quantity);
             if (newQty === null) return;
-
+            const newDiscount = prompt('Discount %:', item.discount);
+            if (newDiscount === null) return;
             item.name = newName.trim();
             item.category = newCategory.trim();
             item.price = parseInt(newPrice);
             item.quantity = parseInt(newQty);
+            item.discount = parseInt(newDiscount);
             item.inStock = item.quantity > 0;
-
             if (type === 'supermarket') localStorage.setItem('taata_supermarket_items', JSON.stringify(items));
             else localStorage.setItem('taata_restaurant_items', JSON.stringify(items));
-
             renderAdminProducts();
             refreshCustomerUI();
             alert('✅ Product updated!');
@@ -1929,8 +1975,9 @@
                 'restaurant');
             renderGrid('restaurantGrid', restaurantItems, restaurantFilter);
             renderGrid('featuredGrid', [...supermarketItems, ...restaurantItems], 'All', true);
+            renderGrid('hotDealsGrid', [...supermarketItems, ...restaurantItems], 'All', false, true);
+            renderGrid('combosGrid', [...supermarketItems, ...restaurantItems], 'All', false, false, true);
             searchProducts();
-            // Update featured grid
         }
 
         // ============================================================
@@ -1944,7 +1991,6 @@
             }
         });
 
-        // Admin session check
         if (sessionStorage.getItem('taata_admin_logged_in') === 'true') {
             document.getElementById('customerApp').style.display = 'none';
             document.getElementById('adminApp').style.display = 'block';
@@ -1958,21 +2004,21 @@
             document.getElementById('adminApp').style.display = 'none';
         }
 
-        // Render initial UI
         renderCategoryPills('supermarketCategoryPills', supermarketItems, 'All', 'supermarketGrid', 'supermarket');
         renderGrid('supermarketGrid', supermarketItems, 'All');
         renderCategoryPills('restaurantCategoryPills', restaurantItems, 'All', 'restaurantGrid', 'restaurant');
         renderGrid('restaurantGrid', restaurantItems, 'All');
         renderGrid('featuredGrid', [...supermarketItems, ...restaurantItems], 'All', true);
+        renderGrid('hotDealsGrid', [...supermarketItems, ...restaurantItems], 'All', false, true);
+        renderGrid('combosGrid', [...supermarketItems, ...restaurantItems], 'All', false, false, true);
         updateCartUI();
         updateRestaurantStatus();
         setInterval(updateRestaurantStatus, 60000);
         toggleAddressField();
         loadPromoPreview();
 
-        console.log('🔥 Taata Owen Supermarket & Restaurant is LIVE with Ultimate Upgrade!');
-        console.log('🔐 Admin Login: admin123');
-        console.log('⭐ Features: Order History, Auto-Notifications, Featured Products, Low Stock Alerts, Promo Manager.');
+        console.log('🔥 Taata Owen Ultimate Upgrade LIVE!');
+        console.log('⭐ Features: Featured, Hot Deals, Combos, WhatsApp & Email floating buttons.');
         window.placeOrder = placeOrder;
     </script>
 </body>
