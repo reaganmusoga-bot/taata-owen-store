@@ -19,6 +19,7 @@
             --red: #CC0000;
             --white: #FFFFFF;
             --blue: #003399;
+            --gold: #D4AF37;
             --light-gray: #f1f3f5;
             --shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
         }
@@ -120,8 +121,8 @@
 
         /* ---------- HERO (with Background Image) ---------- */
         .hero {
-            background: linear-gradient(rgba(0, 20, 50, 0.75), rgba(0, 0, 0, 0.85)), 
-                        url('https://i.ibb.co/KjkypGTv/supermarket-aisle-view-stockcake.jpg');
+            background: linear-gradient(rgba(0, 20, 50, 0.75), rgba(0, 0, 0, 0.85)),
+                url('https://i.ibb.co/KjkypGTv/supermarket-aisle-view-stockcake.jpg');
             background-size: cover;
             background-position: center;
             color: white;
@@ -147,10 +148,15 @@
             height: 6px;
             border-radius: 4px;
         }
-        .hero-content .flag-stripes .stripe-red { background: var(--red); }
-        .hero-content .flag-stripes .stripe-white { background: white; }
-        .hero-content .flag-stripes .stripe-blue { background: var(--blue); }
-
+        .hero-content .flag-stripes .stripe-red {
+            background: var(--red);
+        }
+        .hero-content .flag-stripes .stripe-white {
+            background: white;
+        }
+        .hero-content .flag-stripes .stripe-blue {
+            background: var(--blue);
+        }
         .hero h1 {
             font-size: 4rem;
             font-weight: 900;
@@ -229,7 +235,7 @@
             padding-bottom: 10px;
         }
 
-        /* ---------- CATEGORY HEADINGS & PILLS (Redesigned) ---------- */
+        /* ---------- CATEGORY PILLS ---------- */
         .category-heading {
             font-size: 1.2rem;
             font-weight: 700;
@@ -288,10 +294,56 @@
             margin-left: 4px;
         }
 
+        /* ---------- RESTAURANT SPECIAL BANNER ---------- */
+        .restaurant-info-bar {
+            background: linear-gradient(135deg, #1a0f0a, #3d1f12);
+            color: white;
+            padding: 18px 25px;
+            border-radius: 20px;
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+            align-items: center;
+            margin: 15px 0 25px 0;
+            border-left: 8px solid var(--gold);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+        }
+        .restaurant-info-bar .hours {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            flex-wrap: wrap;
+        }
+        .restaurant-info-bar .hours .status-open {
+            background: #28a745;
+            padding: 4px 16px;
+            border-radius: 30px;
+            font-weight: bold;
+            font-size: 0.9rem;
+        }
+        .restaurant-info-bar .hours .status-closed {
+            background: #dc3545;
+            padding: 4px 16px;
+            border-radius: 30px;
+            font-weight: bold;
+            font-size: 0.9rem;
+        }
+        .restaurant-info-bar .chef-pick {
+            background: var(--gold);
+            color: #222;
+            padding: 6px 20px;
+            border-radius: 30px;
+            font-weight: 800;
+            font-size: 0.9rem;
+        }
+        .restaurant-info-bar .chef-pick i {
+            margin-right: 6px;
+        }
+
         /* ---------- PRODUCT GRID ---------- */
         .product-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
             gap: 25px;
             margin-top: 5px;
         }
@@ -303,10 +355,32 @@
             text-align: center;
             transition: all 0.2s;
             border-bottom: 5px solid var(--red);
+            position: relative;
+            overflow: hidden;
         }
         .product-card:hover {
             transform: scale(1.03);
             box-shadow: 0 10px 30px rgba(0, 0, 0, 0.12);
+        }
+        /* Badges for Restaurant */
+        .product-card .badge {
+            position: absolute;
+            top: 12px;
+            right: 12px;
+            font-size: 0.6rem;
+            font-weight: 800;
+            padding: 4px 12px;
+            border-radius: 30px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        .badge-special {
+            background: var(--gold);
+            color: #222;
+        }
+        .badge-popular {
+            background: var(--red);
+            color: white;
         }
         .product-card .icon {
             font-size: 48px;
@@ -326,11 +400,26 @@
             color: #222;
             min-height: 40px;
         }
+        .product-card .description {
+            font-size: 0.75rem;
+            color: #777;
+            margin: 5px 0 8px;
+            min-height: 30px;
+            font-style: italic;
+        }
         .product-card .price {
             font-size: 1.2rem;
             font-weight: 800;
             color: var(--red);
             margin: 8px 0;
+        }
+        .product-card .meta-info {
+            display: flex;
+            justify-content: center;
+            gap: 12px;
+            font-size: 0.7rem;
+            color: #888;
+            margin-bottom: 10px;
         }
         .product-card .category-tag {
             background: var(--light-gray);
@@ -367,7 +456,9 @@
             background: rgba(0, 0, 0, 0.6);
             z-index: 200;
         }
-        .cart-overlay.active { display: block; }
+        .cart-overlay.active {
+            display: block;
+        }
         .cart-sidebar {
             position: fixed;
             top: 0;
@@ -382,7 +473,9 @@
             overflow-y: auto;
             transition: right 0.4s cubic-bezier(0.22, 1, 0.36, 1);
         }
-        .cart-sidebar.open { right: 0; }
+        .cart-sidebar.open {
+            right: 0;
+        }
         .cart-sidebar .close-cart {
             float: right;
             font-size: 32px;
@@ -404,8 +497,13 @@
             padding: 10px 0;
             border-bottom: 1px solid #eee;
         }
-        .cart-item .item-name { font-weight: 600; }
-        .cart-item .item-price { color: var(--red); font-weight: bold; }
+        .cart-item .item-name {
+            font-weight: 600;
+        }
+        .cart-item .item-price {
+            color: var(--red);
+            font-weight: bold;
+        }
         .qty-controls button {
             background: var(--light-gray);
             border: 1px solid #ccc;
@@ -414,16 +512,50 @@
             cursor: pointer;
             font-weight: bold;
         }
-        .qty-controls span { margin: 0 10px; font-weight: bold; }
-        .cart-total { margin-top: 15px; padding-top: 15px; border-top: 3px solid var(--red); font-weight: bold; }
+        .qty-controls span {
+            margin: 0 10px;
+            font-weight: bold;
+        }
+        .cart-total {
+            margin-top: 15px;
+            padding-top: 15px;
+            border-top: 3px solid var(--red);
+            font-weight: bold;
+        }
 
-        .checkout-form label { display: block; font-weight: 600; margin-top: 12px; color: #333; }
-        .checkout-form input, .checkout-form select {
+        .checkout-form label {
+            display: block;
+            font-weight: 600;
+            margin-top: 12px;
+            color: #333;
+        }
+        .checkout-form input,
+        .checkout-form select {
             width: 100%;
             padding: 12px;
             border: 1px solid #ccc;
             border-radius: 10px;
             margin-top: 5px;
+        }
+        .order-type-toggle {
+            display: flex;
+            gap: 15px;
+            margin: 10px 0;
+        }
+        .order-type-toggle label {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            background: var(--light-gray);
+            padding: 10px 20px;
+            border-radius: 30px;
+            cursor: pointer;
+            font-weight: 600;
+            margin: 0;
+        }
+        .order-type-toggle input[type="radio"] {
+            width: auto;
+            margin: 0;
         }
         .payment-options {
             display: grid;
@@ -442,8 +574,12 @@
             margin: 0;
             font-size: 0.9rem;
         }
-        .payment-options label:hover { border-color: var(--blue); }
-        .payment-options input[type="radio"] { display: none; }
+        .payment-options label:hover {
+            border-color: var(--blue);
+        }
+        .payment-options input[type="radio"] {
+            display: none;
+        }
         .payment-options input[type="radio"]:checked+label {
             border-color: var(--red);
             background: #fff0f0;
@@ -484,7 +620,9 @@
             margin-top: 15px;
             cursor: pointer;
         }
-        .checkout-btn:hover { background: var(--blue); }
+        .checkout-btn:hover {
+            background: var(--blue);
+        }
 
         /* ---------- ACCOUNT MODAL ---------- */
         .auth-overlay {
@@ -499,7 +637,9 @@
             justify-content: center;
             align-items: center;
         }
-        .auth-overlay.active { display: flex; }
+        .auth-overlay.active {
+            display: flex;
+        }
         .auth-modal {
             background: white;
             padding: 40px;
@@ -545,7 +685,9 @@
             cursor: pointer;
             margin-top: 10px;
         }
-        .auth-modal .auth-btn:hover { background: var(--blue); }
+        .auth-modal .auth-btn:hover {
+            background: var(--blue);
+        }
         .auth-modal .toggle-auth {
             text-align: center;
             margin-top: 15px;
@@ -572,13 +714,34 @@
             margin-top: 10px;
         }
         @media (max-width: 600px) {
-            .hero h1 { font-size: 2.2rem; }
-            .hero .tagline { font-size: 1.2rem; }
-            .navbar .logo { font-size: 16px; }
-            .navbar .logo img { height: 35px; }
-            .product-grid { grid-template-columns: repeat(2, 1fr); gap: 15px; }
-            .cart-sidebar { width: 100%; right: -100%; }
-            .auth-modal { padding: 25px; }
+            .hero h1 {
+                font-size: 2.2rem;
+            }
+            .hero .tagline {
+                font-size: 1.2rem;
+            }
+            .navbar .logo {
+                font-size: 16px;
+            }
+            .navbar .logo img {
+                height: 35px;
+            }
+            .product-grid {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 15px;
+            }
+            .cart-sidebar {
+                width: 100%;
+                right: -100%;
+            }
+            .auth-modal {
+                padding: 25px;
+            }
+            .restaurant-info-bar {
+                flex-direction: column;
+                gap: 10px;
+                text-align: center;
+            }
         }
     </style>
 </head>
@@ -604,7 +767,7 @@
         </div>
     </nav>
 
-    <!-- ===== HERO (with new design & background) ===== -->
+    <!-- ===== HERO ===== -->
     <section class="hero">
         <div class="hero-content">
             <div class="flag-stripes">
@@ -633,28 +796,39 @@
         <div class="section-header">
             <h2 class="section-title"><i class="fas fa-store"></i> Supermarket</h2>
         </div>
-
-        <!-- Category Heading & Pills -->
         <div class="category-heading">
             <i class="fas fa-tags"></i> Browse Categories
         </div>
         <div id="supermarketCategoryPills" class="category-pills"></div>
-
         <div class="product-grid" id="supermarketGrid"></div>
     </div>
 
-    <!-- ===== RESTAURANT ===== -->
-    <div class="section-container" style="background: var(--light-gray); border-radius: 30px; margin: 0 20px 30px; padding: 20px 20px 30px;">
+    <!-- ===== RESTAURANT (UPGRADED & BALANCED) ===== -->
+    <div class="section-container" style="background: #fcf6f0; border-radius: 30px; margin: 0 20px 30px; padding: 20px 20px 30px; border: 1px solid #f0e0d0;">
         <div class="section-header">
-            <h2 class="section-title"><i class="fas fa-utensils"></i> Restaurant Menu</h2>
+            <h2 class="section-title" style="color: #5d2e1b;"><i class="fas fa-utensils" style="color: var(--gold);"></i> Restaurant Menu</h2>
         </div>
 
-        <!-- Category Heading & Pills -->
+        <!-- Professional Restaurant Info Bar -->
+        <div class="restaurant-info-bar">
+            <div class="hours">
+                <i class="fas fa-clock" style="font-size: 1.5rem; color: var(--gold);"></i>
+                <span id="restaurantStatus" class="status-open">Loading...</span>
+                <span style="font-weight: 300;">|</span>
+                <span><i class="fas fa-calendar-alt"></i> Mon - Sun: 7:00 AM - 10:00 PM</span>
+            </div>
+            <div class="chef-pick">
+                <i class="fas fa-star"></i> Chef's Specials Available
+            </div>
+            <div>
+                <i class="fas fa-motorcycle"></i> Delivery / <i class="fas fa-store-alt"></i> Pickup
+            </div>
+        </div>
+
         <div class="category-heading">
             <i class="fas fa-tags"></i> Browse Categories
         </div>
         <div id="restaurantCategoryPills" class="category-pills"></div>
-
         <div class="product-grid" id="restaurantGrid"></div>
     </div>
 
@@ -677,11 +851,19 @@
 
         <div class="checkout-form">
             <h4 style="color:var(--blue);">Complete Order</h4>
+
+            <!-- Order Type: Delivery vs Pickup (Marketable!) -->
+            <label>Order Type</label>
+            <div class="order-type-toggle">
+                <label><input type="radio" name="orderType" value="delivery" checked onchange="toggleAddressField()"> <i class="fas fa-truck"></i> Delivery</label>
+                <label><input type="radio" name="orderType" value="pickup" onchange="toggleAddressField()"> <i class="fas fa-store-alt"></i> Pickup</label>
+            </div>
+
             <label>Full Name</label>
             <input type="text" id="custName" placeholder="e.g. John Muwonge">
             <label>Phone Number</label>
             <input type="tel" id="custPhone" placeholder="e.g. 0777123456">
-            <label>Delivery Address</label>
+            <label id="addressLabel">Delivery Address</label>
             <input type="text" id="custAddress" placeholder="Street, building, landmark">
             <label>Location</label>
             <select id="custLocation">
@@ -723,7 +905,7 @@
         </div>
     </div>
 
-    <!-- ===== AUTHENTICATION MODAL (Login/Signup) ===== -->
+    <!-- ===== AUTH MODAL ===== -->
     <div class="auth-overlay" id="authModal">
         <div class="auth-modal">
             <button class="close-auth" onclick="toggleAuthModal()">&times;</button>
@@ -742,7 +924,7 @@
 
     <script>
         // ============================================================
-        //  DATA (Expanded)
+        //  DATA (BALANCED RESTAURANT MENU)
         // ============================================================
         const supermarketItems = [
             { id: 1, name: "Matooke (Bunch)", category: "Fresh Produce", price: 15000, icon: "fa-solid fa-leaf" },
@@ -767,13 +949,45 @@
             { id: 20, name: "Shampoo (500ml)", category: "Personal Care", price: 12000, icon: "fa-solid fa-spray-can" },
         ];
 
+        // ** BALANCED RESTAURANT ITEMS **
         const restaurantItems = [
-            { id: 101, name: "Rolex (Chapati + Eggs)", category: "Fast Food", price: 7000, icon: "fa-solid fa-egg" },
-            { id: 102, name: "Chapati (2 pcs)", category: "Fast Food", price: 3000, icon: "fa-solid fa-bread-slice" },
-            { id: 103, name: "Chicken Stew + Rice", category: "Main Course", price: 18000, icon: "fa-solid fa-drumstick-bite" },
-            { id: 104, name: "Beans + Matooke", category: "Main Course", price: 12000, icon: "fa-solid fa-utensils" },
-            { id: 105, name: "Fresh Juice (Passion)", category: "Beverages", price: 5000, icon: "fa-solid fa-wine-bottle" },
-            { id: 106, name: "Grilled Fish + Chips", category: "Main Course", price: 22000, icon: "fa-solid fa-fish" },
+            // Fast Food (4 items)
+            { id: 101, name: "Rolex (Chapati + Eggs)", category: "Fast Food", price: 7000, icon: "fa-solid fa-egg",
+                description: "Classic Ugandan street roll with eggs & veggies", prepTime: "10 min", badge: "popular" },
+            { id: 102, name: "Chapati (2 pcs)", category: "Fast Food", price: 3000, icon: "fa-solid fa-bread-slice",
+                description: "Soft, flaky Ugandan flatbread", prepTime: "5 min", badge: null },
+            { id: 103, name: "Samosa (2 pcs)", category: "Fast Food", price: 4000, icon: "fa-solid fa-cube",
+                description: "Crispy pastry filled with spiced meat or vegetables", prepTime: "8 min", badge: null },
+            { id: 104, name: "Chips (Large)", category: "Fast Food", price: 5000, icon: "fa-solid fa-fries",
+                description: "Golden crispy fries, served with ketchup", prepTime: "8 min", badge: null },
+
+            // Main Course (4 items)
+            { id: 105, name: "Chicken Stew + Rice", category: "Main Course", price: 18000, icon: "fa-solid fa-drumstick-bite",
+                description: "Tender chicken stew served with hot rice", prepTime: "20 min", badge: "special" },
+            { id: 106, name: "Beans + Matooke", category: "Main Course", price: 12000, icon: "fa-solid fa-utensils",
+                description: "Rich bean stew paired with steamed matooke", prepTime: "15 min", badge: null },
+            { id: 107, name: "Grilled Fish + Chips", category: "Main Course", price: 22000, icon: "fa-solid fa-fish",
+                description: "Fresh Nile perch grilled to perfection with chips", prepTime: "25 min", badge: "special" },
+            { id: 108, name: "Beef Stew + Rice", category: "Main Course", price: 20000, icon: "fa-solid fa-cow",
+                description: "Tender beef stew in rich gravy with rice", prepTime: "20 min", badge: null },
+
+            // Beverages (4 items)
+            { id: 109, name: "Fresh Juice (Passion)", category: "Beverages", price: 5000, icon: "fa-solid fa-wine-bottle",
+                description: "Freshly squeezed passion fruit juice", prepTime: "5 min", badge: null },
+            { id: 110, name: "Soda (Can)", category: "Beverages", price: 3000, icon: "fa-solid fa-wine-bottle",
+                description: "Chilled soft drink (Coke, Fanta, or Sprite)", prepTime: "2 min", badge: null },
+            { id: 111, name: "Bottled Water", category: "Beverages", price: 2000, icon: "fa-solid fa-wine-bottle",
+                description: "Pure mineral water (500ml)", prepTime: "1 min", badge: null },
+            { id: 112, name: "Milkshake", category: "Beverages", price: 8000, icon: "fa-solid fa-wine-bottle",
+                description: "Creamy vanilla or strawberry milkshake", prepTime: "5 min", badge: "popular" },
+
+            // Sides & Extras (3 items)
+            { id: 113, name: "Extra Chapati", category: "Sides", price: 2000, icon: "fa-solid fa-bread-slice",
+                description: "One extra fluffy chapati", prepTime: "3 min", badge: null },
+            { id: 114, name: "Extra Rice", category: "Sides", price: 3000, icon: "fa-solid fa-seedling",
+                description: "Extra serving of steamed rice", prepTime: "5 min", badge: null },
+            { id: 115, name: "Fresh Salad", category: "Sides", price: 4000, icon: "fa-solid fa-leaf",
+                description: "Mixed greens with tomatoes and onions", prepTime: "5 min", badge: null },
         ];
 
         const allProducts = [...supermarketItems.map(p => ({ ...p, type: 'supermarket' })), ...restaurantItems.map(p => ({ ...p,
@@ -841,11 +1055,9 @@
                 return;
             }
 
-            // Load users from localStorage
             let users = JSON.parse(localStorage.getItem('taata_users')) || {};
 
             if (isLoginMode) {
-                // LOGIN
                 if (users[username] && users[username].password === password) {
                     currentUser = username;
                     document.getElementById('accountNameDisplay').textContent = username;
@@ -857,7 +1069,6 @@
                     msg.style.color = 'red';
                 }
             } else {
-                // SIGNUP
                 if (users[username]) {
                     msg.textContent = '❌ Username already exists.';
                     msg.style.color = 'red';
@@ -884,7 +1095,6 @@
             }
         }
 
-        // Add logout option by clicking the account name when logged in
         document.getElementById('accountNameDisplay').addEventListener('dblclick', function() {
             if (currentUser) {
                 if (confirm(`Logout ${currentUser}?`)) {
@@ -894,31 +1104,20 @@
         });
 
         // ============================================================
-        //  WALLET & POINTS (User-specific)
+        //  WALLET & POINTS
         // ============================================================
-        function getWalletBalance() {
-            return loadUserData().wallet;
-        }
+        function getWalletBalance() { return loadUserData().wallet; }
 
-        function getPointsBalance() {
-            return loadUserData().points;
-        }
+        function getPointsBalance() { return loadUserData().points; }
 
-        function setWalletBalance(val) {
-            const data = loadUserData();
-            saveUserData(val, data.points);
-        }
+        function setWalletBalance(val) { const d = loadUserData();
+            saveUserData(val, d.points); }
 
-        function setPointsBalance(val) {
-            const data = loadUserData();
-            saveUserData(data.wallet, val);
-        }
+        function setPointsBalance(val) { const d = loadUserData();
+            saveUserData(d.wallet, val); }
 
         function depositMoney() {
-            if (!currentUser) {
-                alert('⚠️ Please Login or Sign Up first to use the wallet.');
-                return;
-            }
+            if (!currentUser) { alert('⚠️ Please Login or Sign Up first.'); return; }
             const amount = prompt("Enter amount to deposit (UGX):", "10000");
             if (amount && !isNaN(amount) && parseInt(amount) > 0) {
                 let balance = getWalletBalance();
@@ -933,14 +1132,14 @@
 
         function showWalletInfo() {
             if (!currentUser) {
-                alert('⚠️ Please Login to view your wallet and points.\n\n(Double-click "Login" to sign up)');
+                alert('⚠️ Please Login to view your wallet and points.');
                 return;
             }
             alert(`💰 Wallet Balance: UGX ${getWalletBalance().toLocaleString()}\n⭐ Points: ${getPointsBalance()}\n\nEarn 1 point per UGX 1,000 spent.`);
         }
 
         // ============================================================
-        //  CART LOGIC
+        //  CART & UI LOGIC
         // ============================================================
         let cart = [];
         let supermarketFilter = 'All';
@@ -965,7 +1164,8 @@
                 'Household Supplies': 'fa-solid fa-soap',
                 'Personal Care': 'fa-solid fa-tooth',
                 'Fast Food': 'fa-solid fa-burger',
-                'Main Course': 'fa-solid fa-utensils'
+                'Main Course': 'fa-solid fa-utensils',
+                'Sides': 'fa-solid fa-plate-wheat'
             };
             return map[cat] || 'fa-solid fa-tag';
         }
@@ -982,13 +1182,13 @@
                 pill.onclick = () => {
                     if (type === 'supermarket') {
                         supermarketFilter = cat;
-                        renderCategoryPills('supermarketCategoryPills', supermarketItems, supermarketFilter, 'supermarketGrid',
-                            'supermarket');
+                        renderCategoryPills('supermarketCategoryPills', supermarketItems, supermarketFilter,
+                            'supermarketGrid', 'supermarket');
                         renderGrid('supermarketGrid', supermarketItems, supermarketFilter);
                     } else {
                         restaurantFilter = cat;
-                        renderCategoryPills('restaurantCategoryPills', restaurantItems, restaurantFilter, 'restaurantGrid',
-                            'restaurant');
+                        renderCategoryPills('restaurantCategoryPills', restaurantItems, restaurantFilter,
+                            'restaurantGrid', 'restaurant');
                         renderGrid('restaurantGrid', restaurantItems, restaurantFilter);
                     }
                 };
@@ -1008,10 +1208,31 @@
             filtered.forEach(item => {
                 const card = document.createElement('div');
                 card.className = 'product-card';
+
+                let badgeHtml = '';
+                if (item.badge === 'special') {
+                    badgeHtml = `<span class="badge badge-special"><i class="fas fa-crown"></i> Chef's Special</span>`;
+                } else if (item.badge === 'popular') {
+                    badgeHtml = `<span class="badge badge-popular"><i class="fas fa-fire"></i> Popular</span>`;
+                }
+
+                let metaHtml = '';
+                if (item.prepTime) {
+                    metaHtml = `<div class="meta-info"><i class="fas fa-clock"></i> ${item.prepTime}</div>`;
+                }
+
+                let descHtml = '';
+                if (item.description) {
+                    descHtml = `<div class="description">${item.description}</div>`;
+                }
+
                 card.innerHTML = `
+                        ${badgeHtml}
                         <div class="icon"><i class="${item.icon}"></i></div>
                         <span class="category-tag">${item.category}</span>
                         <h3>${item.name}</h3>
+                        ${descHtml}
+                        ${metaHtml}
                         <div class="price">UGX ${item.price.toLocaleString()}</div>
                         <button onclick="addToCart(${item.id})"><i class="fas fa-plus"></i> Add</button>
                     `;
@@ -1036,6 +1257,21 @@
                 else cart.splice(index, 1);
             }
             updateCartUI();
+        }
+
+        function toggleAddressField() {
+            const isPickup = document.querySelector('input[name="orderType"]:checked')?.value === 'pickup';
+            const addressInput = document.getElementById('custAddress');
+            const addressLabel = document.getElementById('addressLabel');
+            if (isPickup) {
+                addressInput.placeholder = 'Pickup location (e.g., Taata Owen Jinja Central)';
+                addressLabel.textContent = 'Pickup Location';
+                addressInput.required = false;
+            } else {
+                addressInput.placeholder = 'Street, building, landmark';
+                addressLabel.textContent = 'Delivery Address';
+                addressInput.required = true;
+            }
         }
 
         function updateCartUI() {
@@ -1097,10 +1333,19 @@
                 `;
         }
 
+        function toggleCart() {
+            const sidebar = document.getElementById('cartSidebar');
+            const overlay = document.getElementById('cartOverlay');
+            sidebar.classList.toggle('open');
+            overlay.classList.toggle('active');
+            if (sidebar.classList.contains('open')) updateCartUI();
+        }
+
         // ============================================================
         //  PLACE ORDER
         // ============================================================
         function placeOrder() {
+            const orderType = document.querySelector('input[name="orderType"]:checked')?.value || 'delivery';
             const name = document.getElementById('custName').value.trim();
             const phone = document.getElementById('custPhone').value.trim();
             const address = document.getElementById('custAddress').value.trim();
@@ -1108,7 +1353,8 @@
             const payment = document.querySelector('input[name="payment"]:checked')?.value || 'momo';
 
             if (cart.length === 0) { alert('❌ Cart is empty!'); return; }
-            if (!name || !phone || !address) { alert('⚠️ Please fill in Name, Phone, and Address.'); return; }
+            if (!name || !phone) { alert('⚠️ Please fill in Name and Phone.'); return; }
+            if (orderType === 'delivery' && !address) { alert('⚠️ Please provide a delivery address.'); return; }
 
             let subtotal = cart.reduce((sum, c) => sum + (c.price * c.qty), 0);
             const shipping = location === 'jinja' ? 5000 : 20000;
@@ -1128,41 +1374,38 @@
                 finalTotal = subtotal - discount - walletPay + (subtotal >= 200000 ? 0 : shipping);
                 if (finalTotal < 0) finalTotal = 0;
 
-                // Deduct
                 if (walletPay > 0) { setWalletBalance(wallet - walletPay); }
                 if (discount > 0) { setPointsBalance(points - discount); }
 
-                // Add new points
                 const newPoints = Math.floor(finalTotal / 1000);
                 if (newPoints > 0) { setPointsBalance(getPointsBalance() + newPoints); }
-
-                // Show points earned in alert
-                var pointsEarnedMsg = `\n⭐ Points Earned: ${newPoints}`;
+                var pointsMsg = `\n⭐ Points Earned: ${newPoints}`;
             } else {
-                var pointsEarnedMsg = '\n⚠️ Create an account to earn points on this order!';
+                var pointsMsg = '\n⚠️ Create an account to earn points!';
             }
 
             const orderSummary = cart.map(c => `${c.name} x${c.qty}`).join(', ');
             const paymentMethod = { momo: 'MTN Mobile Money', airtel: 'Airtel Money', card: 'Credit/Debit Card',
                 cash: 'Cash on Delivery' } [payment] || payment;
+            const orderTypeLabel = orderType === 'delivery' ? '🚚 Delivery' : '🏪 Pickup';
 
             alert(`
         ✅ ORDER PLACED SUCCESSFULLY!
 
         👤 Customer: ${name}
         📞 Phone: ${phone}
-        📍 Address: ${address}
-        🚚 Location: ${location === 'jinja' ? 'Jinja City' : 'Other Uganda City'}
+        📍 ${orderType === 'delivery' ? 'Delivery Address' : 'Pickup Location'}: ${address}
+        🏷️ Order Type: ${orderTypeLabel}
         💳 Payment: ${paymentMethod}
 
         🛒 Items: ${orderSummary}
         💰 Total Paid: UGX ${finalTotal.toLocaleString()}
-        ${pointsEarnedMsg}
+        ${pointsMsg}
         💵 Wallet Balance Left: UGX ${getWalletBalance().toLocaleString()}
 
         📌 Next Steps:
         1. We will call you on ${phone} to confirm.
-        2. Your order will be delivered within 1-2 days.
+        2. ${orderType === 'delivery' ? 'Your order will be delivered within 1-2 days.' : 'Your order will be ready for pickup at Taata Owen Supermarket (Jinja Central).'}
 
         Thank you for shopping at Taata Owen! 🛍️🇺🇬
         `);
@@ -1176,34 +1419,43 @@
         }
 
         // ============================================================
-        //  TOGGLE CART & EVENTS
+        //  RESTAURANT OPEN/CLOSE STATUS
         // ============================================================
-        function toggleCart() {
-            const sidebar = document.getElementById('cartSidebar');
-            const overlay = document.getElementById('cartOverlay');
-            sidebar.classList.toggle('open');
-            overlay.classList.toggle('active');
-            if (sidebar.classList.contains('open')) updateCartUI();
+        function updateRestaurantStatus() {
+            const now = new Date();
+            const hours = now.getHours();
+            // Open from 7 AM (7) to 10 PM (22)
+            const isOpen = hours >= 7 && hours < 22;
+            const statusEl = document.getElementById('restaurantStatus');
+            if (isOpen) {
+                statusEl.className = 'status-open';
+                statusEl.textContent = '🔴 Open Now';
+            } else {
+                statusEl.className = 'status-closed';
+                statusEl.textContent = '⏰ Closed (Opens at 7 AM)';
+            }
         }
 
+        // ============================================================
+        //  INIT & EVENTS
+        // ============================================================
         document.addEventListener('change', function(e) {
-            if (e.target.id === 'custLocation' || e.target.id === 'useWallet' || e.target.id === 'usePoints') {
+            if (e.target.id === 'custLocation' || e.target.id === 'useWallet' || e.target.id === 'usePoints' || e.target
+                .name === 'orderType') {
+                if (e.target.name === 'orderType') toggleAddressField();
                 updateCartUI();
             }
         });
 
-        // ============================================================
-        //  INIT
-        // ============================================================
         renderCategoryPills('supermarketCategoryPills', supermarketItems, 'All', 'supermarketGrid', 'supermarket');
         renderGrid('supermarketGrid', supermarketItems, 'All');
         renderCategoryPills('restaurantCategoryPills', restaurantItems, 'All', 'restaurantGrid', 'restaurant');
         renderGrid('restaurantGrid', restaurantItems, 'All');
         updateCartUI();
+        updateRestaurantStatus();
+        setInterval(updateRestaurantStatus, 60000); // Update every minute
 
-        // Check if user is logged in from previous session (optional: keep simple, just reset state)
-        // Logout double-click listener is set above.
-        console.log('🚀 Taata Owen Supermarket is ready!');
+        console.log('🔥 Taata Owen Supermarket & Restaurant is LIVE!');
     </script>
 </body>
 </html>
