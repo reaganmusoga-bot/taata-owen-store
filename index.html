@@ -67,6 +67,35 @@
             gap: 12px;
             flex-wrap: wrap;
         }
+        .navbar .search-box {
+            display: flex;
+            align-items: center;
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 30px;
+            padding: 4px 15px;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+        }
+        .navbar .search-box input {
+            background: transparent;
+            border: none;
+            padding: 8px 10px;
+            color: white;
+            font-size: 0.9rem;
+            width: 150px;
+            outline: none;
+        }
+        .navbar .search-box input::placeholder {
+            color: rgba(255, 255, 255, 0.7);
+        }
+        .navbar .search-box i {
+            color: white;
+            opacity: 0.7;
+        }
+        @media (max-width: 600px) {
+            .navbar .search-box input {
+                width: 100px;
+            }
+        }
         .navbar .account-btn {
             background: rgba(255, 255, 255, 0.15);
             border: 2px solid rgba(255, 255, 255, 0.5);
@@ -208,6 +237,22 @@
             border-radius: 50px;
             display: inline-block;
             border: 1px solid rgba(255, 255, 255, 0.25);
+        }
+        .hero .restaurant-jump {
+            margin-top: 20px;
+            display: inline-block;
+            background: var(--gold);
+            color: #222;
+            padding: 12px 30px;
+            border-radius: 50px;
+            font-weight: 700;
+            text-decoration: none;
+            transition: 0.3s;
+            box-shadow: 0 4px 15px rgba(212, 175, 55, 0.4);
+        }
+        .hero .restaurant-jump:hover {
+            transform: scale(1.05);
+            background: #ffd700;
         }
 
         .section-container {
@@ -424,6 +469,11 @@
         .product-card button:disabled {
             background: #6c757d;
             cursor: not-allowed;
+        }
+
+        /* Search highlight: hide products not matching */
+        .product-card.hidden {
+            display: none !important;
         }
 
         .cart-overlay {
@@ -689,6 +739,28 @@
             opacity: 0.9;
         }
 
+        /* Back to Top Button */
+        #backToTop {
+            display: none;
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            z-index: 999;
+            background: var(--red);
+            color: white;
+            border: none;
+            border-radius: 50%;
+            padding: 15px 18px;
+            font-size: 20px;
+            cursor: pointer;
+            box-shadow: 0 4px 15px rgba(204, 0, 0, 0.4);
+            transition: 0.3s;
+        }
+        #backToTop:hover {
+            transform: scale(1.1);
+            background: var(--blue);
+        }
+
         @media (max-width: 600px) {
             .hero h1 {
                 font-size: 2.2rem;
@@ -700,9 +772,18 @@
                 width: 100%;
                 right: -100%;
             }
+            .navbar .search-box input {
+                width: 100px;
+            }
+            #backToTop {
+                bottom: 20px;
+                right: 20px;
+                padding: 12px 15px;
+                font-size: 16px;
+            }
         }
 
-        /* ========== ADMIN DASHBOARD STYLES ========== */
+        /* ========== ADMIN DASHBOARD STYLES (unchanged) ========== */
         #adminApp {
             display: none;
             background: #f4f6f9;
@@ -950,6 +1031,11 @@
                 <span>Jinja</span>
             </div>
             <div class="right-icons">
+                <!-- SEARCH BAR -->
+                <div class="search-box">
+                    <i class="fas fa-search"></i>
+                    <input type="text" id="searchInput" placeholder="Search products..." onkeyup="searchProducts()">
+                </div>
                 <button class="account-btn" onclick="toggleAuthModal()">
                     <i class="fas fa-user"></i> <span id="accountNameDisplay">Login</span>
                 </button>
@@ -980,7 +1066,10 @@
                 <p class="sub-text">
                     Jinja's freshest groceries & tasty restaurant meals, delivered to your door.
                 </p>
-                <a href="#supermarketSection" class="cta-btn"><i class="fas fa-store"></i> Shop Now</a>
+                <div style="display: flex; flex-wrap: wrap; gap: 15px; justify-content: center; margin-top: 20px;">
+                    <a href="#supermarketSection" class="cta-btn"><i class="fas fa-store"></i> Shop Now</a>
+                    <a href="#restaurantSection" class="restaurant-jump"><i class="fas fa-utensils"></i> Restaurant Menu</a>
+                </div>
                 <div class="delivery-tag">
                     <i class="fas fa-truck"></i> Free delivery over UGX 200k &nbsp;|&nbsp; <i class="fas fa-star"></i> Earn points on every order
                 </div>
@@ -1000,7 +1089,7 @@
         </div>
 
         <!-- RESTAURANT -->
-        <div class="section-container" style="background: #fcf6f0; border-radius: 30px; margin: 0 20px 30px; padding: 20px 20px 30px; border: 1px solid #f0e0d0;">
+        <div class="section-container" style="background: #fcf6f0; border-radius: 30px; margin: 0 20px 30px; padding: 20px 20px 30px; border: 1px solid #f0e0d0;" id="restaurantSection">
             <div class="section-header">
                 <h2 class="section-title" style="color: #5d2e1b;"><i class="fas fa-utensils" style="color: var(--gold);"></i> Restaurant Menu</h2>
             </div>
@@ -1108,6 +1197,9 @@
             <div style="margin-top:10px; color:red; font-size:0.8rem;" id="adminLoginError"></div>
         </div>
     </div>
+
+    <!-- Back to Top Button -->
+    <button id="backToTop" onclick="scrollToTop()"><i class="fas fa-arrow-up"></i></button>
 
     <script>
         // ============================================================
@@ -1321,7 +1413,47 @@
             alert(`💰 Wallet: UGX ${getWalletBalance().toLocaleString()}\n⭐ Points: ${getPointsBalance()}`);
         }
 
-        // UI Rendering
+        // ============================================================
+        //  SEARCH FUNCTION
+        // ============================================================
+        function searchProducts() {
+            const query = document.getElementById('searchInput').value.toLowerCase().trim();
+            const allCards = document.querySelectorAll('.product-card');
+            let visibleCount = 0;
+            allCards.forEach(card => {
+                const text = card.textContent.toLowerCase();
+                if (query === '' || text.includes(query)) {
+                    card.classList.remove('hidden');
+                    visibleCount++;
+                } else {
+                    card.classList.add('hidden');
+                }
+            });
+            // Show message if no items found
+            // We'll handle by checking grids
+            ['supermarketGrid', 'restaurantGrid'].forEach(gridId => {
+                const grid = document.getElementById(gridId);
+                const hidden = grid.querySelectorAll('.product-card.hidden');
+                const total = grid.querySelectorAll('.product-card').length;
+                let msgEl = grid.parentElement.querySelector('.no-search-results');
+                if (hidden.length === total && total > 0) {
+                    if (!msgEl) {
+                        const msg = document.createElement('p');
+                        msg.className = 'no-search-results';
+                        msg.style.cssText =
+                            'grid-column:1/-1; text-align:center; padding:40px; color:#888; font-size:1.1rem;';
+                        msg.textContent = 'No products match your search. Try a different keyword.';
+                        grid.parentElement.appendChild(msg);
+                    }
+                } else {
+                    if (msgEl) msgEl.remove();
+                }
+            });
+        }
+
+        // ============================================================
+        //  UI RENDERING
+        // ============================================================
         function getCategories(items) {
             const cats = items.map(item => item.category);
             return ['All', ...new Set(cats)];
@@ -1368,6 +1500,8 @@
                             'restaurantGrid', 'restaurant');
                         renderGrid('restaurantGrid', restaurantItems, restaurantFilter);
                     }
+                    // Re-apply search filter after category change
+                    searchProducts();
                 };
                 container.appendChild(pill);
             });
@@ -1504,7 +1638,7 @@
             if (sidebar.classList.contains('open')) updateCartUI();
         }
 
-        // Place Order
+        // Place Order (same as before, but we keep it)
         function placeOrder() {
             const orderType = document.querySelector('input[name="orderType"]:checked')?.value || 'delivery';
             const name = document.getElementById('custName').value.trim();
@@ -1552,7 +1686,6 @@
                 cash: 'Cash on Delivery' } [payment] || payment;
             const orderTypeLabel = orderType === 'delivery' ? '🚚 Delivery' : '🏪 Pickup';
 
-            // Save Order (with points earned)
             const orders = JSON.parse(localStorage.getItem('taata_orders')) || [];
             orders.push({
                 timestamp: new Date().toLocaleString(),
@@ -1612,7 +1745,23 @@
         }
 
         // ============================================================
-        //  ADMIN APP LOGIC
+        //  BACK TO TOP
+        // ============================================================
+        window.onscroll = function() {
+            const btn = document.getElementById('backToTop');
+            if (document.body.scrollTop > 300 || document.documentElement.scrollTop > 300) {
+                btn.style.display = 'block';
+            } else {
+                btn.style.display = 'none';
+            }
+        };
+
+        function scrollToTop() {
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        // ============================================================
+        //  ADMIN APP LOGIC (unchanged from previous, but included for completeness)
         // ============================================================
         function showAdminLogin() {
             document.getElementById('adminLoginModal').classList.add('active');
@@ -1670,11 +1819,7 @@
             document.getElementById('statTotalProducts').textContent = supermarketItems.length + restaurantItems.length;
         }
 
-        // ============================================================
-        //  NEW: NOTIFY CLIENT VIA WHATSAPP
-        // ============================================================
         function sendWhatsApp(phone, customer, orderIndex, total) {
-            // Format phone number (remove spaces, remove leading 0, add 256)
             let rawPhone = phone.replace(/\s/g, '');
             if (rawPhone.startsWith('0')) rawPhone = '256' + rawPhone.substring(1);
             if (!rawPhone.startsWith('256')) rawPhone = '256' + rawPhone;
@@ -1684,9 +1829,6 @@
             window.open(url, '_blank');
         }
 
-        // ============================================================
-        //  NEW: MARK SINGLE ORDER AS DELIVERED (Quick Action)
-        // ============================================================
         function markOrderDelivered(index) {
             const orders = JSON.parse(localStorage.getItem('taata_orders')) || [];
             if (orders[index]) {
@@ -1698,9 +1840,6 @@
             }
         }
 
-        // ============================================================
-        //  NEW: CLEAR ALL DELIVERED ORDERS
-        // ============================================================
         function clearDeliveredOrders() {
             let orders = JSON.parse(localStorage.getItem('taata_orders')) || [];
             const deliveredCount = orders.filter(o => o.status === 'Delivered').length;
@@ -1717,9 +1856,6 @@
             }
         }
 
-        // ============================================================
-        //  RENDER ADMIN ORDERS (UPDATED)
-        // ============================================================
         function renderAdminOrders() {
             const container = document.getElementById('adminOrderList');
             const orders = JSON.parse(localStorage.getItem('taata_orders')) || [];
@@ -1776,9 +1912,7 @@
             }
         }
 
-        // ============================================================
-        //  RENDER ADMIN PRODUCTS (Unchanged but included)
-        // ============================================================
+        // Products admin (unchanged)
         function renderAdminProducts() {
             const container = document.getElementById('adminProductList');
             const allItems = [...supermarketItems, ...restaurantItems];
@@ -1912,6 +2046,7 @@
             renderCategoryPills('restaurantCategoryPills', restaurantItems, restaurantFilter, 'restaurantGrid',
                 'restaurant');
             renderGrid('restaurantGrid', restaurantItems, restaurantFilter);
+            searchProducts(); // Re-apply search
         }
 
         // ============================================================
@@ -1947,6 +2082,8 @@
 
         console.log('🔥 Taata Owen Supermarket & Restaurant is LIVE!');
         console.log('🔐 Admin Login: Click "Admin Login" at the bottom. Password: admin123');
+        console.log('🔎 Use the search bar to find products instantly.');
+        console.log('🍽️ Click "Restaurant Menu" to jump straight to the restaurant section.');
     </script>
 </body>
 </html>
