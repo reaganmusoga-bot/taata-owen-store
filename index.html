@@ -79,6 +79,115 @@
             color: var(--text-primary);
             transition: background 0.3s, color 0.3s;
         }
+
+        /* ===== LOGIN OVERLAY ===== */
+        #loginOverlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, #003399, #CC0000);
+            z-index: 9999;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: opacity 0.6s ease;
+            padding: 20px;
+        }
+        #loginOverlay.hidden {
+            opacity: 0;
+            pointer-events: none;
+        }
+        .login-box {
+            background: #fff;
+            border-radius: 24px;
+            padding: 40px 30px;
+            max-width: 400px;
+            width: 100%;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            text-align: center;
+            border-top: 8px solid #CC0000;
+        }
+        .login-box img {
+            max-height: 80px;
+            margin-bottom: 20px;
+        }
+        .login-box h2 {
+            color: #003399;
+            margin-bottom: 8px;
+        }
+        .login-box p {
+            color: #888;
+            font-size: 0.9rem;
+            margin-bottom: 20px;
+        }
+        .login-box input {
+            width: 100%;
+            padding: 14px;
+            margin: 8px 0;
+            border: 1px solid #ddd;
+            border-radius: 12px;
+            font-size: 1rem;
+            background: #f8f9fa;
+            transition: 0.3s;
+        }
+        .login-box input:focus {
+            border-color: #CC0000;
+            outline: none;
+            box-shadow: 0 0 0 3px rgba(204,0,0,0.1);
+        }
+        .login-box .login-btn {
+            width: 100%;
+            padding: 14px;
+            background: #CC0000;
+            color: #fff;
+            border: none;
+            border-radius: 30px;
+            font-weight: 700;
+            font-size: 1.1rem;
+            cursor: pointer;
+            transition: 0.3s;
+            margin-top: 10px;
+        }
+        .login-box .login-btn:hover {
+            background: #003399;
+        }
+        .login-box .toggle-auth {
+            margin-top: 15px;
+            color: #003399;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 0.9rem;
+        }
+        .login-box .toggle-auth:hover {
+            text-decoration: underline;
+        }
+        .login-box .error-msg {
+            color: red;
+            font-size: 0.85rem;
+            margin-top: 8px;
+            min-height: 20px;
+        }
+        .login-box .forgot-pw {
+            color: #888;
+            font-size: 0.8rem;
+            margin-top: 8px;
+            cursor: pointer;
+        }
+        .login-box .forgot-pw:hover {
+            text-decoration: underline;
+        }
+
+        /* ===== APP CONTAINER (hidden until login) ===== */
+        #appContainer {
+            display: none;
+        }
+        #appContainer.visible {
+            display: block;
+        }
+
+        /* ===== YOUR ORIGINAL STYLES (everything below is unchanged) ===== */
         .navbar {
             background: var(--nav-bg);
             color: var(--nav-text);
@@ -467,424 +576,544 @@
 <body>
 
     <!-- ========================================================== -->
-    <!-- CUSTOMER APP -->
+    <!-- LOGIN OVERLAY -->
     <!-- ========================================================== -->
-    <div id="customerApp">
-        <!-- NAVBAR -->
-        <nav class="navbar">
-            <div class="logo">
-                <img src="https://i.ibb.co/TqgqYj50/TAATA-OWEN.png" alt="Taata Owen Logo" />
-                <span>Jinja</span>
-            </div>
-            <div class="right-icons">
-                <div class="search-box">
-                    <i class="fas fa-search"></i>
-                    <input type="text" id="searchInput" placeholder="Search products..." onkeyup="searchProducts()" />
-                </div>
-                <div class="nav-icon" onclick="viewMyMessages()" title="Messages">
-                    <i class="fas fa-envelope"></i>
-                    <span class="notif-dot" id="msgNotifDot"></span>
-                </div>
-                <div class="nav-icon" onclick="openCommunityModal()" title="Community">
-                    <i class="fas fa-users"></i>
-                    <span class="notif-dot" id="communityNotifDot"></span>
-                </div>
-                <!-- Dark Mode Toggle -->
-                <button class="theme-toggle" onclick="toggleTheme()" title="Toggle Dark Mode">
-                    <i class="fas fa-moon" id="themeIcon"></i>
-                </button>
-                <button class="account-btn" onclick="toggleAccountModal()">
-                    <i class="fas fa-user-circle"></i> <span id="accountNameDisplay">Login</span> <i class="fas fa-chevron-down"></i>
-                </button>
-                <div class="wallet-display" onclick="toggleAccountModal()">
-                    <i class="fas fa-wallet"></i> UGX <span id="walletBalanceDisplay">0</span>
-                </div>
-                <div class="cart-icon" onclick="toggleCart()">
-                    <i class="fas fa-shopping-cart"></i>
-                    <span class="badge" id="cartCount">0</span>
-                </div>
-            </div>
-        </nav>
-
-        <!-- HERO -->
-        <section class="hero" id="heroSection">
-            <div class="hero-slideshow" id="heroSlideshow">
-                <div class="slide active" style="background-image:url('https://i.ibb.co/ZzZDkk8B/back.jpg');"></div>
-                <div class="slide" style="background-image:url('https://i.ibb.co/nqBhrt8Z/fron.webp');"></div>
-                <div class="overlay"></div>
-            </div>
-            <div class="hero-content">
-                <div class="flag-stripes">
-                    <div class="stripe-red"></div>
-                    <div class="stripe-white"></div>
-                    <div class="stripe-blue"></div>
-                </div>
-                <h1 id="heroTitle">Taata Owen <span class="highlight-red">Supermarket</span></h1>
-                <div class="tagline" id="heroTagline"><i class="fas fa-shopping-basket"></i> Get out of the <strong>line</strong>, get <strong>online</strong>!</div>
-                <p class="sub-text" id="heroSubtext">Jinja's freshest groceries & tasty restaurant meals, delivered to your door.</p>
-                <div style="display:flex; flex-wrap:wrap; gap:15px; justify-content:center; margin-top:20px;">
-                    <a href="#supermarketSection" class="cta-btn"><i class="fas fa-store"></i> Shop Now</a>
-                    <a href="#restaurantSection" class="restaurant-jump"><i class="fas fa-utensils"></i> Restaurant Menu</a>
-                </div>
-                <div class="delivery-tag">
-                    <i class="fas fa-truck"></i> Free delivery over UGX 200k &nbsp;|&nbsp; <i class="fas fa-star"></i> Earn points on every order
-                </div>
-            </div>
-        </section>
-
-        <!-- FEATURED -->
-        <div class="section-container" id="featuredSection">
-            <div class="section-header"><h2 class="section-title"><i class="fas fa-star" style="color:#D4AF37;"></i> Featured Products</h2></div>
-            <div class="product-grid" id="featuredGrid"></div>
+    <div id="loginOverlay">
+        <div class="login-box">
+            <img src="https://i.ibb.co/TqgqYj50/TAATA-OWEN.png" alt="Taata Owen Logo">
+            <h2 id="loginTitle">Welcome Back</h2>
+            <p id="loginSubtitle">Login to continue shopping</p>
+            <input type="text" id="loginUsername" placeholder="Username" autocomplete="username">
+            <input type="password" id="loginPassword" placeholder="Password" autocomplete="current-password">
+            <div class="error-msg" id="loginError"></div>
+            <button class="login-btn" id="loginActionBtn">Login</button>
+            <div class="toggle-auth" id="loginToggleLink">Don't have an account? <strong>Sign Up</strong></div>
+            <div class="forgot-pw" onclick="forgotPassword()">Forgot Password?</div>
         </div>
-
-        <!-- HOT DEALS -->
-        <div class="section-container" id="hotDealsSection" style="background: #fff5f5; border-radius: 30px; padding: 20px 20px 30px; border: 2px solid #ff5722;">
-            <div class="section-header"><h2 class="section-title" style="color:#ff5722;"><i class="fas fa-fire" style="color:#ff5722;"></i> Hot Deals - Electricals</h2></div>
-            <div class="product-grid" id="hotDealsGrid"></div>
-        </div>
-
-        <!-- COMBOS -->
-        <div class="section-container" id="combosSection" style="background: #e8f5e9; border-radius: 30px; padding: 20px 20px 30px; border: 2px solid #4caf50;">
-            <div class="section-header"><h2 class="section-title" style="color:#2e7d32;"><i class="fas fa-boxes" style="color:#4caf50;"></i> Special Combos</h2></div>
-            <div class="product-grid" id="combosGrid"></div>
-        </div>
-
-        <!-- SUPERMARKET -->
-        <div class="section-container" id="supermarketSection">
-            <div class="section-header"><h2 class="section-title"><i class="fas fa-store"></i> Supermarket</h2></div>
-            <div class="category-heading"><i class="fas fa-tags"></i> Browse Categories</div>
-            <div id="supermarketCategoryPills" class="category-pills"></div>
-            <div class="product-grid" id="supermarketGrid"></div>
-        </div>
-
-        <!-- RESTAURANT -->
-        <div class="section-container" style="background:#fcf6f0; border-radius:30px; margin:0 20px 30px; padding:20px 20px 30px; border:1px solid #f0e0d0;" id="restaurantSection">
-            <div class="section-header"><h2 class="section-title" style="color:#5d2e1b;"><i class="fas fa-utensils" style="color:#D4AF37;"></i> Restaurant Menu</h2></div>
-            <div class="restaurant-info-bar">
-                <div><i class="fas fa-clock" style="color:#D4AF37;"></i> <span id="restaurantStatus" class="status-open">Loading...</span> <span style="margin-left:10px;">Mon - Sun: 7:00 AM - 10:00 PM</span></div>
-                <div class="chef-pick"><i class="fas fa-star"></i> Chef's Specials</div>
-                <div><i class="fas fa-motorcycle"></i> Delivery / <i class="fas fa-store-alt"></i> Pickup</div>
-            </div>
-            <div class="category-heading"><i class="fas fa-tags"></i> Browse Categories</div>
-            <div id="restaurantCategoryPills" class="category-pills"></div>
-            <div class="product-grid" id="restaurantGrid"></div>
-        </div>
-
-        <!-- CART SIDEBAR -->
-        <div class="cart-overlay" id="cartOverlay" onclick="toggleCart()"></div>
-        <div class="cart-sidebar" id="cartSidebar">
-            <button class="close-cart" onclick="toggleCart()">&times;</button>
-            <h2><i class="fas fa-shopping-cart"></i> Your Cart</h2>
-            <div id="cartItems"></div>
-            <div id="cartSummary"></div>
-            <div class="checkout-form">
-                <label>Order Type</label>
-                <div class="order-type-toggle">
-                    <label><input type="radio" name="orderType" value="delivery" checked onchange="toggleAddressField()"> <i class="fas fa-truck"></i> Delivery</label>
-                    <label><input type="radio" name="orderType" value="pickup" onchange="toggleAddressField()"> <i class="fas fa-store-alt"></i> Pickup</label>
-                </div>
-                <label>Full Name (Contact Person)</label>
-                <input type="text" id="custName" placeholder="e.g. Nabiga Sebastian">
-                <label>Phone Number</label>
-                <input type="tel" id="custPhone" placeholder="e.g. 0777123456">
-                <label id="addressLabel">Delivery Address</label>
-                <input type="text" id="custAddress" placeholder="Street, building, landmark">
-                <label for="custLocation">Select your location in Jinja District</label>
-                <select id="custLocation">
-                    <optgroup label="🏙️ Jinja City Center (UGX 5,000)">
-                        <option value="Jinja Central">Jinja Central</option>
-                        <option value="Jinja South">Jinja South</option>
-                        <option value="Jinja North">Jinja North</option>
-                        <option value="Jinja East">Jinja East</option>
-                        <option value="Jinja West">Jinja West</option>
-                        <option value="Walukuba">Walukuba</option>
-                        <option value="Masese">Masese</option>
-                        <option value="Mpumudde">Mpumudde</option>
-                        <option value="Kimaka">Kimaka</option>
-                        <option value="Bugembe">Bugembe</option>
-                        <option value="Nalufenya">Nalufenya</option>
-                        <option value="Njeru">Njeru</option>
-                        <option value="Buwenda">Buwenda</option>
-                        <option value="Bugungu">Bugungu</option>
-                    </optgroup>
-                    <optgroup label="🏘️ Nearby Towns & Sub-counties (UGX 10,000)">
-                        <option value="Kakira">Kakira</option>
-                        <option value="Buwenge">Buwenge</option>
-                        <option value="Mafubira">Mafubira</option>
-                        <option value="Budondo">Budondo</option>
-                        <option value="Butagaya">Butagaya</option>
-                        <option value="Buyengo">Buyengo</option>
-                        <option value="Busede">Busede</option>
-                    </optgroup>
-                    <optgroup label="🚚 Other Areas (Outside Jinja) (UGX 20,000)">
-                        <option value="other">Other Location</option>
-                    </optgroup>
-                </select>
-                <div class="pickup-note" id="pickupNote"><i class="fas fa-store-alt"></i> Pickup available at Taata Owen Supermarket, Jinja Central</div>
-                <label>Payment Method</label>
-                <div class="payment-options">
-                    <div><input type="radio" name="payment" value="momo" checked> <label><i class="fas fa-mobile-alt"></i> MTN MoMo</label></div>
-                    <div><input type="radio" name="payment" value="airtel"> <label><i class="fas fa-mobile-alt"></i> Airtel</label></div>
-                    <div><input type="radio" name="payment" value="card"> <label><i class="fas fa-credit-card"></i> Card</label></div>
-                    <div><input type="radio" name="payment" value="cash"> <label><i class="fas fa-money-bill-wave"></i> Cash</label></div>
-                </div>
-                <div class="wallet-section">
-                    <p><strong><i class="fas fa-wallet"></i> Wallet Balance: UGX <span id="walletBalanceCheckout">0</span></strong></p>
-                    <button class="btn-deposit" onclick="depositMoney()"><i class="fas fa-plus"></i> Add Money</button>
-                    <div><input type="checkbox" id="useWallet" onchange="updateCartUI()"> <label> Pay with Wallet</label></div>
-                </div>
-                <div class="points-section">
-                    <p><strong><i class="fas fa-star"></i> Loyalty Points: <span id="pointsBalanceDisplay">0</span></strong></p>
-                    <div><input type="checkbox" id="usePoints" onchange="updateCartUI()"> <label> Redeem 1000 points = UGX 1,000</label></div>
-                </div>
-                <button class="checkout-btn" onclick="placeOrder()"><i class="fas fa-check-circle"></i> Place Order</button>
-                <p style="font-size:0.7rem; color:#888; margin-top:8px; text-align:center;">* You must be logged in to complete checkout.</p>
-            </div>
-        </div>
-
-        <!-- FOOTER -->
-        <footer class="footer">
-            <p style="font-size:1.5rem; font-weight:900;">Taata Owen Supermarket</p>
-            <p><i class="fas fa-map-marker-alt"></i> Jinja Central, Uganda</p>
-            <p><i class="fas fa-phone"></i> +256 786 605 822</p>
-            <div class="credit">Designed with pride by Reagan</div>
-            <div class="tagline">Glad to be of service for Jinja people</div>
-            <button class="admin-login-link" onclick="showAdminLogin()"><i class="fas fa-lock"></i> Admin Login</button>
-        </footer>
     </div>
 
     <!-- ========================================================== -->
-    <!-- ADMIN APP -->
+    <!-- APP CONTAINER (hidden until login) -->
     <!-- ========================================================== -->
-    <div id="adminApp">
-        <div class="admin-container">
-            <div class="admin-sidebar">
-                <h2><i class="fas fa-crown"></i> Taata Owen<br><span style="font-size:0.8rem; opacity:0.7;">Admin Panel</span></h2>
-                <button class="active" onclick="showAdminSection('dashboard')"><i class="fas fa-chart-pie"></i> Dashboard</button>
-                <button onclick="showAdminSection('orders')"><i class="fas fa-clipboard-list"></i> Orders</button>
-                <button onclick="showAdminSection('products')"><i class="fas fa-boxes"></i> Products</button>
-                <button onclick="showAdminSection('customers')"><i class="fas fa-users"></i> Customers</button>
-                <button onclick="showAdminSection('promotions')"><i class="fas fa-bullhorn"></i> Promotions</button>
-                <button onclick="showAdminSection('messages')"><i class="fas fa-envelope"></i> Messages</button>
-                <button class="logout-btn" onclick="logoutAdmin()"><i class="fas fa-sign-out-alt"></i> Logout</button>
-            </div>
-            <div class="admin-content">
-                <div id="adminDashboard">
-                    <h2 style="color:#003399; margin-bottom:20px;">📊 Dashboard Overview</h2>
-                    <div class="stats-grid" id="adminStats">
-                        <div class="stat-card"><h3>Total Orders</h3><div class="number" id="statTotalOrders">0</div></div>
-                        <div class="stat-card"><h3>Total Revenue</h3><div class="number" id="statTotalRevenue">UGX 0</div></div>
-                        <div class="stat-card"><h3>Pending Orders</h3><div class="number" id="statPendingOrders">0</div></div>
-                        <div class="stat-card"><h3>Products</h3><div class="number" id="statTotalProducts">0</div></div>
+    <div id="appContainer">
+
+        <!-- ===== CUSTOMER APP ===== -->
+        <div id="customerApp">
+            <!-- NAVBAR -->
+            <nav class="navbar">
+                <div class="logo">
+                    <img src="https://i.ibb.co/TqgqYj50/TAATA-OWEN.png" alt="Taata Owen Logo" />
+                    <span>Jinja</span>
+                </div>
+                <div class="right-icons">
+                    <div class="search-box">
+                        <i class="fas fa-search"></i>
+                        <input type="text" id="searchInput" placeholder="Search products..." onkeyup="searchProducts()" />
                     </div>
-                    <div id="lowStockAlerts" class="alert-card" style="display:none;"><h4><i class="fas fa-exclamation-triangle"></i> Low Stock Alert!</h4><ul id="lowStockList" style="list-style:none; padding:0;"></ul></div>
-                    <div style="background:#e6f0ff; padding:20px; border-radius:12px; border-left:5px solid #CC0000;">
-                        <p><strong><i class="fas fa-info-circle"></i> Welcome Admin!</strong></p>
-                        <p style="color:#555; font-size:0.9rem;">Manage orders, products, customers, and support messages.</p>
+                    <div class="nav-icon" onclick="viewMyMessages()" title="Messages">
+                        <i class="fas fa-envelope"></i>
+                        <span class="notif-dot" id="msgNotifDot"></span>
                     </div>
-                </div>
-                <div id="adminOrders" style="display:none;">
-                    <h2 style="color:#003399; margin-bottom:20px;">📋 Order Management</h2>
-                    <button class="clear-btn" onclick="clearDeliveredOrders()"><i class="fas fa-trash-alt"></i> Clear Delivered Orders</button>
-                    <div class="admin-order-table-wrapper" id="adminOrderList"><p>Loading orders...</p></div>
-                </div>
-                <div id="adminProducts" style="display:none;">
-                    <h2 style="color:#003399; margin-bottom:20px;">📦 Product Management</h2>
-                    <button class="btn-add" onclick="showAddProductForm()"><i class="fas fa-plus"></i> Add New Product</button>
-                    <div id="adminProductFormContainer"></div>
-                    <div id="adminProductList"><p>Loading products...</p></div>
-                </div>
-                <div id="adminCustomers" style="display:none;">
-                    <h2 style="color:#003399; margin-bottom:20px;">👥 Customer Management</h2>
-                    <p style="color:#888; margin-bottom:15px;">View all registered customers and their loyalty points accumulation.</p>
-                    <div id="adminCustomerList"><p>Loading customers...</p></div>
-                </div>
-                <div id="adminPromotions" style="display:none;">
-                    <h2 style="color:#003399; margin-bottom:20px;">📢 Manage Promotions</h2>
-                    <div class="promo-form">
-                        <div><label>Hero Title</label><input type="text" id="promoTitle" placeholder="e.g. Taata Owen Supermarket"></div>
-                        <div><label>Hero Tagline</label><input type="text" id="promoTagline" placeholder="e.g. Get out of the line, get online!"></div>
-                        <div><label>Hero Subtext</label><input type="text" id="promoSubtext" placeholder="e.g. Jinja's freshest groceries..."></div>
-                        <div><label>Hero Background Image URL</label><input type="text" id="promoBg" placeholder="https://..."></div>
-                        <button onclick="savePromo()"><i class="fas fa-save"></i> Save Promo</button>
+                    <div class="nav-icon" onclick="openCommunityModal()" title="Community">
+                        <i class="fas fa-users"></i>
+                        <span class="notif-dot" id="communityNotifDot"></span>
                     </div>
-                    <div style="background:#e8f5e9; padding:15px; border-radius:12px; border-left:4px solid #4caf50;">
-                        <p><strong>Current Hero Preview</strong></p>
-                        <p id="previewTitle" style="font-size:1.2rem; font-weight:700;">Taata Owen Supermarket</p>
-                        <p id="previewTagline" style="font-size:1rem;">Get out of the line, get online!</p>
-                        <p id="previewSubtext" style="color:#555;">Jinja's freshest groceries...</p>
-                        <p><small>Background image: <span id="previewBg">Default</span></small></p>
-                    </div>
-                </div>
-                <div id="adminMessages" style="display:none;">
-                    <h2 style="color:#003399; margin-bottom:20px;">📩 Customer Messages</h2>
-                    <button onclick="renderAdminMessages()" style="background:#003399; color:#fff; border:none; padding:8px 20px; border-radius:30px; cursor:pointer; margin-bottom:15px;">
-                        <i class="fas fa-sync-alt"></i> Refresh Messages
+                    <!-- Dark Mode Toggle -->
+                    <button class="theme-toggle" onclick="toggleTheme()" title="Toggle Dark Mode">
+                        <i class="fas fa-moon" id="themeIcon"></i>
                     </button>
-                    <div id="adminMessagesList"><p>Loading messages...</p></div>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- ========================================================== -->
-    <!-- MODALS -->
-    <!-- ========================================================== -->
-
-    <!-- Auth Modal -->
-    <div class="auth-overlay" id="authModal">
-        <div class="auth-modal">
-            <button class="close-auth" onclick="toggleAuthModal()">&times;</button>
-            <h2 id="authTitle">Welcome Back</h2>
-            <div id="authForm">
-                <input type="text" id="authUsername" placeholder="Username" />
-                <input type="password" id="authPassword" placeholder="Password" />
-                <button class="auth-btn" id="authActionBtn" onclick="handleAuth()">Login</button>
-                <div class="forgot-pw" onclick="forgotPassword()">Forgot Password?</div>
-            </div>
-            <div class="toggle-auth" id="authToggleLink" onclick="toggleAuthMode()">Don't have an account? <strong>Sign Up</strong></div>
-            <div style="margin-top:10px; color:#888; font-size:0.8rem;" id="authMessage"></div>
-        </div>
-    </div>
-
-    <!-- Account Modal -->
-    <div class="auth-overlay account-modal" id="accountModal">
-        <div class="auth-modal">
-            <button class="close-auth" onclick="toggleAccountModal()">&times;</button>
-            <div class="account-card">
-                <div class="avatar" id="accountAvatar"><i class="fas fa-user"></i></div>
-                <h2 id="accountModalName">User</h2>
-                <p class="member-since"><i class="fas fa-calendar-alt"></i> Member since today</p>
-                <div class="account-stats">
-                    <div class="stat-item"><div class="label"><i class="fas fa-wallet"></i> Wallet Balance</div><div class="value wallet-value" id="accountModalWallet">UGX 0</div></div>
-                    <div class="stat-item"><div class="label"><i class="fas fa-star"></i> Loyalty Points</div><div class="value points-value" id="accountModalPoints">0</div></div>
-                </div>
-                <div class="account-actions">
-                    <button class="btn-deposit-account" onclick="depositMoney()"><i class="fas fa-plus-circle"></i> Add Money</button>
-                    <button class="btn-orders" onclick="viewMyOrders()"><i class="fas fa-list-ul"></i> My Orders</button>
-                    <button class="btn-profile" onclick="openProfileModal()"><i class="fas fa-user-edit"></i> My Profile</button>
-                    <button class="btn-logout" onclick="logoutUser()"><i class="fas fa-sign-out-alt"></i> Logout</button>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- Profile Modal -->
-    <div class="auth-overlay profile-modal" id="profileModal">
-        <div class="auth-modal">
-            <button class="close-auth" onclick="closeProfileModal()">&times;</button>
-            <h2 style="color:#003399;">Edit Profile</h2>
-            <form id="profileForm" onsubmit="saveProfile(event)">
-                <div style="display:flex; align-items:center; gap:15px; margin-bottom:10px;">
-                    <div style="width:60px; height:60px; border-radius:50%; background:var(--light-gray); overflow:hidden; display:flex; align-items:center; justify-content:center; border:3px solid #CC0000;" id="profilePicPreview">
-                        <i class="fas fa-user" style="font-size:30px; color:#888;"></i>
+                    <button class="account-btn" onclick="toggleAccountModal()">
+                        <i class="fas fa-user-circle"></i> <span id="accountNameDisplay">Login</span> <i class="fas fa-chevron-down"></i>
+                    </button>
+                    <div class="wallet-display" onclick="toggleAccountModal()">
+                        <i class="fas fa-wallet"></i> UGX <span id="walletBalanceDisplay">0</span>
                     </div>
-                    <div class="file-upload">
-                        <label for="profilePicUpload" style="cursor:pointer; background:#003399; color:#fff; padding:6px 16px; border-radius:30px; font-weight:600;">Upload Photo</label>
-                        <input type="file" id="profilePicUpload" accept="image/*" style="display:none;" onchange="previewProfilePic(event)">
+                    <div class="cart-icon" onclick="toggleCart()">
+                        <i class="fas fa-shopping-cart"></i>
+                        <span class="badge" id="cartCount">0</span>
                     </div>
                 </div>
-                <input type="text" id="profileFullName" placeholder="Full Name" />
-                <input type="tel" id="profilePhone" placeholder="Phone Number" />
-                <input type="email" id="profileEmail" placeholder="Email Address" />
-                <input type="text" id="profileAddress" placeholder="Default Delivery Address" />
-                <button class="auth-btn" type="submit">Save Profile</button>
-            </form>
-        </div>
-    </div>
+            </nav>
 
-    <!-- Support Modal -->
-    <div class="auth-overlay support-modal" id="supportModal">
-        <div class="auth-modal">
-            <button class="close-auth" onclick="closeSupportModal()">&times;</button>
-            <h2 style="color:#003399;"><i class="fas fa-headset"></i> Contact Support</h2>
-            <p style="color:#888; margin-bottom:10px;">Send us a message and our team will get back to you.</p>
-            <form id="supportForm" onsubmit="sendMessage(event)">
-                <textarea id="supportMessage" placeholder="Write your message here..." required></textarea>
-                <button class="auth-btn" type="submit">Send Message</button>
-            </form>
-        </div>
-    </div>
+            <!-- HERO -->
+            <section class="hero" id="heroSection">
+                <div class="hero-slideshow" id="heroSlideshow">
+                    <div class="slide active" style="background-image:url('https://i.ibb.co/ZzZDkk8B/back.jpg');"></div>
+                    <div class="slide" style="background-image:url('https://i.ibb.co/nqBhrt8Z/fron.webp');"></div>
+                    <div class="overlay"></div>
+                </div>
+                <div class="hero-content">
+                    <div class="flag-stripes">
+                        <div class="stripe-red"></div>
+                        <div class="stripe-white"></div>
+                        <div class="stripe-blue"></div>
+                    </div>
+                    <h1 id="heroTitle">Taata Owen <span class="highlight-red">Supermarket</span></h1>
+                    <div class="tagline" id="heroTagline"><i class="fas fa-shopping-basket"></i> Get out of the <strong>line</strong>, get <strong>online</strong>!</div>
+                    <p class="sub-text" id="heroSubtext">Jinja's freshest groceries & tasty restaurant meals, delivered to your door.</p>
+                    <div style="display:flex; flex-wrap:wrap; gap:15px; justify-content:center; margin-top:20px;">
+                        <a href="#supermarketSection" class="cta-btn"><i class="fas fa-store"></i> Shop Now</a>
+                        <a href="#restaurantSection" class="restaurant-jump"><i class="fas fa-utensils"></i> Restaurant Menu</a>
+                    </div>
+                    <div class="delivery-tag">
+                        <i class="fas fa-truck"></i> Free delivery over UGX 200k &nbsp;|&nbsp; <i class="fas fa-star"></i> Earn points on every order
+                    </div>
+                </div>
+            </section>
 
-    <!-- My Messages Modal -->
-    <div class="auth-overlay messages-modal" id="myMessagesModal">
-        <div class="auth-modal">
-            <button class="close-auth" onclick="document.getElementById('myMessagesModal').classList.remove('active')">&times;</button>
-            <h2 style="color:#003399;"><i class="fas fa-inbox"></i> My Messages</h2>
-            <div id="myMessagesContent" class="msg-thread"><p class="no-msg">Loading messages...</p></div>
-        </div>
-    </div>
-
-    <!-- Community Modal -->
-    <div class="auth-overlay community-modal" id="communityModal">
-        <div class="auth-modal">
-            <button class="close-auth" onclick="document.getElementById('communityModal').classList.remove('active')">&times;</button>
-            <h2 style="color:#003399;"><i class="fas fa-users"></i> Community</h2>
-            <div style="display:flex; gap:10px; margin-bottom:15px; flex-wrap:wrap;">
-                <button onclick="renderCommunity('all')" style="background:#003399; color:#fff; border:none; padding:6px 18px; border-radius:30px; cursor:pointer; font-weight:600;">All Members</button>
-                <button onclick="renderCommunity('connections')" style="background:#D4AF37; color:#222; border:none; padding:6px 18px; border-radius:30px; cursor:pointer; font-weight:600;">My Connections</button>
-                <button onclick="renderCommunity('chats')" style="background:#17a2b8; color:#fff; border:none; padding:6px 18px; border-radius:30px; cursor:pointer; font-weight:600;">My Chats</button>
+            <!-- FEATURED -->
+            <div class="section-container" id="featuredSection">
+                <div class="section-header"><h2 class="section-title"><i class="fas fa-star" style="color:#D4AF37;"></i> Featured Products</h2></div>
+                <div class="product-grid" id="featuredGrid"></div>
             </div>
-            <div id="communityContent" class="community-grid"><p>Loading...</p></div>
-        </div>
-    </div>
 
-    <!-- Direct Chat Modal -->
-    <div class="auth-overlay chat-modal" id="directChatModal">
-        <div class="auth-modal">
-            <button class="close-auth" onclick="document.getElementById('directChatModal').classList.remove('active')">&times;</button>
-            <h2 id="chatPartnerName" style="color:#003399;"><i class="fas fa-comment"></i> Chat with <span id="chatPartnerDisplay">User</span></h2>
-            <div id="chatMessages" class="chat-box"><p style="color:#888; text-align:center; padding:20px;">Loading messages...</p></div>
-            <div class="chat-input">
-                <input type="text" id="chatInput" placeholder="Type a message..." onkeydown="if(event.key==='Enter') sendDirectMessage()">
-                <button onclick="sendDirectMessage()"><i class="fas fa-paper-plane"></i> Send</button>
+            <!-- HOT DEALS -->
+            <div class="section-container" id="hotDealsSection" style="background: #fff5f5; border-radius: 30px; padding: 20px 20px 30px; border: 2px solid #ff5722;">
+                <div class="section-header"><h2 class="section-title" style="color:#ff5722;"><i class="fas fa-fire" style="color:#ff5722;"></i> Hot Deals - Electricals</h2></div>
+                <div class="product-grid" id="hotDealsGrid"></div>
+            </div>
+
+            <!-- COMBOS -->
+            <div class="section-container" id="combosSection" style="background: #e8f5e9; border-radius: 30px; padding: 20px 20px 30px; border: 2px solid #4caf50;">
+                <div class="section-header"><h2 class="section-title" style="color:#2e7d32;"><i class="fas fa-boxes" style="color:#4caf50;"></i> Special Combos</h2></div>
+                <div class="product-grid" id="combosGrid"></div>
+            </div>
+
+            <!-- SUPERMARKET -->
+            <div class="section-container" id="supermarketSection">
+                <div class="section-header"><h2 class="section-title"><i class="fas fa-store"></i> Supermarket</h2></div>
+                <div class="category-heading"><i class="fas fa-tags"></i> Browse Categories</div>
+                <div id="supermarketCategoryPills" class="category-pills"></div>
+                <div class="product-grid" id="supermarketGrid"></div>
+            </div>
+
+            <!-- RESTAURANT -->
+            <div class="section-container" style="background:#fcf6f0; border-radius:30px; margin:0 20px 30px; padding:20px 20px 30px; border:1px solid #f0e0d0;" id="restaurantSection">
+                <div class="section-header"><h2 class="section-title" style="color:#5d2e1b;"><i class="fas fa-utensils" style="color:#D4AF37;"></i> Restaurant Menu</h2></div>
+                <div class="restaurant-info-bar">
+                    <div><i class="fas fa-clock" style="color:#D4AF37;"></i> <span id="restaurantStatus" class="status-open">Loading...</span> <span style="margin-left:10px;">Mon - Sun: 7:00 AM - 10:00 PM</span></div>
+                    <div class="chef-pick"><i class="fas fa-star"></i> Chef's Specials</div>
+                    <div><i class="fas fa-motorcycle"></i> Delivery / <i class="fas fa-store-alt"></i> Pickup</div>
+                </div>
+                <div class="category-heading"><i class="fas fa-tags"></i> Browse Categories</div>
+                <div id="restaurantCategoryPills" class="category-pills"></div>
+                <div class="product-grid" id="restaurantGrid"></div>
+            </div>
+
+            <!-- CART SIDEBAR -->
+            <div class="cart-overlay" id="cartOverlay" onclick="toggleCart()"></div>
+            <div class="cart-sidebar" id="cartSidebar">
+                <button class="close-cart" onclick="toggleCart()">&times;</button>
+                <h2><i class="fas fa-shopping-cart"></i> Your Cart</h2>
+                <div id="cartItems"></div>
+                <div id="cartSummary"></div>
+                <div class="checkout-form">
+                    <label>Order Type</label>
+                    <div class="order-type-toggle">
+                        <label><input type="radio" name="orderType" value="delivery" checked onchange="toggleAddressField()"> <i class="fas fa-truck"></i> Delivery</label>
+                        <label><input type="radio" name="orderType" value="pickup" onchange="toggleAddressField()"> <i class="fas fa-store-alt"></i> Pickup</label>
+                    </div>
+                    <label>Full Name (Contact Person)</label>
+                    <input type="text" id="custName" placeholder="e.g. Nabiga Sebastian">
+                    <label>Phone Number</label>
+                    <input type="tel" id="custPhone" placeholder="e.g. 0777123456">
+                    <label id="addressLabel">Delivery Address</label>
+                    <input type="text" id="custAddress" placeholder="Street, building, landmark">
+                    <label for="custLocation">Select your location in Jinja District</label>
+                    <select id="custLocation">
+                        <optgroup label="🏙️ Jinja City Center (UGX 5,000)">
+                            <option value="Jinja Central">Jinja Central</option>
+                            <option value="Jinja South">Jinja South</option>
+                            <option value="Jinja North">Jinja North</option>
+                            <option value="Jinja East">Jinja East</option>
+                            <option value="Jinja West">Jinja West</option>
+                            <option value="Walukuba">Walukuba</option>
+                            <option value="Masese">Masese</option>
+                            <option value="Mpumudde">Mpumudde</option>
+                            <option value="Kimaka">Kimaka</option>
+                            <option value="Bugembe">Bugembe</option>
+                            <option value="Nalufenya">Nalufenya</option>
+                            <option value="Njeru">Njeru</option>
+                            <option value="Buwenda">Buwenda</option>
+                            <option value="Bugungu">Bugungu</option>
+                        </optgroup>
+                        <optgroup label="🏘️ Nearby Towns & Sub-counties (UGX 10,000)">
+                            <option value="Kakira">Kakira</option>
+                            <option value="Buwenge">Buwenge</option>
+                            <option value="Mafubira">Mafubira</option>
+                            <option value="Budondo">Budondo</option>
+                            <option value="Butagaya">Butagaya</option>
+                            <option value="Buyengo">Buyengo</option>
+                            <option value="Busede">Busede</option>
+                        </optgroup>
+                        <optgroup label="🚚 Other Areas (Outside Jinja) (UGX 20,000)">
+                            <option value="other">Other Location</option>
+                        </optgroup>
+                    </select>
+                    <div class="pickup-note" id="pickupNote"><i class="fas fa-store-alt"></i> Pickup available at Taata Owen Supermarket, Jinja Central</div>
+                    <label>Payment Method</label>
+                    <div class="payment-options">
+                        <div><input type="radio" name="payment" value="momo" checked> <label><i class="fas fa-mobile-alt"></i> MTN MoMo</label></div>
+                        <div><input type="radio" name="payment" value="airtel"> <label><i class="fas fa-mobile-alt"></i> Airtel</label></div>
+                        <div><input type="radio" name="payment" value="card"> <label><i class="fas fa-credit-card"></i> Card</label></div>
+                        <div><input type="radio" name="payment" value="cash"> <label><i class="fas fa-money-bill-wave"></i> Cash</label></div>
+                    </div>
+                    <div class="wallet-section">
+                        <p><strong><i class="fas fa-wallet"></i> Wallet Balance: UGX <span id="walletBalanceCheckout">0</span></strong></p>
+                        <button class="btn-deposit" onclick="depositMoney()"><i class="fas fa-plus"></i> Add Money</button>
+                        <div><input type="checkbox" id="useWallet" onchange="updateCartUI()"> <label> Pay with Wallet</label></div>
+                    </div>
+                    <div class="points-section">
+                        <p><strong><i class="fas fa-star"></i> Loyalty Points: <span id="pointsBalanceDisplay">0</span></strong></p>
+                        <div><input type="checkbox" id="usePoints" onchange="updateCartUI()"> <label> Redeem 1000 points = UGX 1,000</label></div>
+                    </div>
+                    <button class="checkout-btn" onclick="placeOrder()"><i class="fas fa-check-circle"></i> Place Order</button>
+                    <p style="font-size:0.7rem; color:#888; margin-top:8px; text-align:center;">* You must be logged in to complete checkout.</p>
+                </div>
+            </div>
+
+            <!-- FOOTER -->
+            <footer class="footer">
+                <p style="font-size:1.5rem; font-weight:900;">Taata Owen Supermarket</p>
+                <p><i class="fas fa-map-marker-alt"></i> Jinja Central, Uganda</p>
+                <p><i class="fas fa-phone"></i> +256 786 605 822</p>
+                <div class="credit">Designed with pride by Reagan</div>
+                <div class="tagline">Glad to be of service for Jinja people</div>
+                <button class="admin-login-link" onclick="showAdminLogin()"><i class="fas fa-lock"></i> Admin Login</button>
+            </footer>
+        </div>
+
+        <!-- ===== ADMIN APP ===== -->
+        <div id="adminApp">
+            <div class="admin-container">
+                <div class="admin-sidebar">
+                    <h2><i class="fas fa-crown"></i> Taata Owen<br><span style="font-size:0.8rem; opacity:0.7;">Admin Panel</span></h2>
+                    <button class="active" onclick="showAdminSection('dashboard')"><i class="fas fa-chart-pie"></i> Dashboard</button>
+                    <button onclick="showAdminSection('orders')"><i class="fas fa-clipboard-list"></i> Orders</button>
+                    <button onclick="showAdminSection('products')"><i class="fas fa-boxes"></i> Products</button>
+                    <button onclick="showAdminSection('customers')"><i class="fas fa-users"></i> Customers</button>
+                    <button onclick="showAdminSection('promotions')"><i class="fas fa-bullhorn"></i> Promotions</button>
+                    <button onclick="showAdminSection('messages')"><i class="fas fa-envelope"></i> Messages</button>
+                    <button class="logout-btn" onclick="logoutAdmin()"><i class="fas fa-sign-out-alt"></i> Logout</button>
+                </div>
+                <div class="admin-content">
+                    <div id="adminDashboard">
+                        <h2 style="color:#003399; margin-bottom:20px;">📊 Dashboard Overview</h2>
+                        <div class="stats-grid" id="adminStats">
+                            <div class="stat-card"><h3>Total Orders</h3><div class="number" id="statTotalOrders">0</div></div>
+                            <div class="stat-card"><h3>Total Revenue</h3><div class="number" id="statTotalRevenue">UGX 0</div></div>
+                            <div class="stat-card"><h3>Pending Orders</h3><div class="number" id="statPendingOrders">0</div></div>
+                            <div class="stat-card"><h3>Products</h3><div class="number" id="statTotalProducts">0</div></div>
+                        </div>
+                        <div id="lowStockAlerts" class="alert-card" style="display:none;"><h4><i class="fas fa-exclamation-triangle"></i> Low Stock Alert!</h4><ul id="lowStockList" style="list-style:none; padding:0;"></ul></div>
+                        <div style="background:#e6f0ff; padding:20px; border-radius:12px; border-left:5px solid #CC0000;">
+                            <p><strong><i class="fas fa-info-circle"></i> Welcome Admin!</strong></p>
+                            <p style="color:#555; font-size:0.9rem;">Manage orders, products, customers, and support messages.</p>
+                        </div>
+                    </div>
+                    <div id="adminOrders" style="display:none;">
+                        <h2 style="color:#003399; margin-bottom:20px;">📋 Order Management</h2>
+                        <button class="clear-btn" onclick="clearDeliveredOrders()"><i class="fas fa-trash-alt"></i> Clear Delivered Orders</button>
+                        <div class="admin-order-table-wrapper" id="adminOrderList"><p>Loading orders...</p></div>
+                    </div>
+                    <div id="adminProducts" style="display:none;">
+                        <h2 style="color:#003399; margin-bottom:20px;">📦 Product Management</h2>
+                        <button class="btn-add" onclick="showAddProductForm()"><i class="fas fa-plus"></i> Add New Product</button>
+                        <div id="adminProductFormContainer"></div>
+                        <div id="adminProductList"><p>Loading products...</p></div>
+                    </div>
+                    <div id="adminCustomers" style="display:none;">
+                        <h2 style="color:#003399; margin-bottom:20px;">👥 Customer Management</h2>
+                        <p style="color:#888; margin-bottom:15px;">View all registered customers and their loyalty points accumulation.</p>
+                        <div id="adminCustomerList"><p>Loading customers...</p></div>
+                    </div>
+                    <div id="adminPromotions" style="display:none;">
+                        <h2 style="color:#003399; margin-bottom:20px;">📢 Manage Promotions</h2>
+                        <div class="promo-form">
+                            <div><label>Hero Title</label><input type="text" id="promoTitle" placeholder="e.g. Taata Owen Supermarket"></div>
+                            <div><label>Hero Tagline</label><input type="text" id="promoTagline" placeholder="e.g. Get out of the line, get online!"></div>
+                            <div><label>Hero Subtext</label><input type="text" id="promoSubtext" placeholder="e.g. Jinja's freshest groceries..."></div>
+                            <div><label>Hero Background Image URL</label><input type="text" id="promoBg" placeholder="https://..."></div>
+                            <button onclick="savePromo()"><i class="fas fa-save"></i> Save Promo</button>
+                        </div>
+                        <div style="background:#e8f5e9; padding:15px; border-radius:12px; border-left:4px solid #4caf50;">
+                            <p><strong>Current Hero Preview</strong></p>
+                            <p id="previewTitle" style="font-size:1.2rem; font-weight:700;">Taata Owen Supermarket</p>
+                            <p id="previewTagline" style="font-size:1rem;">Get out of the line, get online!</p>
+                            <p id="previewSubtext" style="color:#555;">Jinja's freshest groceries...</p>
+                            <p><small>Background image: <span id="previewBg">Default</span></small></p>
+                        </div>
+                    </div>
+                    <div id="adminMessages" style="display:none;">
+                        <h2 style="color:#003399; margin-bottom:20px;">📩 Customer Messages</h2>
+                        <button onclick="renderAdminMessages()" style="background:#003399; color:#fff; border:none; padding:8px 20px; border-radius:30px; cursor:pointer; margin-bottom:15px;">
+                            <i class="fas fa-sync-alt"></i> Refresh Messages
+                        </button>
+                        <div id="adminMessagesList"><p>Loading messages...</p></div>
+                    </div>
+                </div>
             </div>
         </div>
-    </div>
 
-    <!-- My Orders Modal -->
-    <div class="auth-overlay history-modal" id="myOrdersModal">
-        <div class="auth-modal">
-            <button class="close-auth" onclick="document.getElementById('myOrdersModal').classList.remove('active')">&times;</button>
-            <h2 id="myOrdersTitle" style="color:#003399;">📦 My Orders</h2>
-            <div class="history-table" id="myOrdersContent"><p>Loading orders...</p></div>
+        <!-- ===== ALL MODALS ===== -->
+        <!-- Auth Modal -->
+        <div class="auth-overlay" id="authModal">
+            <div class="auth-modal">
+                <button class="close-auth" onclick="toggleAuthModal()">&times;</button>
+                <h2 id="authTitle">Welcome Back</h2>
+                <div id="authForm">
+                    <input type="text" id="authUsername" placeholder="Username" />
+                    <input type="password" id="authPassword" placeholder="Password" />
+                    <button class="auth-btn" id="authActionBtn" onclick="handleAuth()">Login</button>
+                    <div class="forgot-pw" onclick="forgotPassword()">Forgot Password?</div>
+                </div>
+                <div class="toggle-auth" id="authToggleLink" onclick="toggleAuthMode()">Don't have an account? <strong>Sign Up</strong></div>
+                <div style="margin-top:10px; color:#888; font-size:0.8rem;" id="authMessage"></div>
+            </div>
         </div>
-    </div>
 
-    <!-- Admin Login Modal -->
-    <div class="auth-overlay admin-login-modal" id="adminLoginModal">
-        <div class="auth-modal">
-            <button class="close-auth" onclick="document.getElementById('adminLoginModal').classList.remove('active')">&times;</button>
-            <h2 style="color:#D4AF37;"><i class="fas fa-lock"></i> Admin Login</h2>
-            <input type="password" id="adminPasswordInput" placeholder="Enter Admin Password" onkeydown="if(event.key==='Enter') loginAdmin()" />
-            <button class="auth-btn" onclick="loginAdmin()" style="background:#D4AF37; color:#222;">Login</button>
-            <div style="margin-top:10px; color:red; font-size:0.8rem;" id="adminLoginError"></div>
+        <!-- Account Modal -->
+        <div class="auth-overlay account-modal" id="accountModal">
+            <div class="auth-modal">
+                <button class="close-auth" onclick="toggleAccountModal()">&times;</button>
+                <div class="account-card">
+                    <div class="avatar" id="accountAvatar"><i class="fas fa-user"></i></div>
+                    <h2 id="accountModalName">User</h2>
+                    <p class="member-since"><i class="fas fa-calendar-alt"></i> Member since today</p>
+                    <div class="account-stats">
+                        <div class="stat-item"><div class="label"><i class="fas fa-wallet"></i> Wallet Balance</div><div class="value wallet-value" id="accountModalWallet">UGX 0</div></div>
+                        <div class="stat-item"><div class="label"><i class="fas fa-star"></i> Loyalty Points</div><div class="value points-value" id="accountModalPoints">0</div></div>
+                    </div>
+                    <div class="account-actions">
+                        <button class="btn-deposit-account" onclick="depositMoney()"><i class="fas fa-plus-circle"></i> Add Money</button>
+                        <button class="btn-orders" onclick="viewMyOrders()"><i class="fas fa-list-ul"></i> My Orders</button>
+                        <button class="btn-profile" onclick="openProfileModal()"><i class="fas fa-user-edit"></i> My Profile</button>
+                        <button class="btn-logout" onclick="logoutUser()"><i class="fas fa-sign-out-alt"></i> Logout</button>
+                    </div>
+                </div>
+            </div>
         </div>
-    </div>
 
-    <!-- Customer History Modal (Admin) -->
-    <div class="auth-overlay customer-history-modal" id="customerHistoryModal">
-        <div class="auth-modal">
-            <button class="close-auth" onclick="document.getElementById('customerHistoryModal').classList.remove('active')">&times;</button>
-            <h2 id="historyModalTitle" style="color:#003399;">Customer Order History</h2>
-            <div class="history-table" id="customerHistoryContent"><p>Loading history...</p></div>
+        <!-- Profile Modal -->
+        <div class="auth-overlay profile-modal" id="profileModal">
+            <div class="auth-modal">
+                <button class="close-auth" onclick="closeProfileModal()">&times;</button>
+                <h2 style="color:#003399;">Edit Profile</h2>
+                <form id="profileForm" onsubmit="saveProfile(event)">
+                    <div style="display:flex; align-items:center; gap:15px; margin-bottom:10px;">
+                        <div style="width:60px; height:60px; border-radius:50%; background:var(--light-gray); overflow:hidden; display:flex; align-items:center; justify-content:center; border:3px solid #CC0000;" id="profilePicPreview">
+                            <i class="fas fa-user" style="font-size:30px; color:#888;"></i>
+                        </div>
+                        <div class="file-upload">
+                            <label for="profilePicUpload" style="cursor:pointer; background:#003399; color:#fff; padding:6px 16px; border-radius:30px; font-weight:600;">Upload Photo</label>
+                            <input type="file" id="profilePicUpload" accept="image/*" style="display:none;" onchange="previewProfilePic(event)">
+                        </div>
+                    </div>
+                    <input type="text" id="profileFullName" placeholder="Full Name" />
+                    <input type="tel" id="profilePhone" placeholder="Phone Number" />
+                    <input type="email" id="profileEmail" placeholder="Email Address" />
+                    <input type="text" id="profileAddress" placeholder="Default Delivery Address" />
+                    <button class="auth-btn" type="submit">Save Profile</button>
+                </form>
+            </div>
         </div>
-    </div>
 
-    <!-- FLOATING CONTACT BUTTONS -->
-    <div id="contactFloating">
-        <a href="https://wa.me/256786605822" target="_blank" class="float-btn float-btn-wa" title="Chat on WhatsApp"><i class="fab fa-whatsapp"></i></a>
-        <a href="mailto:info@taataowen.com" class="float-btn float-btn-msg" title="Send us an Email"><i class="fas fa-envelope"></i></a>
-    </div>
+        <!-- Support Modal -->
+        <div class="auth-overlay support-modal" id="supportModal">
+            <div class="auth-modal">
+                <button class="close-auth" onclick="closeSupportModal()">&times;</button>
+                <h2 style="color:#003399;"><i class="fas fa-headset"></i> Contact Support</h2>
+                <p style="color:#888; margin-bottom:10px;">Send us a message and our team will get back to you.</p>
+                <form id="supportForm" onsubmit="sendMessage(event)">
+                    <textarea id="supportMessage" placeholder="Write your message here..." required></textarea>
+                    <button class="auth-btn" type="submit">Send Message</button>
+                </form>
+            </div>
+        </div>
 
-    <button id="floatingCheckoutBtn" onclick="toggleCart()"><i class="fas fa-shopping-cart"></i> Checkout (<span id="floatingCartCount">0</span>)</button>
-    <button id="backToTop" onclick="scrollToTop()"><i class="fas fa-arrow-up"></i></button>
+        <!-- My Messages Modal -->
+        <div class="auth-overlay messages-modal" id="myMessagesModal">
+            <div class="auth-modal">
+                <button class="close-auth" onclick="document.getElementById('myMessagesModal').classList.remove('active')">&times;</button>
+                <h2 style="color:#003399;"><i class="fas fa-inbox"></i> My Messages</h2>
+                <div id="myMessagesContent" class="msg-thread"><p class="no-msg">Loading messages...</p></div>
+            </div>
+        </div>
+
+        <!-- Community Modal -->
+        <div class="auth-overlay community-modal" id="communityModal">
+            <div class="auth-modal">
+                <button class="close-auth" onclick="document.getElementById('communityModal').classList.remove('active')">&times;</button>
+                <h2 style="color:#003399;"><i class="fas fa-users"></i> Community</h2>
+                <div style="display:flex; gap:10px; margin-bottom:15px; flex-wrap:wrap;">
+                    <button onclick="renderCommunity('all')" style="background:#003399; color:#fff; border:none; padding:6px 18px; border-radius:30px; cursor:pointer; font-weight:600;">All Members</button>
+                    <button onclick="renderCommunity('connections')" style="background:#D4AF37; color:#222; border:none; padding:6px 18px; border-radius:30px; cursor:pointer; font-weight:600;">My Connections</button>
+                    <button onclick="renderCommunity('chats')" style="background:#17a2b8; color:#fff; border:none; padding:6px 18px; border-radius:30px; cursor:pointer; font-weight:600;">My Chats</button>
+                </div>
+                <div id="communityContent" class="community-grid"><p>Loading...</p></div>
+            </div>
+        </div>
+
+        <!-- Direct Chat Modal -->
+        <div class="auth-overlay chat-modal" id="directChatModal">
+            <div class="auth-modal">
+                <button class="close-auth" onclick="document.getElementById('directChatModal').classList.remove('active')">&times;</button>
+                <h2 id="chatPartnerName" style="color:#003399;"><i class="fas fa-comment"></i> Chat with <span id="chatPartnerDisplay">User</span></h2>
+                <div id="chatMessages" class="chat-box"><p style="color:#888; text-align:center; padding:20px;">Loading messages...</p></div>
+                <div class="chat-input">
+                    <input type="text" id="chatInput" placeholder="Type a message..." onkeydown="if(event.key==='Enter') sendDirectMessage()">
+                    <button onclick="sendDirectMessage()"><i class="fas fa-paper-plane"></i> Send</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- My Orders Modal -->
+        <div class="auth-overlay history-modal" id="myOrdersModal">
+            <div class="auth-modal">
+                <button class="close-auth" onclick="document.getElementById('myOrdersModal').classList.remove('active')">&times;</button>
+                <h2 id="myOrdersTitle" style="color:#003399;">📦 My Orders</h2>
+                <div class="history-table" id="myOrdersContent"><p>Loading orders...</p></div>
+            </div>
+        </div>
+
+        <!-- Admin Login Modal -->
+        <div class="auth-overlay admin-login-modal" id="adminLoginModal">
+            <div class="auth-modal">
+                <button class="close-auth" onclick="document.getElementById('adminLoginModal').classList.remove('active')">&times;</button>
+                <h2 style="color:#D4AF37;"><i class="fas fa-lock"></i> Admin Login</h2>
+                <input type="password" id="adminPasswordInput" placeholder="Enter Admin Password" onkeydown="if(event.key==='Enter') loginAdmin()" />
+                <button class="auth-btn" onclick="loginAdmin()" style="background:#D4AF37; color:#222;">Login</button>
+                <div style="margin-top:10px; color:red; font-size:0.8rem;" id="adminLoginError"></div>
+            </div>
+        </div>
+
+        <!-- Customer History Modal (Admin) -->
+        <div class="auth-overlay customer-history-modal" id="customerHistoryModal">
+            <div class="auth-modal">
+                <button class="close-auth" onclick="document.getElementById('customerHistoryModal').classList.remove('active')">&times;</button>
+                <h2 id="historyModalTitle" style="color:#003399;">Customer Order History</h2>
+                <div class="history-table" id="customerHistoryContent"><p>Loading history...</p></div>
+            </div>
+        </div>
+
+        <!-- FLOATING CONTACT BUTTONS -->
+        <div id="contactFloating">
+            <a href="https://wa.me/256786605822" target="_blank" class="float-btn float-btn-wa" title="Chat on WhatsApp"><i class="fab fa-whatsapp"></i></a>
+            <a href="mailto:info@taataowen.com" class="float-btn float-btn-msg" title="Send us an Email"><i class="fas fa-envelope"></i></a>
+        </div>
+
+        <button id="floatingCheckoutBtn" onclick="toggleCart()"><i class="fas fa-shopping-cart"></i> Checkout (<span id="floatingCartCount">0</span>)</button>
+        <button id="backToTop" onclick="scrollToTop()"><i class="fas fa-arrow-up"></i></button>
+
+    </div> <!-- end #appContainer -->
 
     <!-- ========================================================== -->
-    <!-- JAVASCRIPT -->
+    <!-- JAVASCRIPT (includes login overlay + your full original code) -->
     <!-- ========================================================== -->
     <script>
+        // ============================================================
+        // LOGIN OVERLAY LOGIC (added)
+        // ============================================================
+        let loginMode = true;
+
+        function toggleLoginMode() {
+            loginMode = !loginMode;
+            const title = document.getElementById('loginTitle');
+            const subtitle = document.getElementById('loginSubtitle');
+            const btn = document.getElementById('loginActionBtn');
+            const link = document.getElementById('loginToggleLink');
+            if (loginMode) {
+                title.textContent = 'Welcome Back';
+                subtitle.textContent = 'Login to continue shopping';
+                btn.textContent = 'Login';
+                link.innerHTML = `Don't have an account? <strong>Sign Up</strong>`;
+            } else {
+                title.textContent = 'Create Account';
+                subtitle.textContent = 'Join Taata Owen today';
+                btn.textContent = 'Sign Up';
+                link.innerHTML = `Already have an account? <strong>Login</strong>`;
+            }
+            document.getElementById('loginError').textContent = '';
+        }
+
+        function handleLoginAction() {
+            const username = document.getElementById('loginUsername').value.trim();
+            const password = document.getElementById('loginPassword').value.trim();
+            const error = document.getElementById('loginError');
+
+            if (!username || !password) {
+                error.textContent = '⚠️ Please fill in all fields.';
+                return;
+            }
+
+            let users = JSON.parse(localStorage.getItem('taata_users')) || {};
+
+            if (loginMode) {
+                // Login
+                if (users[username] && users[username].password === password) {
+                    currentUser = username;
+                    localStorage.setItem('taata_session_user', username);
+                    showApp();
+                } else {
+                    error.textContent = '❌ Invalid username or password.';
+                }
+            } else {
+                // Signup
+                if (users[username]) {
+                    error.textContent = '❌ Username already exists.';
+                    return;
+                }
+                users[username] = { password: password };
+                localStorage.setItem('taata_users', JSON.stringify(users));
+                currentUser = username;
+                localStorage.setItem('taata_session_user', username);
+                showApp();
+            }
+        }
+
+        function showApp() {
+            document.getElementById('loginOverlay').classList.add('hidden');
+            document.getElementById('appContainer').classList.add('visible');
+            // Initialize the app (calls your existing init)
+            initApp();
+            // Update UI elements
+            document.getElementById('accountNameDisplay').textContent = currentUser;
+            updateAccountModal();
+            updateCartUI();
+            updateMsgNotif();
+            updateChatListUnread();
+            updateOnlineStatus();
+        }
+
+        // Attach login event listeners
+        document.getElementById('loginActionBtn').addEventListener('click', handleLoginAction);
+        document.getElementById('loginToggleLink').addEventListener('click', toggleLoginMode);
+        document.getElementById('loginPassword').addEventListener('keydown', function(e) {
+            if (e.key === 'Enter') handleLoginAction();
+        });
+        document.getElementById('loginUsername').addEventListener('keydown', function(e) {
+            if (e.key === 'Enter') document.getElementById('loginPassword').focus();
+        });
+
+        // Check session
+        (function checkSession() {
+            const savedUser = localStorage.getItem('taata_session_user');
+            if (savedUser) {
+                let users = JSON.parse(localStorage.getItem('taata_users')) || {};
+                if (users[savedUser]) {
+                    currentUser = savedUser;
+                    showApp();
+                    return;
+                }
+            }
+            document.getElementById('loginOverlay').classList.remove('hidden');
+            document.getElementById('appContainer').classList.remove('visible');
+        })();
+
+        // ============================================================
+        // YOUR ORIGINAL JAVASCRIPT (everything below is unchanged)
+        // ============================================================
+
         // ============================================================
         // DARK MODE TOGGLE
         // ============================================================
@@ -1431,6 +1660,7 @@
                     updateChatListUnread();
                     updateOnlineStatus();
                     msg.textContent = '';
+                    showApp(); // <--- ensures overlay hides if using modal login
                 } else {
                     msg.textContent = '❌ Invalid username/password.';
                     msg.style.color = 'red';
@@ -1448,6 +1678,7 @@
                 updateMsgNotif();
                 updateChatListUnread();
                 updateOnlineStatus();
+                showApp(); // <--- ensures overlay hides if using modal signup
             }
         }
 
@@ -1524,12 +1755,16 @@
                 let onlineUsers = JSON.parse(localStorage.getItem('taata_online_users')) || {};
                 delete onlineUsers[currentUser];
                 localStorage.setItem('taata_online_users', JSON.stringify(onlineUsers));
+                localStorage.removeItem('taata_session_user');
                 currentUser = null;
                 document.getElementById('accountNameDisplay').textContent = 'Login';
                 document.getElementById('accountModal').classList.remove('active');
                 updateCartUI();
                 updateMsgNotif();
                 updateChatListUnread();
+                // Hide app and show login overlay
+                document.getElementById('appContainer').classList.remove('visible');
+                document.getElementById('loginOverlay').classList.remove('hidden');
                 alert('✅ Logged out successfully.');
             }
         }
@@ -2610,47 +2845,53 @@
         }
 
         // ============================================================
-        // INIT
+        // INIT (wrapped so it can be called after login)
         // ============================================================
-        document.addEventListener('change', function(e) {
-            if (e.target.id === 'custLocation' || e.target.id === 'useWallet' || e.target.id === 'usePoints' || e.target
-                .name === 'orderType') {
-                if (e.target.name === 'orderType') toggleAddressField();
-                updateCartUI();
-            }
-        });
+        function initApp() {
+            // This is your original bottom initialization code, now inside a function.
+            document.addEventListener('change', function(e) {
+                if (e.target.id === 'custLocation' || e.target.id === 'useWallet' || e.target.id === 'usePoints' || e
+                    .target.name === 'orderType') {
+                    if (e.target.name === 'orderType') toggleAddressField();
+                    updateCartUI();
+                }
+            });
 
-        if (sessionStorage.getItem('taata_admin_logged_in') === 'true') {
-            document.getElementById('customerApp').style.display = 'none';
-            document.getElementById('adminApp').style.display = 'block';
-            renderAdminDashboard();
-            renderAdminOrders();
-            renderAdminProducts();
-            renderAdminCustomers();
+            if (sessionStorage.getItem('taata_admin_logged_in') === 'true') {
+                document.getElementById('customerApp').style.display = 'none';
+                document.getElementById('adminApp').style.display = 'block';
+                renderAdminDashboard();
+                renderAdminOrders();
+                renderAdminProducts();
+                renderAdminCustomers();
+                loadPromoPreview();
+                renderAdminMessages();
+            } else {
+                document.getElementById('customerApp').style.display = 'block';
+                document.getElementById('adminApp').style.display = 'none';
+            }
+
+            renderCategoryPills('supermarketCategoryPills', supermarketItems, 'All', 'supermarketGrid', 'supermarket');
+            renderGrid('supermarketGrid', supermarketItems, 'All');
+            renderCategoryPills('restaurantCategoryPills', restaurantItems, 'All', 'restaurantGrid', 'restaurant');
+            renderGrid('restaurantGrid', restaurantItems, 'All');
+            renderGrid('featuredGrid', [...supermarketItems, ...restaurantItems], 'All', true);
+            renderGrid('hotDealsGrid', [...supermarketItems, ...restaurantItems], 'All', false, true);
+            renderGrid('combosGrid', [...supermarketItems, ...restaurantItems], 'All', false, false, true);
+            updateCartUI();
+            updateRestaurantStatus();
+            setInterval(updateRestaurantStatus, 60000);
+            toggleAddressField();
             loadPromoPreview();
-            renderAdminMessages();
-        } else {
-            document.getElementById('customerApp').style.display = 'block';
-            document.getElementById('adminApp').style.display = 'none';
+            updateMsgNotif();
+            updateChatListUnread();
+
+            console.log('🔥 Taata Owen v2.6 – Complete with Login Overlay, Dark Mode, Hero Slideshow, Community, Direct Chat, and all products!');
+            window.placeOrder = placeOrder;
         }
 
-        renderCategoryPills('supermarketCategoryPills', supermarketItems, 'All', 'supermarketGrid', 'supermarket');
-        renderGrid('supermarketGrid', supermarketItems, 'All');
-        renderCategoryPills('restaurantCategoryPills', restaurantItems, 'All', 'restaurantGrid', 'restaurant');
-        renderGrid('restaurantGrid', restaurantItems, 'All');
-        renderGrid('featuredGrid', [...supermarketItems, ...restaurantItems], 'All', true);
-        renderGrid('hotDealsGrid', [...supermarketItems, ...restaurantItems], 'All', false, true);
-        renderGrid('combosGrid', [...supermarketItems, ...restaurantItems], 'All', false, false, true);
-        updateCartUI();
-        updateRestaurantStatus();
-        setInterval(updateRestaurantStatus, 60000);
-        toggleAddressField();
-        loadPromoPreview();
-        updateMsgNotif();
-        updateChatListUnread();
-
-        console.log('🔥 Taata Owen v2.6 – Complete with Dark Mode, Hero Slideshow, Community, Direct Chat, and all products!');
-        window.placeOrder = placeOrder;
+        // If the user is already logged in, initApp is called from showApp().
+        // If the overlay is visible, initApp waits for login.
     </script>
 </body>
 </html>
