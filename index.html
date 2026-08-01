@@ -6,7 +6,7 @@
     <title>Taata Owen Supermarket & Restaurant - Jinja</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <style>
-        /* ===== FULL STYLES ===== */
+        /* ===== FULL STYLES (same as before + new styles) ===== */
         * { margin:0; padding:0; box-sizing:border-box; font-family:'Segoe UI',Tahoma,Geneva,Verdana,sans-serif; }
         body { background:#f8f9fa; }
         :root { --red:#CC0000; --blue:#003399; --gold:#D4AF37; --light-gray:#f1f3f5; --shadow:0 4px 15px rgba(0,0,0,0.08); }
@@ -21,6 +21,7 @@
         .navbar .search-box input::placeholder { color:rgba(255,255,255,0.7); }
         .navbar .search-box i { color:#fff; opacity:0.7; }
         @media (max-width:600px) { .navbar .search-box input { width:100px; } }
+
         .navbar .account-btn { background:rgba(255,255,255,0.15); border:2px solid rgba(255,255,255,0.5); color:#fff; padding:8px 18px; border-radius:30px; font-weight:700; cursor:pointer; transition:0.3s; font-size:0.9rem; display:flex; align-items:center; gap:6px; }
         .navbar .account-btn:hover { background:#fff; color:var(--red); }
         .navbar .wallet-display { background:rgba(255,255,255,0.15); padding:6px 15px; border-radius:30px; font-weight:700; font-size:14px; border:1px solid rgba(255,255,255,0.3); cursor:pointer; }
@@ -28,6 +29,12 @@
         .navbar .cart-icon:hover { background:var(--blue); color:#fff; }
         .navbar .cart-icon .badge { background:var(--blue); color:#fff; border-radius:50%; padding:2px 10px; font-size:14px; border:2px solid #fff; }
 
+        /* NEW: Messages icon with notification badge */
+        .navbar .msg-icon { font-size:24px; cursor:pointer; position:relative; background:rgba(255,255,255,0.15); color:#fff; padding:8px 14px; border-radius:30px; transition:0.3s; font-weight:700; display:flex; align-items:center; gap:8px; border:1px solid rgba(255,255,255,0.2); }
+        .navbar .msg-icon:hover { background:rgba(255,255,255,0.3); }
+        .navbar .msg-icon .notif-dot { position:absolute; top:2px; right:2px; width:14px; height:14px; background:red; border-radius:50%; border:2px solid var(--red); display:none; }
+
+        /* ===== HERO (unchanged) ===== */
         .hero { background:linear-gradient(rgba(0,20,50,0.75),rgba(0,0,0,0.85)), var(--hero-bg, url('https://i.ibb.co/KjkypGTv/supermarket-aisle-view-stockcake.jpg')); background-size:cover; background-position:center; color:#fff; padding:80px 20px; text-align:center; border-bottom:8px solid var(--red); }
         .hero-content { max-width:900px; margin:0 auto; }
         .hero-content .flag-stripes { display:flex; justify-content:center; gap:5px; margin-bottom:20px; }
@@ -46,6 +53,7 @@
         .hero .restaurant-jump { margin-top:20px; display:inline-block; background:var(--gold); color:#222; padding:12px 30px; border-radius:50px; font-weight:700; text-decoration:none; transition:0.3s; box-shadow:0 4px 15px rgba(212,175,55,0.4); }
         .hero .restaurant-jump:hover { transform:scale(1.05); background:#ffd700; }
 
+        /* ===== SECTIONS (unchanged) ===== */
         .section-container { max-width:1300px; margin:0 auto; padding:20px 20px 40px; }
         .section-header { display:flex; flex-direction:column; align-items:center; margin:30px 0 15px; }
         .section-title { font-size:2.2rem; color:var(--blue); border-bottom:5px solid var(--red); padding-bottom:10px; }
@@ -130,7 +138,7 @@
         .float-btn-msg { background:var(--blue); }
         .float-btn-msg i { font-size:22px; }
 
-        /* ===== AUTH & MODALS ===== */
+        /* ===== AUTH MODALS ===== */
         .auth-overlay { display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.7); z-index:500; justify-content:center; align-items:center; }
         .auth-overlay.active { display:flex; }
         .auth-modal { background:#fff; padding:40px; border-radius:20px; max-width:420px; width:90%; box-shadow:0 20px 60px rgba(0,0,0,0.3); position:relative; border-top:8px solid var(--red); }
@@ -139,10 +147,12 @@
         .auth-modal .auth-btn { width:100%; padding:14px; background:var(--red); color:#fff; border:none; border-radius:30px; font-weight:700; font-size:1.1rem; cursor:pointer; margin-top:10px; }
         .auth-modal .auth-btn:hover { background:var(--blue); }
         .auth-modal .toggle-auth { text-align:center; margin-top:15px; color:var(--blue); cursor:pointer; font-weight:600; }
+        .auth-modal .forgot-pw { text-align:center; margin-top:8px; font-size:0.85rem; color:var(--blue); cursor:pointer; }
 
         .account-modal .auth-modal { max-width:520px; border-top-color:var(--gold); }
         .account-modal .auth-modal .account-card { text-align:center; }
-        .account-modal .auth-modal .account-card .avatar { font-size:4rem; color:var(--blue); background:var(--light-gray); width:80px; height:80px; border-radius:50%; display:flex; align-items:center; justify-content:center; margin:0 auto 15px; border:4px solid var(--red); }
+        .account-modal .auth-modal .account-card .avatar { font-size:4rem; color:var(--blue); background:var(--light-gray); width:80px; height:80px; border-radius:50%; display:flex; align-items:center; justify-content:center; margin:0 auto 15px; border:4px solid var(--red); overflow:hidden; }
+        .account-modal .auth-modal .account-card .avatar img { width:100%; height:100%; object-fit:cover; }
         .account-modal .auth-modal .account-card h2 { color:var(--blue); margin-bottom:5px; }
         .account-modal .auth-modal .account-card .member-since { color:#888; font-size:0.8rem; margin-bottom:20px; }
         .account-modal .auth-modal .account-stats { display:grid; grid-template-columns:1fr 1fr; gap:15px; margin:20px 0; }
@@ -161,13 +171,12 @@
         .account-modal .auth-modal .account-actions .btn-orders:hover { background:#0f7a8b; }
         .account-modal .auth-modal .account-actions .btn-profile { background:#6f42c1; color:#fff; }
         .account-modal .auth-modal .account-actions .btn-profile:hover { background:#5a32a3; }
-        .account-modal .auth-modal .account-actions .btn-support { background:#fd7e14; color:#fff; position:relative; }
-        .account-modal .auth-modal .account-actions .btn-support:hover { background:#e06b0c; }
-        .account-modal .auth-modal .account-actions .btn-messages { background:#17a2b8; color:#fff; }
-        .account-modal .auth-modal .account-actions .btn-messages:hover { background:#0f7a8b; }
+        .account-modal .auth-modal .account-actions .btn-community { background:#e83e8c; color:#fff; }
+        .account-modal .auth-modal .account-actions .btn-community:hover { background:#c8236c; }
 
         .profile-modal .auth-modal { max-width:480px; }
-        .profile-modal .auth-modal input { width:100%; padding:12px; margin:6px 0; border:1px solid #ddd; border-radius:8px; }
+        .profile-modal .auth-modal input, .profile-modal .auth-modal .file-upload { width:100%; padding:12px; margin:6px 0; border:1px solid #ddd; border-radius:8px; }
+        .profile-modal .auth-modal .file-upload { padding:8px; }
         .support-modal .auth-modal { max-width:480px; }
         .support-modal .auth-modal textarea { width:100%; padding:12px; margin:6px 0; border:1px solid #ddd; border-radius:8px; min-height:100px; font-family:inherit; }
 
@@ -178,6 +187,16 @@
         .messages-modal .auth-modal .msg-thread .msg-bubble.admin { background:#e6f0ff; align-self:flex-end; border-bottom-right-radius:4px; border-left:3px solid var(--blue); }
         .messages-modal .auth-modal .msg-thread .msg-bubble .time { font-size:0.65rem; color:#888; margin-top:4px; display:block; }
         .messages-modal .auth-modal .no-msg { color:#888; text-align:center; padding:30px; }
+
+        .community-modal .auth-modal { max-width:650px; width:95%; }
+        .community-modal .auth-modal .community-grid { display:flex; flex-direction:column; gap:12px; max-height:400px; overflow-y:auto; }
+        .community-modal .auth-modal .community-grid .user-card { display:flex; justify-content:space-between; align-items:center; padding:12px; background:var(--light-gray); border-radius:12px; }
+        .community-modal .auth-modal .community-grid .user-card .user-info { display:flex; align-items:center; gap:12px; }
+        .community-modal .auth-modal .community-grid .user-card .user-info .avatar-sm { width:40px; height:40px; border-radius:50%; background:#ddd; display:flex; align-items:center; justify-content:center; font-weight:700; color:#555; overflow:hidden; }
+        .community-modal .auth-modal .community-grid .user-card .user-info .avatar-sm img { width:100%; height:100%; object-fit:cover; }
+        .community-modal .auth-modal .community-grid .user-card .btn-connect { background:var(--blue); color:#fff; border:none; padding:6px 16px; border-radius:30px; cursor:pointer; font-weight:600; }
+        .community-modal .auth-modal .community-grid .user-card .btn-connect:hover { background:var(--red); }
+        .community-modal .auth-modal .community-grid .user-card .btn-connected { background:#28a745; color:#fff; border:none; padding:6px 16px; border-radius:30px; cursor:default; font-weight:600; }
 
         .history-modal .auth-modal { max-width:700px; width:95%; }
         .history-modal .auth-modal .history-table { max-height:400px; overflow-y:auto; }
@@ -201,6 +220,7 @@
             .product-grid { grid-template-columns:repeat(2,1fr); }
             .cart-sidebar { width:100%; right:-100%; }
             .navbar .search-box input { width:100px; }
+            .navbar .msg-icon { padding:6px 12px; font-size:20px; }
             #backToTop { bottom:20px; left:20px; padding:12px 15px; font-size:16px; }
             #floatingCheckoutBtn { bottom:20px; right:80px; padding:10px 18px; font-size:0.8rem; }
             .account-modal .auth-modal .account-stats { grid-template-columns:1fr; }
@@ -211,9 +231,10 @@
             .float-btn { width:45px; height:45px; font-size:20px; }
             .auth-modal { padding:25px; }
             .messages-modal .auth-modal { padding:20px; }
+            .community-modal .auth-modal { padding:20px; }
         }
 
-        /* ===== ADMIN STYLES ===== */
+        /* ===== ADMIN STYLES (unchanged) ===== */
         #adminApp { display:none; background:#f4f6f9; min-height:100vh; }
         .admin-container { display:flex; max-width:1400px; margin:0 auto; padding:20px; gap:25px; flex-wrap:wrap; }
         .admin-sidebar { width:220px; background:var(--blue); border-radius:16px; padding:25px 15px; color:#fff; height:fit-content; position:sticky; top:20px; box-shadow:0 8px 25px rgba(0,0,0,0.1); }
@@ -283,6 +304,11 @@
                     <i class="fas fa-search"></i>
                     <input type="text" id="searchInput" placeholder="Search products..." onkeyup="searchProducts()" />
                 </div>
+                <!-- NEW: Messages icon with notification dot -->
+                <div class="msg-icon" onclick="viewMyMessages()" title="Messages">
+                    <i class="fas fa-envelope"></i>
+                    <span class="notif-dot" id="msgNotifDot"></span>
+                </div>
                 <button class="account-btn" onclick="toggleAccountModal()">
                     <i class="fas fa-user-circle"></i> <span id="accountNameDisplay">Login</span> <i class="fas fa-chevron-down"></i>
                 </button>
@@ -296,6 +322,7 @@
             </div>
         </nav>
 
+        <!-- HERO (unchanged) -->
         <section class="hero" id="heroSection">
             <div class="hero-content">
                 <div class="flag-stripes">
@@ -316,28 +343,25 @@
             </div>
         </section>
 
+        <!-- PRODUCT SECTIONS (unchanged) -->
         <div class="section-container" id="featuredSection">
             <div class="section-header"><h2 class="section-title"><i class="fas fa-star" style="color:var(--gold);"></i> Featured Products</h2></div>
             <div class="product-grid" id="featuredGrid"></div>
         </div>
-
         <div class="section-container" id="hotDealsSection" style="background: #fff5f5; border-radius: 30px; padding: 20px 20px 30px; border: 2px solid #ff5722;">
             <div class="section-header"><h2 class="section-title" style="color:#ff5722;"><i class="fas fa-fire" style="color:#ff5722;"></i> Hot Deals - Electricals</h2></div>
             <div class="product-grid" id="hotDealsGrid"></div>
         </div>
-
         <div class="section-container" id="combosSection" style="background: #e8f5e9; border-radius: 30px; padding: 20px 20px 30px; border: 2px solid #4caf50;">
             <div class="section-header"><h2 class="section-title" style="color:#2e7d32;"><i class="fas fa-boxes" style="color:#4caf50;"></i> Special Combos</h2></div>
             <div class="product-grid" id="combosGrid"></div>
         </div>
-
         <div class="section-container" id="supermarketSection">
             <div class="section-header"><h2 class="section-title"><i class="fas fa-store"></i> Supermarket</h2></div>
             <div class="category-heading"><i class="fas fa-tags"></i> Browse Categories</div>
             <div id="supermarketCategoryPills" class="category-pills"></div>
             <div class="product-grid" id="supermarketGrid"></div>
         </div>
-
         <div class="section-container" style="background:#fcf6f0; border-radius:30px; margin:0 20px 30px; padding:20px 20px 30px; border:1px solid #f0e0d0;" id="restaurantSection">
             <div class="section-header"><h2 class="section-title" style="color:#5d2e1b;"><i class="fas fa-utensils" style="color:var(--gold);"></i> Restaurant Menu</h2></div>
             <div class="restaurant-info-bar">
@@ -350,7 +374,7 @@
             <div class="product-grid" id="restaurantGrid"></div>
         </div>
 
-        <!-- CART SIDEBAR -->
+        <!-- CART SIDEBAR (unchanged) -->
         <div class="cart-overlay" id="cartOverlay" onclick="toggleCart()"></div>
         <div class="cart-sidebar" id="cartSidebar">
             <button class="close-cart" onclick="toggleCart()">&times;</button>
@@ -433,7 +457,7 @@
     </div>
 
     <!-- ========================================================== -->
-    <!-- ADMIN APP -->
+    <!-- ADMIN APP (unchanged) -->
     <!-- ========================================================== -->
     <div id="adminApp">
         <div class="admin-container">
@@ -448,6 +472,7 @@
                 <button class="logout-btn" onclick="logoutAdmin()"><i class="fas fa-sign-out-alt"></i> Logout</button>
             </div>
             <div class="admin-content">
+                <!-- Dashboard -->
                 <div id="adminDashboard">
                     <h2 style="color:var(--blue); margin-bottom:20px;">📊 Dashboard Overview</h2>
                     <div class="stats-grid" id="adminStats">
@@ -462,22 +487,26 @@
                         <p style="color:#555; font-size:0.9rem;">Manage orders, products, customers, and support messages.</p>
                     </div>
                 </div>
+                <!-- Orders -->
                 <div id="adminOrders" style="display:none;">
                     <h2 style="color:var(--blue); margin-bottom:20px;">📋 Order Management</h2>
                     <button class="clear-btn" onclick="clearDeliveredOrders()"><i class="fas fa-trash-alt"></i> Clear Delivered Orders</button>
                     <div class="admin-order-table-wrapper" id="adminOrderList"><p>Loading orders...</p></div>
                 </div>
+                <!-- Products -->
                 <div id="adminProducts" style="display:none;">
                     <h2 style="color:var(--blue); margin-bottom:20px;">📦 Product Management</h2>
                     <button class="btn-add" onclick="showAddProductForm()"><i class="fas fa-plus"></i> Add New Product</button>
                     <div id="adminProductFormContainer"></div>
                     <div id="adminProductList"><p>Loading products...</p></div>
                 </div>
+                <!-- Customers -->
                 <div id="adminCustomers" style="display:none;">
                     <h2 style="color:var(--blue); margin-bottom:20px;">👥 Customer Management</h2>
                     <p style="color:#888; margin-bottom:15px;">View all registered customers and their loyalty points accumulation.</p>
                     <div id="adminCustomerList"><p>Loading customers...</p></div>
                 </div>
+                <!-- Promotions -->
                 <div id="adminPromotions" style="display:none;">
                     <h2 style="color:var(--blue); margin-bottom:20px;">📢 Manage Promotions</h2>
                     <div class="promo-form">
@@ -495,7 +524,7 @@
                         <p><small>Background image: <span id="previewBg">Default</span></small></p>
                     </div>
                 </div>
-                <!-- ===== UPDATED MESSAGES TAB WITH REFRESH BUTTON ===== -->
+                <!-- Messages -->
                 <div id="adminMessages" style="display:none;">
                     <h2 style="color:var(--blue); margin-bottom:20px;">📩 Customer Messages</h2>
                     <button onclick="renderAdminMessages()" style="background:var(--blue); color:#fff; border:none; padding:8px 20px; border-radius:30px; cursor:pointer; margin-bottom:15px;">
@@ -511,7 +540,7 @@
     <!-- MODALS -->
     <!-- ========================================================== -->
 
-    <!-- Auth Modal -->
+    <!-- Auth Modal (with Forgot Password) -->
     <div class="auth-overlay" id="authModal">
         <div class="auth-modal">
             <button class="close-auth" onclick="toggleAuthModal()">&times;</button>
@@ -520,18 +549,19 @@
                 <input type="text" id="authUsername" placeholder="Username" />
                 <input type="password" id="authPassword" placeholder="Password" />
                 <button class="auth-btn" id="authActionBtn" onclick="handleAuth()">Login</button>
+                <div class="forgot-pw" onclick="forgotPassword()">Forgot Password?</div>
             </div>
             <div class="toggle-auth" id="authToggleLink" onclick="toggleAuthMode()">Don't have an account? <strong>Sign Up</strong></div>
             <div style="margin-top:10px; color:#888; font-size:0.8rem;" id="authMessage"></div>
         </div>
     </div>
 
-    <!-- Account Modal -->
+    <!-- Account Modal (with Community button) -->
     <div class="auth-overlay account-modal" id="accountModal">
         <div class="auth-modal">
             <button class="close-auth" onclick="toggleAccountModal()">&times;</button>
             <div class="account-card">
-                <div class="avatar"><i class="fas fa-user"></i></div>
+                <div class="avatar" id="accountAvatar"><i class="fas fa-user"></i></div>
                 <h2 id="accountModalName">User</h2>
                 <p class="member-since"><i class="fas fa-calendar-alt"></i> Member since today</p>
                 <div class="account-stats">
@@ -542,20 +572,28 @@
                     <button class="btn-deposit-account" onclick="depositMoney()"><i class="fas fa-plus-circle"></i> Add Money</button>
                     <button class="btn-orders" onclick="viewMyOrders()"><i class="fas fa-list-ul"></i> My Orders</button>
                     <button class="btn-profile" onclick="openProfileModal()"><i class="fas fa-user-edit"></i> My Profile</button>
-                    <button class="btn-messages" onclick="viewMyMessages()"><i class="fas fa-inbox"></i> My Messages</button>
-                    <button class="btn-support" onclick="openSupportModal()"><i class="fas fa-headset"></i> Contact Support</button>
+                    <button class="btn-community" onclick="openCommunityModal()"><i class="fas fa-users"></i> Community</button>
                     <button class="btn-logout" onclick="logoutUser()"><i class="fas fa-sign-out-alt"></i> Logout</button>
                 </div>
             </div>
         </div>
     </div>
 
-    <!-- Profile Modal -->
+    <!-- Profile Modal (with picture upload) -->
     <div class="auth-overlay profile-modal" id="profileModal">
         <div class="auth-modal">
             <button class="close-auth" onclick="closeProfileModal()">&times;</button>
             <h2 style="color:var(--blue);">Edit Profile</h2>
             <form id="profileForm" onsubmit="saveProfile(event)">
+                <div style="display:flex; align-items:center; gap:15px; margin-bottom:10px;">
+                    <div style="width:60px; height:60px; border-radius:50%; background:var(--light-gray); overflow:hidden; display:flex; align-items:center; justify-content:center; border:3px solid var(--red);" id="profilePicPreview">
+                        <i class="fas fa-user" style="font-size:30px; color:#888;"></i>
+                    </div>
+                    <div class="file-upload">
+                        <label for="profilePicUpload" style="cursor:pointer; background:var(--blue); color:#fff; padding:6px 16px; border-radius:30px; font-weight:600;">Upload Photo</label>
+                        <input type="file" id="profilePicUpload" accept="image/*" style="display:none;" onchange="previewProfilePic(event)">
+                    </div>
+                </div>
                 <input type="text" id="profileFullName" placeholder="Full Name" />
                 <input type="tel" id="profilePhone" placeholder="Phone Number" />
                 <input type="email" id="profileEmail" placeholder="Email Address" />
@@ -565,7 +603,7 @@
         </div>
     </div>
 
-    <!-- Support Modal (Send Message) -->
+    <!-- Support Modal -->
     <div class="auth-overlay support-modal" id="supportModal">
         <div class="auth-modal">
             <button class="close-auth" onclick="closeSupportModal()">&times;</button>
@@ -578,13 +616,28 @@
         </div>
     </div>
 
-    <!-- My Messages Modal (Customer Inbox) -->
+    <!-- My Messages Modal -->
     <div class="auth-overlay messages-modal" id="myMessagesModal">
         <div class="auth-modal">
             <button class="close-auth" onclick="document.getElementById('myMessagesModal').classList.remove('active')">&times;</button>
             <h2 style="color:var(--blue);"><i class="fas fa-inbox"></i> My Messages</h2>
             <div id="myMessagesContent" class="msg-thread">
                 <p class="no-msg">Loading messages...</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Community Modal -->
+    <div class="auth-overlay community-modal" id="communityModal">
+        <div class="auth-modal">
+            <button class="close-auth" onclick="document.getElementById('communityModal').classList.remove('active')">&times;</button>
+            <h2 style="color:var(--blue);"><i class="fas fa-users"></i> Community</h2>
+            <div style="display:flex; gap:10px; margin-bottom:15px;">
+                <button onclick="renderCommunity('all')" style="background:var(--blue); color:#fff; border:none; padding:6px 18px; border-radius:30px; cursor:pointer; font-weight:600;">All Members</button>
+                <button onclick="renderCommunity('connections')" style="background:var(--gold); color:#222; border:none; padding:6px 18px; border-radius:30px; cursor:pointer; font-weight:600;">My Connections</button>
+            </div>
+            <div id="communityContent" class="community-grid">
+                <p>Loading...</p>
             </div>
         </div>
     </div>
@@ -628,13 +681,13 @@
     <button id="backToTop" onclick="scrollToTop()"><i class="fas fa-arrow-up"></i></button>
 
     <!-- ========================================================== -->
-    <!-- JAVASCRIPT – FULL, COMPLETE, ORGANIZED -->
+    <!-- JAVASCRIPT (updated with all new features) -->
     <!-- ========================================================== -->
     <script>
         // ============================================================
         // VERSION CHECK
         // ============================================================
-        const APP_VERSION = '2.2';
+        const APP_VERSION = '2.3';
         if (localStorage.getItem('taata_app_version') !== APP_VERSION) {
             localStorage.removeItem('taata_supermarket_items');
             localStorage.removeItem('taata_restaurant_items');
@@ -642,7 +695,7 @@
         }
 
         // ============================================================
-        // DEFAULT PRODUCT DATA (full list)
+        // DEFAULT PRODUCT DATA (full list – same as before)
         // ============================================================
         const defaultSupermarketItems = [
             { id: 1, name: "Matooke (Bunch)", category: "Fresh Produce", price: 15000, icon: "fa-solid fa-leaf",
@@ -724,6 +777,7 @@
         ];
 
         const defaultRestaurantItems = [
+            // ... same as before (omitted for brevity)
             { id: 101, name: "Rolex (Chapati + Eggs)", category: "Fast Food", price: 7000, icon: "fa-solid fa-egg",
                 description: "Classic Ugandan street roll", prepTime: "10 min", badge: "popular", inStock: true,
                 quantity: 10, featured: false, discount: 0, isCombo: false, comboItems: "" },
@@ -774,6 +828,7 @@
         let supermarketItems = JSON.parse(localStorage.getItem('taata_supermarket_items')) || defaultSupermarketItems;
         let restaurantItems = JSON.parse(localStorage.getItem('taata_restaurant_items')) || defaultRestaurantItems;
 
+        // Ensure fields
         [supermarketItems, restaurantItems].forEach(items => {
             items.forEach(p => {
                 if (p.quantity === undefined) p.quantity = 10;
@@ -800,7 +855,7 @@
         let restaurantFilter = 'All';
 
         // ============================================================
-        // HELPERS (Wallet, Points, Auth)
+        // HELPERS
         // ============================================================
         function getStorageKey() { return currentUser ? `taata_${currentUser}` : null; }
 
@@ -832,7 +887,53 @@
             saveUserData(d.wallet, v); }
 
         // ============================================================
-        // AUTH UI
+        // PROFILE PICTURE FUNCTIONS
+        // ============================================================
+        function getProfile(username) {
+            const data = localStorage.getItem(`taata_profile_${username}`);
+            return data ? JSON.parse(data) : { fullName: '', phone: '', email: '', address: '', picture: '' };
+        }
+
+        function saveProfileData(username, profile) {
+            localStorage.setItem(`taata_profile_${username}`, JSON.stringify(profile));
+        }
+
+        function updateAvatarUI() {
+            if (!currentUser) return;
+            const profile = getProfile(currentUser);
+            const avatarEl = document.getElementById('accountAvatar');
+            if (profile.picture) {
+                avatarEl.innerHTML = `<img src="${profile.picture}" alt="Profile">`;
+            } else {
+                avatarEl.innerHTML = `<i class="fas fa-user"></i>`;
+            }
+            // Also update navbar if we had a separate avatar there
+            // Update profile preview if modal is open
+            if (document.getElementById('profileModal').classList.contains('active')) {
+                const preview = document.getElementById('profilePicPreview');
+                if (profile.picture) {
+                    preview.innerHTML = `<img src="${profile.picture}" style="width:100%;height:100%;object-fit:cover;">`;
+                } else {
+                    preview.innerHTML = `<i class="fas fa-user" style="font-size:30px; color:#888;"></i>`;
+                }
+            }
+        }
+
+        function previewProfilePic(e) {
+            const file = e.target.files[0];
+            if (!file) return;
+            const reader = new FileReader();
+            reader.onload = function(event) {
+                const preview = document.getElementById('profilePicPreview');
+                preview.innerHTML = `<img src="${event.target.result}" style="width:100%;height:100%;object-fit:cover;">`;
+                // Store temporarily
+                window._tempProfilePic = event.target.result;
+            };
+            reader.readAsDataURL(file);
+        }
+
+        // ============================================================
+        // AUTH UI (with Forgot Password)
         // ============================================================
         function toggleAuthModal() {
             document.getElementById('authModal').classList.toggle('active');
@@ -869,6 +970,7 @@
                     toggleAuthModal();
                     updateAccountModal();
                     updateCartUI();
+                    updateMsgNotif();
                     msg.textContent = '';
                 } else {
                     msg.textContent = '❌ Invalid username/password.';
@@ -884,23 +986,46 @@
                 toggleAuthModal();
                 updateAccountModal();
                 updateCartUI();
+                updateMsgNotif();
             }
+        }
+
+        // Forgot Password
+        function forgotPassword() {
+            const username = prompt('Enter your username to reset password:');
+            if (!username) return;
+            let users = JSON.parse(localStorage.getItem('taata_users')) || {};
+            if (!users[username]) {
+                alert('❌ Username not found.');
+                return;
+            }
+            // Generate a random temporary password
+            const tempPassword = Math.random().toString(36).slice(2, 10);
+            users[username].password = tempPassword;
+            localStorage.setItem('taata_users', JSON.stringify(users));
+            alert(`✅ Password reset for ${username}.\nYour new temporary password is: ${tempPassword}\nPlease log in and change it in your profile.`);
         }
 
         function toggleAccountModal() {
             if (!currentUser) { toggleAuthModal(); return; }
             const modal = document.getElementById('accountModal');
             modal.classList.toggle('active');
-            if (modal.classList.contains('active')) updateAccountModal();
+            if (modal.classList.contains('active')) {
+                updateAccountModal();
+                updateAvatarUI();
+            }
         }
 
         function updateAccountModal() {
             if (!currentUser) return;
             const data = loadUserData();
-            document.getElementById('accountModalName').textContent = currentUser;
+            const profile = getProfile(currentUser);
+            document.getElementById('accountModalName').textContent = profile.fullName || currentUser;
             document.getElementById('accountModalWallet').textContent = `UGX ${data.wallet.toLocaleString()}`;
             document.getElementById('accountModalPoints').textContent = data.points.toLocaleString();
             document.getElementById('walletBalanceDisplay').textContent = data.wallet.toLocaleString();
+            // Avatar is updated via updateAvatarUI()
+            updateAvatarUI();
         }
 
         function logoutUser() {
@@ -911,6 +1036,7 @@
                 document.getElementById('accountNameDisplay').textContent = 'Login';
                 document.getElementById('accountModal').classList.remove('active');
                 updateCartUI();
+                updateMsgNotif();
                 alert('✅ Logged out successfully.');
             }
         }
@@ -929,17 +1055,8 @@
         }
 
         // ============================================================
-        // PROFILE MANAGEMENT
+        // PROFILE (with picture)
         // ============================================================
-        function getProfile(username) {
-            const data = localStorage.getItem(`taata_profile_${username}`);
-            return data ? JSON.parse(data) : { fullName: '', phone: '', email: '', address: '' };
-        }
-
-        function saveProfileData(username, profile) {
-            localStorage.setItem(`taata_profile_${username}`, JSON.stringify(profile));
-        }
-
         function openProfileModal() {
             if (!currentUser) return;
             const profile = getProfile(currentUser);
@@ -947,7 +1064,15 @@
             document.getElementById('profilePhone').value = profile.phone || '';
             document.getElementById('profileEmail').value = profile.email || '';
             document.getElementById('profileAddress').value = profile.address || '';
+            // Show picture preview
+            const preview = document.getElementById('profilePicPreview');
+            if (profile.picture) {
+                preview.innerHTML = `<img src="${profile.picture}" style="width:100%;height:100%;object-fit:cover;">`;
+            } else {
+                preview.innerHTML = `<i class="fas fa-user" style="font-size:30px; color:#888;"></i>`;
+            }
             document.getElementById('profileModal').classList.add('active');
+            document.getElementById('accountModal').classList.remove('active');
         }
 
         function closeProfileModal() {
@@ -961,17 +1086,32 @@
                 fullName: document.getElementById('profileFullName').value.trim(),
                 phone: document.getElementById('profilePhone').value.trim(),
                 email: document.getElementById('profileEmail').value.trim(),
-                address: document.getElementById('profileAddress').value.trim()
+                address: document.getElementById('profileAddress').value.trim(),
+                picture: window._tempProfilePic || getProfile(currentUser).picture || ''
             };
             saveProfileData(currentUser, profile);
+            window._tempProfilePic = null;
             closeProfileModal();
+            updateAccountModal();
+            updateAvatarUI();
             alert('✅ Profile updated successfully!');
         }
 
         // ============================================================
-        // WEB-BASED MESSAGING (Customer Inbox & Send)
+        // MESSAGING WITH NOTIFICATION DOT
         // ============================================================
-        // Send message
+        function updateMsgNotif() {
+            const dot = document.getElementById('msgNotifDot');
+            if (!currentUser) { dot.style.display = 'none'; return; }
+            const messages = JSON.parse(localStorage.getItem('taata_messages')) || [];
+            const unread = messages.filter(m => m.from === currentUser && m.reply && !m.read);
+            if (unread.length > 0) {
+                dot.style.display = 'block';
+            } else {
+                dot.style.display = 'none';
+            }
+        }
+
         function openSupportModal() {
             if (!currentUser) { alert('Please login first.'); return; }
             document.getElementById('supportMessage').value = '';
@@ -999,12 +1139,15 @@
             });
             localStorage.setItem('taata_messages', JSON.stringify(messages));
             closeSupportModal();
-            alert('✅ Your message has been sent. Our support team will respond shortly.');
+            alert('✅ Your message has been sent.');
+            updateMsgNotif();
         }
 
-        // View My Messages (Customer Inbox)
         function viewMyMessages() {
-            if (!currentUser) return;
+            if (!currentUser) {
+                alert('Please login first.');
+                return;
+            }
             const modal = document.getElementById('myMessagesModal');
             const content = document.getElementById('myMessagesContent');
             const messages = JSON.parse(localStorage.getItem('taata_messages')) || [];
@@ -1015,8 +1158,7 @@
             } else {
                 let html = '';
                 myMessages.slice().reverse().forEach(msg => {
-                    const isAdminReply = msg.reply !== null && msg.reply !== undefined && msg.reply.trim() !==
-                        '';
+                    const isAdminReply = msg.reply && msg.reply.trim() !== '';
                     html += `
                         <div class="msg-bubble customer">
                             <strong>You:</strong> ${msg.message}
@@ -1033,19 +1175,20 @@
                     }
                 });
                 content.innerHTML = html;
-                // Mark all replies as read
+                // Mark replies as read
                 myMessages.forEach(msg => {
                     if (msg.reply && !msg.read) {
                         msg.read = true;
                     }
                 });
                 localStorage.setItem('taata_messages', JSON.stringify(messages));
+                updateMsgNotif();
             }
             modal.classList.add('active');
             document.getElementById('accountModal').classList.remove('active');
         }
 
-        // Admin message functions
+        // Admin message functions (unchanged)
         function renderAdminMessages() {
             const container = document.getElementById('adminMessagesList');
             const messages = JSON.parse(localStorage.getItem('taata_messages')) || [];
@@ -1081,7 +1224,8 @@
             const msg = messages.find(m => m.id === id);
             if (msg) { msg.read = true;
                 localStorage.setItem('taata_messages', JSON.stringify(messages));
-                renderAdminMessages(); }
+                renderAdminMessages();
+                updateMsgNotif(); }
         }
 
         function replyToMessage(id) {
@@ -1096,12 +1240,92 @@
                 msg.read = true;
                 localStorage.setItem('taata_messages', JSON.stringify(messages));
                 renderAdminMessages();
+                updateMsgNotif();
                 alert('✅ Reply saved. Customer will see it in "My Messages".');
             }
         }
 
         // ============================================================
-        // MY ORDERS
+        // COMMUNITY (Associate with other customers)
+        // ============================================================
+        function openCommunityModal() {
+            if (!currentUser) return;
+            document.getElementById('communityModal').classList.add('active');
+            document.getElementById('accountModal').classList.remove('active');
+            renderCommunity('all');
+        }
+
+        function renderCommunity(view) {
+            const container = document.getElementById('communityContent');
+            const users = JSON.parse(localStorage.getItem('taata_users')) || {};
+            const usernames = Object.keys(users).filter(u => u !== currentUser);
+            const connections = JSON.parse(localStorage.getItem(`taata_connections_${currentUser}`)) || [];
+
+            if (view === 'connections') {
+                const connectedUsers = usernames.filter(u => connections.includes(u));
+                if (connectedUsers.length === 0) {
+                    container.innerHTML = '<p style="color:#888; text-align:center; padding:20px;">You have no connections yet.</p>';
+                    return;
+                }
+                let html = '';
+                connectedUsers.forEach(u => {
+                    const profile = getProfile(u);
+                    const picture = profile.picture || '';
+                    html += `
+                        <div class="user-card">
+                            <div class="user-info">
+                                <div class="avatar-sm">${picture ? `<img src="${picture}">` : `<i class="fas fa-user"></i>`}</div>
+                                <span><strong>${profile.fullName || u}</strong> (@${u})</span>
+                            </div>
+                            <button class="btn-connected"><i class="fas fa-check"></i> Connected</button>
+                        </div>
+                    `;
+                });
+                container.innerHTML = html;
+                return;
+            }
+
+            // All members
+            if (usernames.length === 0) {
+                container.innerHTML = '<p style="color:#888; text-align:center; padding:20px;">No other members yet.</p>';
+                return;
+            }
+            let html = '';
+            usernames.forEach(u => {
+                const profile = getProfile(u);
+                const picture = profile.picture || '';
+                const isConnected = connections.includes(u);
+                const btnClass = isConnected ? 'btn-connected' : 'btn-connect';
+                const btnText = isConnected ? '✅ Connected' : 'Connect';
+                const btnAction = isConnected ? '' : `onclick="sendConnectionRequest('${u}')"`;
+                html += `
+                    <div class="user-card">
+                        <div class="user-info">
+                            <div class="avatar-sm">${picture ? `<img src="${picture}">` : `<i class="fas fa-user"></i>`}</div>
+                            <span><strong>${profile.fullName || u}</strong> (@${u})</span>
+                        </div>
+                        <button class="${btnClass}" ${btnAction}>${btnText}</button>
+                    </div>
+                `;
+            });
+            container.innerHTML = html;
+        }
+
+        function sendConnectionRequest(username) {
+            if (!currentUser) return;
+            let connections = JSON.parse(localStorage.getItem(`taata_connections_${currentUser}`)) || [];
+            if (connections.includes(username)) {
+                alert('Already connected!');
+                return;
+            }
+            connections.push(username);
+            localStorage.setItem(`taata_connections_${currentUser}`, JSON.stringify(connections));
+            renderCommunity('all');
+            alert(`✅ Connection request sent to ${username}!`);
+        }
+
+        // ============================================================
+        // MY ORDERS (unchanged)
         // ============================================================
         function viewMyOrders() {
             if (!currentUser) return;
@@ -1126,7 +1350,7 @@
         }
 
         // ============================================================
-        // SEARCH
+        // SEARCH & UI RENDERING (unchanged from previous)
         // ============================================================
         function searchProducts() {
             const q = document.getElementById('searchInput').value.toLowerCase().trim();
@@ -1150,9 +1374,7 @@
             });
         }
 
-        // ============================================================
-        // UI RENDERING
-        // ============================================================
+        // Categories & Grid (same as before)
         function getCategories(items) { return ['All', ...new Set(items.map(i => i.category))]; }
 
         function getCategoryIcon(cat) {
@@ -1279,7 +1501,7 @@
         }
 
         // ============================================================
-        // CART LOGIC
+        // CART LOGIC (unchanged)
         // ============================================================
         function addToCart(id) {
             try {
@@ -1309,9 +1531,6 @@
             } catch (e) { console.error(e); }
         }
 
-        // ============================================================
-        // SHIPPING & CART UI
-        // ============================================================
         function toggleAddressField() {
             const isPickup = document.querySelector('input[name="orderType"]:checked')?.value === 'pickup';
             const addrInput = document.getElementById('custAddress');
@@ -1445,7 +1664,7 @@
         };
 
         // ============================================================
-        // PLACE ORDER (Guests blocked)
+        // PLACE ORDER (unchanged)
         // ============================================================
         function placeOrder() {
             if (!currentUser) { alert('⚠️ Please login first.'); toggleAuthModal(); return; }
@@ -1558,7 +1777,7 @@
         }
 
         // ============================================================
-        // RESTAURANT STATUS
+        // RESTAURANT STATUS (unchanged)
         // ============================================================
         function updateRestaurantStatus() {
             const now = new Date();
@@ -1572,7 +1791,7 @@
         }
 
         // ============================================================
-        // BACK TO TOP
+        // BACK TO TOP (unchanged)
         // ============================================================
         window.onscroll = function() {
             const btn = document.getElementById('backToTop');
@@ -1587,7 +1806,7 @@
         function scrollToTop() { window.scrollTo({ top: 0, behavior: 'smooth' }); }
 
         // ============================================================
-        // ADMIN APP
+        // ADMIN APP (unchanged)
         // ============================================================
         function showAdminLogin() {
             document.getElementById('adminLoginModal').classList.add('active');
@@ -1755,9 +1974,7 @@
             renderAdminCustomers();
         }
 
-        // ============================================================
-        // ADMIN CUSTOMERS
-        // ============================================================
+        // Admin Customers (unchanged)
         function renderAdminCustomers() {
             const container = document.getElementById('adminCustomerList');
             const users = JSON.parse(localStorage.getItem('taata_users')) || {};
@@ -1808,9 +2025,7 @@
             modal.classList.add('active');
         }
 
-        // ============================================================
-        // ADMIN PRODUCTS
-        // ============================================================
+        // Admin Products (unchanged)
         function renderAdminProducts() {
             const container = document.getElementById('adminProductList');
             const allItems = [...supermarketItems, ...restaurantItems];
@@ -1945,7 +2160,7 @@
         }
 
         // ============================================================
-        // PROMOTIONS
+        // PROMOTIONS (unchanged)
         // ============================================================
         function loadPromoPreview() {
             const promo = JSON.parse(localStorage.getItem('taata_promo')) || {
@@ -2040,8 +2255,9 @@
         setInterval(updateRestaurantStatus, 60000);
         toggleAddressField();
         loadPromoPreview();
+        updateMsgNotif();
 
-        console.log('🔥 Taata Owen v2.2 – Full features with Customer Inbox!');
+        console.log('🔥 Taata Owen v2.3 – Community, Profile Pics, Password Reset, Message Notifications!');
         window.placeOrder = placeOrder;
     </script>
 </body>
