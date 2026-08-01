@@ -187,7 +187,7 @@
             display: block;
         }
 
-        /* ===== YOUR ORIGINAL STYLES (everything below is unchanged) ===== */
+        /* ===== YOUR ORIGINAL STYLES (unchanged) ===== */
         .navbar {
             background: var(--nav-bg);
             color: var(--nav-text);
@@ -1008,13 +1008,14 @@
     </div> <!-- end #appContainer -->
 
     <!-- ========================================================== -->
-    <!-- JAVASCRIPT (includes login overlay + your full original code) -->
+    <!-- JAVASCRIPT (fully fixed – login works) -->
     <!-- ========================================================== -->
     <script>
         // ============================================================
         // LOGIN OVERLAY LOGIC (added)
         // ============================================================
         let loginMode = true;
+        let currentUser = null;   // <-- MOVED HERE to fix the "cannot access before initialization" error
 
         function toggleLoginMode() {
             loginMode = !loginMode;
@@ -1111,7 +1112,7 @@
         })();
 
         // ============================================================
-        // YOUR ORIGINAL JAVASCRIPT (everything below is unchanged)
+        // YOUR ORIGINAL JAVASCRIPT (unchanged, except 'currentUser' moved)
         // ============================================================
 
         // ============================================================
@@ -1320,8 +1321,7 @@
         // ============================================================
         // CUSTOMER STATE & HELPERS
         // ============================================================
-        let currentUser = null;
-        let isLoginMode = true;
+        let isLoginMode = true;   // <-- REMOVED duplicate 'currentUser' declaration
         let cart = [];
         let supermarketFilter = 'All';
         let restaurantFilter = 'All';
@@ -2845,10 +2845,9 @@
         }
 
         // ============================================================
-        // INIT (wrapped so it can be called after login)
+        // INIT (called after login)
         // ============================================================
         function initApp() {
-            // This is your original bottom initialization code, now inside a function.
             document.addEventListener('change', function(e) {
                 if (e.target.id === 'custLocation' || e.target.id === 'useWallet' || e.target.id === 'usePoints' || e
                     .target.name === 'orderType') {
@@ -2886,12 +2885,9 @@
             updateMsgNotif();
             updateChatListUnread();
 
-            console.log('🔥 Taata Owen v2.6 – Complete with Login Overlay, Dark Mode, Hero Slideshow, Community, Direct Chat, and all products!');
+            console.log('🔥 Taata Owen v2.6 – Login works, all features ready!');
             window.placeOrder = placeOrder;
         }
-
-        // If the user is already logged in, initApp is called from showApp().
-        // If the overlay is visible, initApp waits for login.
     </script>
 </body>
 </html>
